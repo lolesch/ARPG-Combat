@@ -1,0 +1,56 @@
+{
+    "name": "PlayerInputAsset",
+    "maps": [
+        {
+            "name": "PlayerInput",
+            "id": "08969cf6-7aeb-44c3-919e-159bc5ccebf8",
+            "actions": [
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "b5742ca7-d879-495a-b944-ac53456b406c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "322506b4-f3f9-4f59-aaa5-d34e614bb334",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Desktop",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Desktop",
+            "bindingGroup": "Desktop",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": true,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": true,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Gamepad>",
+                    "isOptional": true,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}
