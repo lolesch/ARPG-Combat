@@ -74,6 +74,86 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: b5742ca7-d879-495a-b944-ac53456b406c
     m_ActionName: PlayerInput/Interact[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 660850840498718442}
+        m_TargetAssemblyTypeName: ARPG.Input.InputTranslator, ARPG
+        m_MethodName: RightClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a6939418-799c-4023-bf0b-64dba5f8ed99
+    m_ActionName: PlayerInput/Skill1[/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 660850840498718442}
+        m_TargetAssemblyTypeName: ARPG.Input.InputTranslator, ARPG
+        m_MethodName: CastSkill2
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 940cd9fb-c19d-4348-8015-1b475c3ba2f0
+    m_ActionName: PlayerInput/Skill2[/Keyboard/w]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 660850840498718442}
+        m_TargetAssemblyTypeName: ARPG.Input.InputTranslator, ARPG
+        m_MethodName: CastSkill3
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 09432982-b422-4c83-9539-0ee417aab599
+    m_ActionName: PlayerInput/Skill3[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 660850840498718442}
+        m_TargetAssemblyTypeName: ARPG.Input.InputTranslator, ARPG
+        m_MethodName: CastSkill4
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 5543956a-b1e5-4cac-9925-3a164fb2dfb3
+    m_ActionName: PlayerInput/Skill4[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 660850840498718442}
+        m_TargetAssemblyTypeName: ARPG.Input.InputTranslator, ARPG
+        m_MethodName: CastSkill5
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 43a03a68-fbba-4365-abc6-b8ef24a94d31
+    m_ActionName: PlayerInput/Skill5[/Keyboard/r]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Desktop
   m_DefaultActionMap: PlayerInput
@@ -93,9 +173,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isHoldToCrouch: 1
   gamepadMovementRadius: 15
-  layerToNavigationRaycast:
+  layerToIgnoreRaycast:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 4294967291
   hasClickedOnUI: 0
   isCrouching: 0
   hasMovementInput: 0

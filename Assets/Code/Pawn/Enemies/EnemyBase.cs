@@ -23,6 +23,9 @@ namespace ARPG.Pawn.Enemy
             stats.Add(StatName.HealthMax, new StatScore(100));
             if (stats.TryGetValue(StatName.HealthMax, out StatScore healthMax))
                 resources.Add(Resource.HealthCurrent, new ResourceScore(healthMax));
+
+            if (resources.TryGetValue(Resource.HealthCurrent, out ResourceScore health))
+                healthbar.fillAmount = healthMax.MaxValue / health.CurrentValue;
         }
 
         public void TakeDamage(float damage)
@@ -35,8 +38,7 @@ namespace ARPG.Pawn.Enemy
 
             healthbar.gameObject.SetActive(0 < health.CurrentValue && health.CurrentValue < healthMax.MaxValue);
 
-            healthbar.fillAmount = health.CurrentValue;
-            healthbar.fillAmount = health.CurrentValue;
+            healthbar.fillAmount = healthMax.MaxValue / health.CurrentValue;
         }
     }
 }

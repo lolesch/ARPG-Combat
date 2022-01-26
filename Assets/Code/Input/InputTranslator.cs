@@ -124,7 +124,7 @@ namespace ARPG.Input
                 return;
             if (ctx.started)
             {
-                hasClickedOnUI = EventSystem.current.IsPointerOverGameObject();
+                //hasClickedOnUI = EventSystem.current.IsPointerOverGameObject();
                 if (!hasClickedOnUI)
                     CastSkill1(ctx);
             }

@@ -37,6 +37,51 @@ namespace ARPG.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skill1"",
+                    ""type"": ""Button"",
+                    ""id"": ""a6939418-799c-4023-bf0b-64dba5f8ed99"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skill2"",
+                    ""type"": ""Button"",
+                    ""id"": ""940cd9fb-c19d-4348-8015-1b475c3ba2f0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skill3"",
+                    ""type"": ""Button"",
+                    ""id"": ""09432982-b422-4c83-9539-0ee417aab599"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skill4"",
+                    ""type"": ""Button"",
+                    ""id"": ""5543956a-b1e5-4cac-9925-3a164fb2dfb3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skill5"",
+                    ""type"": ""Button"",
+                    ""id"": ""43a03a68-fbba-4365-abc6-b8ef24a94d31"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -48,6 +93,61 @@ namespace ARPG.Input
                     ""processors"": """",
                     ""groups"": ""Desktop"",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""94630d4e-55f0-42c7-9ff5-36c04f4155f5"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Skill2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""39afbcfa-902f-4822-b539-8890dc4d383b"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Skill3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c3e52146-3de2-47cd-8861-26911f0a7775"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Skill4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""18346994-da14-478f-b70a-be709de6393e"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Skill1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b3a090ac-2599-4d83-810b-05a2fc885a06"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Skill5"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -81,6 +181,11 @@ namespace ARPG.Input
             // PlayerInput
             m_PlayerInput = asset.FindActionMap("PlayerInput", throwIfNotFound: true);
             m_PlayerInput_Interact = m_PlayerInput.FindAction("Interact", throwIfNotFound: true);
+            m_PlayerInput_Skill1 = m_PlayerInput.FindAction("Skill1", throwIfNotFound: true);
+            m_PlayerInput_Skill2 = m_PlayerInput.FindAction("Skill2", throwIfNotFound: true);
+            m_PlayerInput_Skill3 = m_PlayerInput.FindAction("Skill3", throwIfNotFound: true);
+            m_PlayerInput_Skill4 = m_PlayerInput.FindAction("Skill4", throwIfNotFound: true);
+            m_PlayerInput_Skill5 = m_PlayerInput.FindAction("Skill5", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -141,11 +246,21 @@ namespace ARPG.Input
         private readonly InputActionMap m_PlayerInput;
         private IPlayerInputActions m_PlayerInputActionsCallbackInterface;
         private readonly InputAction m_PlayerInput_Interact;
+        private readonly InputAction m_PlayerInput_Skill1;
+        private readonly InputAction m_PlayerInput_Skill2;
+        private readonly InputAction m_PlayerInput_Skill3;
+        private readonly InputAction m_PlayerInput_Skill4;
+        private readonly InputAction m_PlayerInput_Skill5;
         public struct PlayerInputActions
         {
             private @PlayerInputAsset m_Wrapper;
             public PlayerInputActions(@PlayerInputAsset wrapper) { m_Wrapper = wrapper; }
             public InputAction @Interact => m_Wrapper.m_PlayerInput_Interact;
+            public InputAction @Skill1 => m_Wrapper.m_PlayerInput_Skill1;
+            public InputAction @Skill2 => m_Wrapper.m_PlayerInput_Skill2;
+            public InputAction @Skill3 => m_Wrapper.m_PlayerInput_Skill3;
+            public InputAction @Skill4 => m_Wrapper.m_PlayerInput_Skill4;
+            public InputAction @Skill5 => m_Wrapper.m_PlayerInput_Skill5;
             public InputActionMap Get() { return m_Wrapper.m_PlayerInput; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -158,6 +273,21 @@ namespace ARPG.Input
                     @Interact.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnInteract;
                     @Interact.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnInteract;
                     @Interact.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnInteract;
+                    @Skill1.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill1;
+                    @Skill1.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill1;
+                    @Skill1.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill1;
+                    @Skill2.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill2;
+                    @Skill2.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill2;
+                    @Skill2.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill2;
+                    @Skill3.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill3;
+                    @Skill3.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill3;
+                    @Skill3.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill3;
+                    @Skill4.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill4;
+                    @Skill4.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill4;
+                    @Skill4.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill4;
+                    @Skill5.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill5;
+                    @Skill5.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill5;
+                    @Skill5.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill5;
                 }
                 m_Wrapper.m_PlayerInputActionsCallbackInterface = instance;
                 if (instance != null)
@@ -165,6 +295,21 @@ namespace ARPG.Input
                     @Interact.started += instance.OnInteract;
                     @Interact.performed += instance.OnInteract;
                     @Interact.canceled += instance.OnInteract;
+                    @Skill1.started += instance.OnSkill1;
+                    @Skill1.performed += instance.OnSkill1;
+                    @Skill1.canceled += instance.OnSkill1;
+                    @Skill2.started += instance.OnSkill2;
+                    @Skill2.performed += instance.OnSkill2;
+                    @Skill2.canceled += instance.OnSkill2;
+                    @Skill3.started += instance.OnSkill3;
+                    @Skill3.performed += instance.OnSkill3;
+                    @Skill3.canceled += instance.OnSkill3;
+                    @Skill4.started += instance.OnSkill4;
+                    @Skill4.performed += instance.OnSkill4;
+                    @Skill4.canceled += instance.OnSkill4;
+                    @Skill5.started += instance.OnSkill5;
+                    @Skill5.performed += instance.OnSkill5;
+                    @Skill5.canceled += instance.OnSkill5;
                 }
             }
         }
@@ -181,6 +326,11 @@ namespace ARPG.Input
         public interface IPlayerInputActions
         {
             void OnInteract(InputAction.CallbackContext context);
+            void OnSkill1(InputAction.CallbackContext context);
+            void OnSkill2(InputAction.CallbackContext context);
+            void OnSkill3(InputAction.CallbackContext context);
+            void OnSkill4(InputAction.CallbackContext context);
+            void OnSkill5(InputAction.CallbackContext context);
         }
     }
 }
