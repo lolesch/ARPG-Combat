@@ -33,7 +33,7 @@ namespace ARPG.Pawn
             SetCurrentValue(Stat.MaxValue * currentPercent);
         }
 
-        public void AdjustCurrentValue(float value)
+        public void AddToCurrentValue(float value)
         {
             currentValue += Mathf.Clamp(value, 0, Stat.MaxValue);
 

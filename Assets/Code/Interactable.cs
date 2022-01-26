@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace ARPG.Input
 {
-    [RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(CapsuleCollider))]
     public abstract class Interactable : MonoBehaviour
     {
         public static Interactable current;
 
-        protected Collider interactionCollider;
+        protected CapsuleCollider interactionCollider;
 
         [SerializeField]
         protected float interactionRange = 2f;
@@ -23,7 +23,7 @@ namespace ARPG.Input
 
         protected virtual void Awake()
         {
-            interactionCollider = GetComponent<Collider>();
+            interactionCollider = GetComponent<CapsuleCollider>();
 
             if (Interaction == InteractionType.NONE)
                 EditorDebug.LogWarning($"Interaction \t {name} is missing an interaction type");

@@ -15,7 +15,7 @@ namespace ARPG.Pawn.Movement
         protected float maxSpeed = 5f;
 
         protected NavMeshAgent agent;
-        [SerializeField] private Character character;
+        private Character character;
 
         [Header("Rotation")]
         [Range(1f, 40f)]

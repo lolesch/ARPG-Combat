@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54a4efd8a2e840b46ac2c392478fc3a4, type: 3}
+  m_Name: MultiProjectile
+  m_EditorClassIdentifier: 
+  spawnAtCursor: 0
+  amountToSpawn: 5
+  fullAngle: 40
+  minDist: 0.5
+  projectileSpeed: 15
+  maxDist: 13
+  projectileDiameter: 0.5
+  resourceCost: 10
+  spawnObject: {fileID: 8461183193586683032, guid: 752d4c85cf215ff4ca0b08f4ae4c3390, type: 3}

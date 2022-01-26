@@ -12,6 +12,7 @@ namespace ARPG.Pawn.Movement
         private Vector3 lerpLocation;
         private Vector3 from;
         private Vector3 target;
+        [SerializeField] private GameObject model;
 
         private StepLock movementLocker = new StepLock();
 
@@ -54,7 +55,7 @@ namespace ARPG.Pawn.Movement
                 else if (Interactable.current.Interaction == InteractionType.Enemy || Interactable.current.Interaction == InteractionType.Destroyable)
                 {
                     Vector3 target = Interactable.current.transform.position;
-                    target = target - GetDirection(transform.position, target) * Mathf.Min(/* TODO: skill attack range */ Interactable.current.InteractionRange, Vector3.Distance(transform.position, target));
+                    target = target - GetDirection(transform.position, target) * Mathf.Min(/* TODO: skill attack range or default meele attack range */20 + Interactable.current.InteractionRange, Vector3.Distance(transform.position, target));
                     SetDestination(FindNavigableLocationAt(target));
                 }
 
@@ -128,8 +129,8 @@ namespace ARPG.Pawn.Movement
                 return;
 
             Quaternion desiredRotation = Quaternion.LookRotation(forward);
-            if (transform.rotation != desiredRotation)
-                transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, Time.deltaTime * rotationSpeed);
+            if (model && model.transform.rotation != desiredRotation)
+                model.transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, Time.deltaTime * rotationSpeed);
         }
 
         bool SamplePosition(Vector3 position) => NavMesh.SamplePosition(position, out navMeshHit, 1f, NavMesh.AllAreas);

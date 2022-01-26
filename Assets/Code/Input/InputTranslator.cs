@@ -50,7 +50,7 @@ namespace ARPG.Input
             if (isLeftSticking)
             {
                 var xzVector = XZVector(leftStickPosition);
-                screenPoint = Camera.main.WorldToScreenPoint(xzVector + transform.position);
+                screenPoint = Camera.main.WorldToScreenPoint(xzVector + transform.position); // why transform.position? this is not the player 
             }
 
             Ray ray = Camera.main.ScreenPointToRay(screenPoint);
@@ -63,7 +63,7 @@ namespace ARPG.Input
 
         private Vector3 HitPosition(Ray ray)
         {
-            if (!Physics.Raycast(ray, out hit, 1000f, layerToNavigationRaycast))
+            if (!Physics.Raycast(ray, out hit)) //, 1000f, layerToNavigationRaycast))
                 EditorDebug.LogError("raycast \t no collider found");
 
             return hit.point;
@@ -98,8 +98,9 @@ namespace ARPG.Input
 
                 /// set the current interactable
                 // invoke action and have the interactable handle this?
-                //if (hit.collider != null)
-                //    Interactable.current = hit.collider.GetComponent<Interactable>();
+                EditorDebug.LogWarning(hit.collider.gameObject.name);
+                if (hit.collider != null)
+                    Interactable.current = hit.collider.TryGetComponent(out Interactable interactable) ? interactable : null;
             }
 
             isLeftClicking = ctx.performed;

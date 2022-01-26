@@ -10,33 +10,33 @@ namespace ARPG.Pawn.Enemy
 {
     public class EnemyBase : Interactable, ITakeDamage
     {
-        //[SerializeField] private Dictionary<Stat, StatScore> stats = new Dictionary<Stat, StatScore>();
+        [SerializeField] private Dictionary<StatName, StatScore> stats = new Dictionary<StatName, StatScore>();
+        [SerializeField] private Dictionary<Resource, ResourceScore> resources = new Dictionary<Resource, ResourceScore>();
 
         [SerializeField] private Image healthbar;
 
         protected override void Awake()
         {
             base.Awake();
-            interactionRange = (interactionCollider as CapsuleCollider).radius;
+            interactionRange = interactionCollider.radius;
 
-            //stats.Add(Stat.Health, new StatScore(100, 0, 0));
-        }
-
-        void Update()
-        {
-            //stats.TryGetValue(Stat.Health, out StatScore health);
-
-            //healthbar.fillAmount = health.current / health.max;
+            stats.Add(StatName.HealthMax, new StatScore(100));
+            if (stats.TryGetValue(StatName.HealthMax, out StatScore healthMax))
+                resources.Add(Resource.HealthCurrent, new ResourceScore(healthMax));
         }
 
         public void TakeDamage(float damage)
         {
-            //stats.TryGetValue(Stat.Health, out StatScore health);
+            stats.TryGetValue(StatName.HealthMax, out StatScore healthMax);
+            resources.TryGetValue(Resource.HealthCurrent, out ResourceScore health);
 
-            //health.current -= damage;
-            EditorDebug.Log($"{this.name} took {damage} damage");
+            health.AddToCurrentValue(-damage);
+            EditorDebug.Log($"{this.name} took {damage} damage and has {health.CurrentValue} of {healthMax.MaxValue} health ({health.CurrentValue * 100 / healthMax.MaxValue} %)");
 
-            //healthbar.gameObject.SetActive(0 < health.current && health.current < health.max);
+            healthbar.gameObject.SetActive(0 < health.CurrentValue && health.CurrentValue < healthMax.MaxValue);
+
+            healthbar.fillAmount = health.CurrentValue;
+            healthbar.fillAmount = health.CurrentValue;
         }
     }
 }

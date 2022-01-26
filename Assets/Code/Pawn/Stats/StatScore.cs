@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TeppichsTools.Logging;
 using UnityEngine;
 
 namespace ARPG.Pawn
 {
-    /// https://www.youtube.com/watch?v=SH25f3cXBVc kudos to Kryzarel
+    /// inpired by https://www.youtube.com/watch?v=SH25f3cXBVc - kudos to Kryzarel
     [Serializable]
     public class StatScore
     {
@@ -105,14 +106,14 @@ namespace ARPG.Pawn
 
             if (statModifiers is null)
             {
-                Debug.LogError("statModifiers was null");
+                EditorDebug.LogError("statModifiers was null");
 
                 return;
             }
 
             if (equipmentStatModifiers is null)
             {
-                Debug.LogError("equipmentStatModifiers was null");
+                EditorDebug.LogError("equipmentStatModifiers was null");
 
                 return;
             }
