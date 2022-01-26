@@ -855,6 +855,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2072121589962342043, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+      propertyPath: layerToNavigationRaycast.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 2392080302900907787, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -953,7 +957,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8828489460519579985, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
       propertyPath: m_EventMask.m_Bits
-      value: 55
+      value: 119
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}

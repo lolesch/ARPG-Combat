@@ -25,7 +25,7 @@ namespace ARPG.Input
         private RaycastHit hit;
         private Vector3 screenPoint = Vector3.zero;
 
-        [SerializeField] private LayerMask layerToNavigationRaycast = 1;
+        [SerializeField] private LayerMask layerToIgnoreRaycast = 4;
 
         [Header("Observation")]
         [SerializeField] private bool hasClickedOnUI;
@@ -40,7 +40,7 @@ namespace ARPG.Input
         public event Action<bool> setForceStop;
         public event Action<bool> setCrouching;
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (isLeftClicking)
             {
@@ -53,9 +53,12 @@ namespace ARPG.Input
                 screenPoint = Camera.main.WorldToScreenPoint(xzVector + transform.position); // why transform.position? this is not the player 
             }
 
-            Ray ray = Camera.main.ScreenPointToRay(screenPoint);
+            if (isLeftClicking || isLeftSticking)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(screenPoint);
 
-            targetPosition = HitPosition(ray);
+                targetPosition = HitPosition(ray);
+            }
 
             if (hasMovementInput)
                 setTargetPos?.Invoke(targetPosition);
@@ -63,7 +66,7 @@ namespace ARPG.Input
 
         private Vector3 HitPosition(Ray ray)
         {
-            if (!Physics.Raycast(ray, out hit)) //, 1000f, layerToNavigationRaycast))
+            if (!Physics.Raycast(ray, out hit, Mathf.Infinity, layerToIgnoreRaycast))
                 EditorDebug.LogError("raycast \t no collider found");
 
             return hit.point;
@@ -98,9 +101,17 @@ namespace ARPG.Input
 
                 /// set the current interactable
                 // invoke action and have the interactable handle this?
-                EditorDebug.LogWarning(hit.collider.gameObject.name);
-                if (hit.collider != null)
+                screenPoint = Mouse.current.position.ReadValue();
+
+                Ray ray = Camera.main.ScreenPointToRay(screenPoint);
+
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerToIgnoreRaycast))
+                {
+                    EditorDebug.LogWarning(hit.collider.gameObject.name);
                     Interactable.current = hit.collider.TryGetComponent(out Interactable interactable) ? interactable : null;
+                }
+                else
+                    EditorDebug.LogError("raycast \t no collider found");
             }
 
             isLeftClicking = ctx.performed;
