@@ -1102,6 +1102,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1144920244320974431, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
     - target: {fileID: 4193368251199867839, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
       propertyPath: m_Name
       value: DamageShape
@@ -1112,15 +1116,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6660401373613737106, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 420.68707
+      value: -1.705
       objectReference: {fileID: 0}
     - target: {fileID: 6660401373613737106, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 36.421776
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6660401373613737106, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.114098474
+      value: 0.515
       objectReference: {fileID: 0}
     - target: {fileID: 6660401373613737106, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
       propertyPath: m_LocalRotation.w

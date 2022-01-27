@@ -45,7 +45,7 @@ namespace ARPG.Container
         public uint ResourceCost { get => resourceCost; }
 
         [SerializeField]
-        private DamageShape spawnObject;
-        public DamageShape SpawnObject { get => spawnObject; }
+        private DamageShape damageShape;
+        public DamageShape DamageShape { get => damageShape; }
     }
 }

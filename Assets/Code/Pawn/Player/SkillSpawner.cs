@@ -28,12 +28,13 @@ namespace ARPG.Combat
 
             if (data != null) // && InventoryHolder.Instance.playerSkills.cells[index].StartCooldown())
             {
-                EditorDebug.Log($"casting skill {index}");
                 //CalculateDirections(XZDirection(target, transform.position));
                 //
                 //for (int i = 0; i < data.AmountToSpawn; i++)
                 //    SpawnObject(target, i);
                 Spawn(target);
+
+                EditorDebug.Log($"casting skill {index}");
             }
             else
                 EditorDebug.Log("casting failed");
@@ -41,7 +42,7 @@ namespace ARPG.Combat
 
         private void Spawn(Vector3 targetPos)
         {
-            DamageShape shape = Instantiate(data.SpawnObject.gameObject, targetPos, playerAgent.rotation, this.transform).GetComponent<DamageShape>();
+            var shape = Instantiate(data.DamageShape.gameObject, targetPos, playerAgent.rotation, this.transform).GetComponent<DamageShape>();
 
             EditorDebug.Log("instantiated a damage shape");
 
@@ -50,57 +51,57 @@ namespace ARPG.Combat
             shape.GetComponent<CapsuleCollider>().radius = data.ProjectileRadius;
             shape.spawnPosition = targetPos;
             shape.target = data.SpawnAtCursor ? targetPos : targetPos + playerAgent.forward * data.MaxDistance;
-            shape.GetComponentInChildren<Canvas>().transform.localScale = new Vector3(data.ProjectileRadius * 2, data.ProjectileRadius * 2, 0);
+            shape.GetComponentInChildren<Canvas>().transform.localScale = new Vector2(data.ProjectileRadius * 2, data.ProjectileRadius * 2);
             #endregion
         }
 
-        private void SpawnObject(Vector3 targetPos, int index)
-        {
-            Vector3 position = CalculateStartPosition(targetPos, index);
-
-            DamageShape shape = Instantiate(data.SpawnObject.gameObject, position, Quaternion.identity, this.transform).GetComponent<DamageShape>();
-
-            EditorDebug.Log("instantiated a damage shape");
-
-            #region travel behaviour
-            shape.projectileSpeed = data.ProjectileSpeed;
-            shape.GetComponent<CapsuleCollider>().radius = data.ProjectileRadius;
-            shape.spawnPosition = position;
-            shape.target = data.SpawnAtCursor ? position : transform.position + projectileDirections[index] * data.MaxDistance;
-            shape.GetComponentInChildren<Canvas>().transform.localScale = new Vector3(data.ProjectileRadius * 2, data.ProjectileRadius * 2, 0);
-            #endregion
-        }
-
-        private Vector3 XZDirection(Vector3 to, Vector3 from) => new Vector3(to.x - from.x, 0, to.z - from.z).normalized;
-
-        private float XZDistance(Vector3 to, Vector3 from) => new Vector3(to.x - from.x, 0, to.z - from.z).magnitude;
-
-        private void CalculateDirections(Vector3 targetDirection)
-        {
-            projectileDirections = new Vector3[data.AmountToSpawn];
-
-            for (int i = 0; i < projectileDirections.Length; i++)
-                projectileDirections[i] = Quaternion.Euler(0, DirectionAngle(i), 0) * targetDirection;
-        }
-
-        private float DirectionAngle(int index)
-        {
-            if (data.AmountToSpawn <= 1)
-                return 0;
-            else if (data.FullAngle % 360 == 0)
-                return (data.FullAngle / data.AmountToSpawn) * index;
-            else
-                return data.FullAngle * .5f - (data.FullAngle / (data.AmountToSpawn - 1) * index);
-        }
-
-        private Vector3 CalculateStartPosition(Vector3 targetPos, int index)
-        {
-            /// calculate the position at the skills max range distance towards the cursors position
-            if (data.SpawnAtCursor)
-                return transform.position + (targetPos - transform.position).normalized * Mathf.Min(data.MaxDistance, Vector3.Distance(targetPos, transform.position));
-            else
-                return 0 < data.MinDistance ? transform.position + projectileDirections[index] * data.MinDistance : transform.position;
-        }
+        //private void SpawnObject(Vector3 targetPos, int index)
+        //{
+        //    Vector3 position = CalculateStartPosition(targetPos, index);
+        //
+        //    DamageShape shape = Instantiate(data.DamageShape.gameObject, position, Quaternion.identity, this.transform).GetComponent<DamageShape>();
+        //
+        //    EditorDebug.Log("instantiated a damage shape");
+        //
+        //    #region travel behaviour
+        //    shape.projectileSpeed = data.ProjectileSpeed;
+        //    shape.GetComponent<CapsuleCollider>().radius = data.ProjectileRadius;
+        //    shape.spawnPosition = position;
+        //    shape.target = data.SpawnAtCursor? position : transform.position + projectileDirections[index] * data.MaxDistance;
+        //    shape.GetComponentInChildren<Canvas>().transform.localScale = new Vector3(data.ProjectileRadius* 2, data.ProjectileRadius* 2, 0);
+        //    #endregion
+        //}
+        //
+        //private Vector3 XZDirection(Vector3 to, Vector3 from) => new Vector3(to.x - from.x, 0, to.z - from.z).normalized;
+        //
+        //private float XZDistance(Vector3 to, Vector3 from) => new Vector3(to.x - from.x, 0, to.z - from.z).magnitude;
+        //
+        //private void CalculateDirections(Vector3 targetDirection)
+        //{
+        //    projectileDirections = new Vector3[data.AmountToSpawn];
+        //
+        //    for (int i = 0; i < projectileDirections.Length; i++)
+        //        projectileDirections[i] = Quaternion.Euler(0, DirectionAngle(i), 0) * targetDirection;
+        //}
+        //
+        //private float DirectionAngle(int index)
+        //{
+        //    if (data.AmountToSpawn <= 1)
+        //        return 0;
+        //    else if (data.FullAngle % 360 == 0)
+        //        return (data.FullAngle / data.AmountToSpawn) * index;
+        //    else
+        //        return data.FullAngle * .5f - (data.FullAngle / (data.AmountToSpawn - 1) * index);
+        //}
+        //
+        //private Vector3 CalculateStartPosition(Vector3 targetPos, int index)
+        //{
+        //    /// calculate the position at the skills max range distance towards the cursors position
+        //    if (data.SpawnAtCursor)
+        //        return transform.position + (targetPos - transform.position).normalized * Mathf.Min(data.MaxDistance, Vector3.Distance(targetPos, transform.position));
+        //    else
+        //        return 0 < data.MinDistance ? transform.position + projectileDirections[index] * data.MinDistance : transform.position;
+        //}
 
         //private void CalculateIndicators(SpawnData behaviour, Vector3 targetPos)
         //{
