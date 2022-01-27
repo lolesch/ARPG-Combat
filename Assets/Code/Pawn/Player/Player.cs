@@ -8,7 +8,7 @@ namespace ARPG.Pawn
 {
     public class Player : Character
     {
-        public List<Skill> skills = new();
+        public List<Skill> skills = new(6);
 
         [SerializeField] private Image healthbar;
         protected void Awake()

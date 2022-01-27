@@ -20,4 +20,4 @@ MonoBehaviour:
   maxDist: 10
   projectileDiameter: 5
   resourceCost: 80
-  spawnObject: {fileID: 8461183193586683032, guid: 28f988ee1c8c03442ba996b07b04dfbd, type: 3}
+  spawnObject: {fileID: 2087973171162287284, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}

@@ -21,8 +21,6 @@ namespace ARPG.Pawn.Movement
         [Range(1f, 40f)]
         [SerializeField] protected float rotationSpeed = 17f;
 
-        protected Vector3 forward = Vector3.forward;
-
         protected virtual void Awake()
         {
             agent = GetComponent<NavMeshAgent>();

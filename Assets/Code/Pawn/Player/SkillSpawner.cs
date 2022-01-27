@@ -14,6 +14,7 @@ namespace ARPG.Combat
         private SpawnData data;
 
         [SerializeField] private Player player;
+        [SerializeField] private Transform playerAgent;
 
         private void OnDestroy() => InputTranslator.Instance.castSkill -= Cast;
         private void Awake() => InputTranslator.Instance.castSkill += Cast;
@@ -32,9 +33,25 @@ namespace ARPG.Combat
                 //
                 //for (int i = 0; i < data.AmountToSpawn; i++)
                 //    SpawnObject(target, i);
+                Spawn(target);
             }
             else
                 EditorDebug.Log("casting failed");
+        }
+
+        private void Spawn(Vector3 targetPos)
+        {
+            DamageShape shape = Instantiate(data.SpawnObject.gameObject, targetPos, playerAgent.rotation, this.transform).GetComponent<DamageShape>();
+
+            EditorDebug.Log("instantiated a damage shape");
+
+            #region travel behaviour
+            shape.projectileSpeed = data.ProjectileSpeed;
+            shape.GetComponent<CapsuleCollider>().radius = data.ProjectileRadius;
+            shape.spawnPosition = targetPos;
+            shape.target = data.SpawnAtCursor ? targetPos : targetPos + playerAgent.forward * data.MaxDistance;
+            shape.GetComponentInChildren<Canvas>().transform.localScale = new Vector3(data.ProjectileRadius * 2, data.ProjectileRadius * 2, 0);
+            #endregion
         }
 
         private void SpawnObject(Vector3 targetPos, int index)

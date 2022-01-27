@@ -9,14 +9,8 @@ namespace ARPG.Pawn.Movement
     public class PlayerMovement : PawnMovement
     {
         private NavMeshHit navMeshHit;
-        private Vector3 lerpLocation;
-        private Vector3 from;
-        private Vector3 target;
-        [SerializeField] private GameObject model;
 
-        private StepLock movementLocker = new StepLock();
-
-        //public event Action<float> animationSpeed;
+        private StepLock movementLocker = new();
 
         private void OnDestroy()
         {
@@ -41,7 +35,7 @@ namespace ARPG.Pawn.Movement
         private void Update()
         {
             //animationSpeed?.Invoke(agent.velocity.magnitude / 6f); // walk speed adjustment to not slide
-            SetRotation(target);
+            SetRotation();
         }
 
         public void SetMovementTarget(Vector3 inputTarget)
@@ -82,7 +76,7 @@ namespace ARPG.Pawn.Movement
             SetDestination(transform.position + transform.forward * agent.stoppingDistance);
         }
 
-        Vector3 FindNavigableLocationAt(Vector3 target)
+        Vector3 FindNavigableLocationAt(Vector3 input)
         {
             if (Interactable.current)
                 return Interactable.current.transform.position -
@@ -90,22 +84,25 @@ namespace ARPG.Pawn.Movement
                         Mathf.Min(Vector3.Distance(Interactable.current.transform.position, transform.position), Interactable.current.InteractionRange);
 
             ///check if hitResult.point is navigable
-            if (SamplePosition(target))
+            if (SamplePosition(input))
                 return navMeshHit.position;
 
-            from = transform.position;
-            this.target = target;
+            var lerpLocation = Vector3.zero;
+            var from = transform.position;
+            var to = input;
 
             ///calculate nearest navigable position
             for (int i = 0; i < 5; i++)
             {
-                lerpLocation = Vector3.Lerp(from, this.target, .5f);
+                lerpLocation = Vector3.Lerp(from, to, .5f);
 
                 if (SamplePosition(lerpLocation))
                     from = lerpLocation;
                 else
-                    this.target = lerpLocation;
+                    to = lerpLocation;
             }
+
+            EditorDebug.DrawLine(transform.position, input, Color.red);
 
             if (SamplePosition(from))
                 return navMeshHit.position;
@@ -114,23 +111,20 @@ namespace ARPG.Pawn.Movement
             return transform.position;
         }
 
-        public void SetRotation(Vector3 target)
+        public void SetRotation()
         {
-            if (transform.position == target)
+            var rotationTarget = agent.steeringTarget;
+            rotationTarget.y = transform.position.y;
+
+            var direction = GetDirection(transform.position, rotationTarget);
+
+            if (direction == Vector3.zero)
                 return;
 
-            if (!agent.isStopped)
-                target = agent.steeringTarget;
+            Quaternion desiredRotation = Quaternion.LookRotation(direction);
 
-            forward = GetDirection(transform.position, target);
-            forward.y = 0;
-
-            if (forward == Vector3.zero)
-                return;
-
-            Quaternion desiredRotation = Quaternion.LookRotation(forward);
-            if (model && model.transform.rotation != desiredRotation)
-                model.transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, Time.deltaTime * rotationSpeed);
+            if (transform.rotation != desiredRotation)
+                transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime * rotationSpeed);
         }
 
         bool SamplePosition(Vector3 position) => NavMesh.SamplePosition(position, out navMeshHit, 1f, NavMesh.AllAreas);
