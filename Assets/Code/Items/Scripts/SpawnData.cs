@@ -1,4 +1,5 @@
 using ARPG.Combat;
+using ARPG.Tools;
 using UnityEngine;
 
 namespace ARPG.Container
@@ -6,9 +7,20 @@ namespace ARPG.Container
     [CreateAssetMenu(fileName = "New Spawn Behaviour", menuName = "Inventory System/Items/SkillBehaviour/SpawnBehaviour")]
     public class SpawnData : ScriptableObject
     {
+        public Ticker CooldownTicker;
+
         [SerializeField]
         private bool spawnAtCursor = false;
         public bool SpawnAtCursor { get => spawnAtCursor; }
+
+        [Range(0f, 300f)]
+        [SerializeField] private float cooldownDuration = 0f;
+        public float CooldownDuration => cooldownDuration;
+
+        [Range(0, 300)]
+        [SerializeField]
+        private uint resourceCost = 10;
+        public uint ResourceCost { get => resourceCost; }
 
         [Range(1u, 24u)]
         [SerializeField]
@@ -33,16 +45,12 @@ namespace ARPG.Container
         [Range(1, 15)]
         [SerializeField]
         private float maxDist = 5;
-        public float MaxDistance { get => maxDist; }
+        public float SkillRange { get => maxDist; }
 
         [Range(0, 10)]
         [SerializeField]
         private float projectileDiameter = 1;
         public float ProjectileRadius { get => projectileDiameter / 2; }
-        [Range(0, 300)]
-        [SerializeField]
-        private uint resourceCost = 10;
-        public uint ResourceCost { get => resourceCost; }
 
         [SerializeField]
         private DamageShape damageShape;

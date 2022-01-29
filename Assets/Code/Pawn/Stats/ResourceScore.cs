@@ -21,7 +21,7 @@ namespace ARPG.Pawn
 
         [SerializeField] private float currentPercent = 1;
 
-        public void RecalculateValues()
+        private void RecalculateValues()
         {
             /// store the currentValue percentage before recalculating maxValue
             if (0 < Stat.MaxValue)
@@ -35,9 +35,9 @@ namespace ARPG.Pawn
 
         public void AddToCurrentValue(float value)
         {
-            currentValue += Mathf.Clamp(value, 0, Stat.MaxValue);
+            currentValue = Mathf.Clamp(currentValue + value, 0, Stat.MaxValue);
 
-            currentPercent = CurrentValue / Stat.MaxValue;
+            currentPercent = CurrentValue * 100 / Stat.MaxValue;
 
             currentHasChanged?.Invoke(currentPercent);
         }
@@ -51,9 +51,9 @@ namespace ARPG.Pawn
             currentHasChanged?.Invoke(currentPercent);
         }
 
-        public void SetScore(StatScore stat)
-        {
-            this.stat = stat;
-        }
+        //public void SetScore(StatScore stat)
+        //{
+        //    this.stat = stat;
+        //}
     }
 }

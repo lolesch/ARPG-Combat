@@ -10,7 +10,7 @@ namespace ARPG.Combat
     [Serializable]
     public class SkillSpawner : MonoBehaviour
     {
-        private Vector3[] projectileDirections;
+        //private Vector3[] projectileDirections;
         private SpawnData data;
 
         [SerializeField] private Player player;
@@ -19,40 +19,47 @@ namespace ARPG.Combat
         private void OnDestroy() => InputTranslator.Instance.castSkill -= Cast;
         private void Awake() => InputTranslator.Instance.castSkill += Cast;
 
-        public void Cast(uint index, Vector3 target)
+        public void Cast(int index, Vector3 pointerPorition)
         {
-            data = player.skills[(int)index].SpawnData;
+            var skill = player.skills[index];
 
-            //TODO: check for cooldown before casting
-            // also add an ability cost value to check against
+            if (skill)
+                data = skill.SpawnData;
 
-            if (data != null) // && InventoryHolder.Instance.playerSkills.cells[index].StartCooldown())
+            if (data != null)
             {
+                /// check for cooldown before casting
+                // also add an ability cost value to check against
+                if (data.CooldownTicker.IsTicking)
+                    return;
+                else
+                    data.CooldownTicker.Restart();
+
                 //CalculateDirections(XZDirection(target, transform.position));
                 //
                 //for (int i = 0; i < data.AmountToSpawn; i++)
                 //    SpawnObject(target, i);
-                Spawn(target);
-
                 EditorDebug.Log($"casting skill {index}");
+
+                SpawnDamageShape(pointerPorition);
             }
             else
                 EditorDebug.Log("casting failed");
-        }
 
-        private void Spawn(Vector3 targetPos)
-        {
-            var shape = Instantiate(data.DamageShape.gameObject, targetPos, playerAgent.rotation, this.transform).GetComponent<DamageShape>();
+            void SpawnDamageShape(Vector3 targetPos)
+            {
+                var shape = Instantiate(data.DamageShape.gameObject, targetPos, playerAgent.rotation, this.transform).GetComponent<DamageShape>();
 
-            EditorDebug.Log("instantiated a damage shape");
+                EditorDebug.Log("instantiated a damage shape");
 
-            #region travel behaviour
-            shape.projectileSpeed = data.ProjectileSpeed;
-            shape.GetComponent<CapsuleCollider>().radius = data.ProjectileRadius;
-            shape.spawnPosition = targetPos;
-            shape.target = data.SpawnAtCursor ? targetPos : targetPos + playerAgent.forward * data.MaxDistance;
-            shape.GetComponentInChildren<Canvas>().transform.localScale = new Vector2(data.ProjectileRadius * 2, data.ProjectileRadius * 2);
-            #endregion
+                #region travel behaviour
+                shape.projectileSpeed = data.ProjectileSpeed;
+                shape.GetComponent<CapsuleCollider>().radius = data.ProjectileRadius;
+                shape.spawnPosition = targetPos;
+                shape.target = data.SpawnAtCursor ? targetPos : targetPos + playerAgent.forward * data.SkillRange;
+                shape.GetComponentInChildren<Canvas>().transform.localScale = new Vector2(data.ProjectileRadius * 2, data.ProjectileRadius * 2);
+                #endregion
+            }
         }
 
         //private void SpawnObject(Vector3 targetPos, int index)
@@ -71,11 +78,11 @@ namespace ARPG.Combat
         //    shape.GetComponentInChildren<Canvas>().transform.localScale = new Vector3(data.ProjectileRadius* 2, data.ProjectileRadius* 2, 0);
         //    #endregion
         //}
-        //
-        //private Vector3 XZDirection(Vector3 to, Vector3 from) => new Vector3(to.x - from.x, 0, to.z - from.z).normalized;
-        //
-        //private float XZDistance(Vector3 to, Vector3 from) => new Vector3(to.x - from.x, 0, to.z - from.z).magnitude;
-        //
+
+        private Vector3 XZDirection(Vector3 to, Vector3 from) => new Vector3(to.x - from.x, 0, to.z - from.z).normalized;
+
+        private float XZDistance(Vector3 to, Vector3 from) => new Vector3(to.x - from.x, 0, to.z - from.z).magnitude;
+
         //private void CalculateDirections(Vector3 targetDirection)
         //{
         //    projectileDirections = new Vector3[data.AmountToSpawn];
@@ -83,7 +90,7 @@ namespace ARPG.Combat
         //    for (int i = 0; i < projectileDirections.Length; i++)
         //        projectileDirections[i] = Quaternion.Euler(0, DirectionAngle(i), 0) * targetDirection;
         //}
-        //
+
         //private float DirectionAngle(int index)
         //{
         //    if (data.AmountToSpawn <= 1)
@@ -93,7 +100,7 @@ namespace ARPG.Combat
         //    else
         //        return data.FullAngle * .5f - (data.FullAngle / (data.AmountToSpawn - 1) * index);
         //}
-        //
+
         //private Vector3 CalculateStartPosition(Vector3 targetPos, int index)
         //{
         //    /// calculate the position at the skills max range distance towards the cursors position

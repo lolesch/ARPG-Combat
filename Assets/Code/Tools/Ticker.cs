@@ -14,7 +14,7 @@ namespace ARPG.Tools
         /// <summary>
         /// progress has not reached duration
         /// </summary>
-        public bool Ticking => progress <= duration;
+        public bool IsTicking => progress < duration;
 
         public float Progress => Mathf.Clamp(progress, 0, duration);
 
@@ -27,15 +27,15 @@ namespace ARPG.Tools
         /// <summary>
         /// A Ticker adds up it's progress to reach a predefined duration by a given tickDelta
         /// </summary>
-        public Ticker(float duration)
+        public Ticker(float duration, bool startLocked = false)
         {
             if (0 < duration)
-                this.duration = duration;
-            else
             {
-                EditorDebug.LogError($"Not able to create a Ticker with {duration} duration");
-                this.duration = 1f;
+                this.duration = duration;
+                progress = startLocked ? 0 : duration;
             }
+            else
+                EditorDebug.LogWarning($"The Ticker's duration is {duration} - so it will never tick");
         }
 
         /// <summary>
@@ -46,6 +46,6 @@ namespace ARPG.Tools
         /// <summary>
         /// Resets the current progress to 0
         /// </summary>
-        public void Reset() => progress = 0f;
+        public void Restart() => progress = 0f;
     }
 }

@@ -18,7 +18,7 @@ namespace ARPG.Pawn.Movement
             if (!target)
                 EditorDebug.LogWarning($"Camera \t Missing FollowTarget on {gameObject.name}");
 
-            startPosition = transform.position;
+            startPosition = transform.position - target.position;
         }
 
         void LateUpdate()

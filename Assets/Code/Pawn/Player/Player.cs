@@ -1,24 +1,50 @@
+using ARPG.Combat;
 using ARPG.Container;
 using ARPG.Enums;
+using ARPG.Tools;
 using System.Collections.Generic;
+using TeppichsTools.Logging;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ARPG.Pawn
 {
-    public class Player : Character
+    public class Player : Character, IRegenerate
     {
         public List<Skill> skills = new(6);
 
-        [SerializeField] private Image healthbar;
-        protected void Awake()
+        protected override void Awake()
         {
-            stats.Add(StatName.HealthMax, new StatScore(100));
-            if (stats.TryGetValue(StatName.HealthMax, out StatScore healthMax))
-                resources.Add(Resource.HealthCurrent, new ResourceScore(healthMax));
+            base.Awake();
 
-            if (resources.TryGetValue(Resource.HealthCurrent, out ResourceScore health))
-                healthbar.fillAmount = healthMax.MaxValue / health.CurrentValue;
+            stats.Add(StatName.HealthPerSecond, new StatScore(5));
+            stats.Add(StatName.ManaMax, new StatScore(60));
+            stats.Add(StatName.ManaPerSecond, new StatScore(12));
+
+            resources.Add(Resource.ManaCurrent, new ResourceScore(new StatScore(60)));
+            //if (resources.TryGetValue(Resource.ManaCurrent, out ResourceScore manaCurrent))
+            //    manaCurrent.AddToCurrentValue(60);
+
+            foreach (var skill in skills)
+                skill.SpawnData.CooldownTicker = new Ticker(skill.SpawnData.CooldownDuration, false);
+        }
+
+        private void LateUpdate()
+        {
+            foreach (var skill in skills)
+                if (skill.SpawnData.CooldownTicker.IsTicking)
+                    skill.SpawnData.CooldownTicker.Tick(Time.deltaTime);
+
+            Regenerate(StatName.HealthMax, Resource.HealthCurrent, StatName.HealthPerSecond);
+            Regenerate(StatName.ManaMax, Resource.ManaCurrent, StatName.ManaPerSecond);
+        }
+
+        public void Regenerate(StatName max, Resource resource, StatName regen)
+        {
+            if (stats.TryGetValue(max, out StatScore maxValue))
+                if (resources.TryGetValue(resource, out ResourceScore current))
+                    if (current.CurrentValue < maxValue.MaxValue)
+                        if (stats.TryGetValue(regen, out StatScore regenValue))
+                            current.AddToCurrentValue(regenValue.MaxValue * Time.deltaTime);
         }
     }
 }

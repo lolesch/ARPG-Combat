@@ -31,7 +31,6 @@ namespace ARPG.Pawn
         public float MaxValue => maxValue;
 
         #region StatModifiers
-
         public void AddModifier(StatModifier mod)
         {
             statModifiers.Add(mod);
@@ -77,12 +76,9 @@ namespace ARPG.Pawn
 
             return wasRemoved;
         }
-
         #endregion
 
         #region EquipmentStatModifiers
-
-
         public void SetEquipmentModifiers(List<StatModifier> modifiers)
         {
             if (modifiers is null)
@@ -96,7 +92,6 @@ namespace ARPG.Pawn
             equipmentStatModifiers.Sort(CompareModifierOrder);
             RecalculateValues();
         }
-
         #endregion
 
         public virtual void RecalculateValues()

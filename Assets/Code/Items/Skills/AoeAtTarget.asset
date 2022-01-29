@@ -12,31 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0df27136eec3b0c42a1f82106fc1fbb6, type: 3}
   m_Name: AoeAtTarget
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: dimensions
-      Entry: 7
-      Data: ARPG.Container.UintUint, Game
-    - Name: x
-      Entry: 3
-      Data: 1
-    - Name: y
-      Entry: 3
-      Data: 1
-    - Name: 
-      Entry: 8
-      Data: 
   guid: AoeAtTarget-fbc20e07-ef8e-4ed1-b816-94541f487017
   icon: {fileID: 21300000, guid: 4a8b11548ae1ade4ba8602f9191f1807, type: 3}
   description: 
-  type: 1
   spawnData: {fileID: 11400000, guid: bf1b0806568b81342bfe710f3dc78458, type: 2}
-  cooldownDuration: 0.5
-  effects: []

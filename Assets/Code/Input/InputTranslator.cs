@@ -35,7 +35,7 @@ namespace ARPG.Input
         [SerializeField] private bool isLeftSticking;
         [SerializeField] private bool isForcingStop;
 
-        public event Action<uint, Vector3> castSkill;
+        public event Action<int, Vector3> castSkill;
         public event Action<Vector3> setTargetPos;
         public event Action<bool> setForceStop;
         public event Action<bool> setCrouching;
@@ -53,12 +53,9 @@ namespace ARPG.Input
                 screenPoint = Camera.main.WorldToScreenPoint(xzVector + transform.position); // why transform.position? this is not the player 
             }
 
-            if (isLeftClicking || isLeftSticking)
-            {
-                Ray ray = Camera.main.ScreenPointToRay(screenPoint);
+            Ray ray = Camera.main.ScreenPointToRay(screenPoint);
 
-                targetPosition = HitPosition(ray);
-            }
+            targetPosition = HitPosition(ray);
 
             if (hasMovementInput)
                 setTargetPos?.Invoke(targetPosition);
@@ -173,7 +170,7 @@ namespace ARPG.Input
 
         #region Skills
 
-        private void CastSkill(uint index)
+        private void CastSkill(int index)
         {
             castSkill?.Invoke(index, targetPosition);
         }

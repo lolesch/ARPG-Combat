@@ -13,11 +13,12 @@ namespace ARPG.Combat
 
     public interface ITakeDamage
     {
+        void SetCurrentHealth();
         void TakeDamage(float damage);
     }
 
     public interface IRegenerate
     {
-        void Regenerate(StatName stat, StatName regen);
+        void Regenerate(StatName max, Resource resource, StatName regen);
     }
 }

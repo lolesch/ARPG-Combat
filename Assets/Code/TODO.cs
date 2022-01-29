@@ -6,4 +6,6 @@ public class TODO : MonoBehaviour
     // add skill effects
     // apply skill effects to targets
     // check for cooldown before casting
+    // make projectiles poolable
+    // fix screenPosition calculation for not having a click input
 }

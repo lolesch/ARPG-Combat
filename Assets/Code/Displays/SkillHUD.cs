@@ -9,10 +9,13 @@ namespace ARPG.GUI
         [SerializeField] private List<SkillSlot> skillSlots = new(6);
         [SerializeField] private Player player;
 
-        void Awake()
+        void LateUpdate()
         {
             for (int i = 0; i < player.skills.Count; i++)
+            {
                 skillSlots[i].SetIcon(player.skills[i].Icon);
+                skillSlots[i].SetCooldownFillAmount(1 - player.skills[i].SpawnData.CooldownTicker.Progress01);
+            }
         }
     }
 }

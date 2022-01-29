@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: MultiProjectileCircle
   m_EditorClassIdentifier: 
   spawnAtCursor: 0
+  cooldownDuration: 1
+  resourceCost: 20
   amountToSpawn: 8
   fullAngle: 360
   minDist: 1
   projectileSpeed: 8
   maxDist: 8
   projectileDiameter: 1
-  resourceCost: 20
   damageShape: {fileID: 2087973171162287284, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
