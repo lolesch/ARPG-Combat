@@ -14,51 +14,56 @@ namespace ARPG.Combat
         private SpawnData data;
 
         [SerializeField] private Player player;
-        [SerializeField] private Transform playerAgent;
+        [SerializeField] private Transform casterPosition;
 
-        private void OnDestroy() => InputTranslator.Instance.castSkill -= Cast;
-        private void Awake() => InputTranslator.Instance.castSkill += Cast;
+        private void OnDestroy() => InputTranslator.Instance.castSkill -= TryCast;
+        private void Awake() => InputTranslator.Instance.castSkill += TryCast;
 
-        public void Cast(int index, Vector3 pointerPorition)
+        public void TryCast(int index, Vector3 pointerPorition)
         {
             var skill = player.skills[index];
 
             if (skill)
                 data = skill.SpawnData;
 
-            if (data != null)
+            if (data)
             {
                 /// check for cooldown before casting
-                // also add an ability cost value to check against
                 if (data.CooldownTicker.IsTicking)
                     return;
-                else
-                    data.CooldownTicker.Restart();
 
-                //CalculateDirections(XZDirection(target, transform.position));
-                //
-                //for (int i = 0; i < data.AmountToSpawn; i++)
-                //    SpawnObject(target, i);
-                EditorDebug.Log($"casting skill {index}");
+                if (player.resources.TryGetValue(Enums.Resource.ManaCurrent, out ResourceScore current))
+                    if (data.ResourceCost <= current.CurrentValue)
+                    {
+                        data.CooldownTicker.Restart();
+                        current.AddToCurrentValue(-data.ResourceCost);
 
-                SpawnDamageShape(pointerPorition);
+                        //CalculateDirections(XZDirection(target, transform.position));
+                        //
+                        //for (int i = 0; i < data.AmountToSpawn; i++)
+                        //    SpawnObject(target, i);
+
+                        ///  maxSpawnRange
+                        var spawnPosition = pointerPorition;
+                        if (data.SpawnRange < XZDistance(pointerPorition, casterPosition.position))
+                            spawnPosition = XZDirection(pointerPorition, casterPosition.position) * data.SpawnRange;
+
+                        SpawnDamageShape(data.SpawnAtCursor ? spawnPosition : casterPosition.position);
+                    }
             }
-            else
-                EditorDebug.Log("casting failed");
 
-            void SpawnDamageShape(Vector3 targetPos)
+            void SpawnDamageShape(Vector3 spawnPosition)
             {
-                var shape = Instantiate(data.DamageShape.gameObject, targetPos, playerAgent.rotation, this.transform).GetComponent<DamageShape>();
-
-                EditorDebug.Log("instantiated a damage shape");
+                data.Projectile.gameObject.SetActive(false);
+                var shape = Instantiate(data.Projectile.gameObject, spawnPosition, casterPosition.rotation, this.transform).GetComponent<Projectile>();
 
                 #region travel behaviour
-                shape.projectileSpeed = data.ProjectileSpeed;
-                shape.GetComponent<CapsuleCollider>().radius = data.ProjectileRadius;
-                shape.spawnPosition = targetPos;
-                shape.target = data.SpawnAtCursor ? targetPos : targetPos + playerAgent.forward * data.SkillRange;
-                shape.GetComponentInChildren<Canvas>().transform.localScale = new Vector2(data.ProjectileRadius * 2, data.ProjectileRadius * 2);
+                shape.data = data;
+                shape.SpawnPosition = spawnPosition;
+                shape.TargetPosition = 0 < data.ProjectileSpeed ? spawnPosition + casterPosition.forward * data.ProjectileSpeed : spawnPosition;
                 #endregion
+
+                shape.gameObject.SetActive(true);
             }
         }
 

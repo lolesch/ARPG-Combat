@@ -12,13 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54a4efd8a2e840b46ac2c392478fc3a4, type: 3}
   m_Name: MultiProjectile
   m_EditorClassIdentifier: 
-  spawnAtCursor: 0
-  cooldownDuration: 2
+  cooldownDuration: 0.334
   resourceCost: 10
-  amountToSpawn: 5
-  fullAngle: 40
-  minDist: 0.5
-  projectileSpeed: 15
-  maxDist: 13
-  projectileDiameter: 0.5
-  damageShape: {fileID: 2087973171162287284, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
+  spawnAtCursor: 0
+  spawnRange: 1
+  innerRadius: 0
+  outerRadius: 0.5
+  isPiercing: 0
+  projectileAmount: 5
+  shapeAngle: 60
+  projectileSpeed: 20
+  despawnRange: 15
+  projectile: {fileID: 2626277891086901119, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
+  hitEffects:
+  - statName: 3
+    stat:
+      maxValue: 30
+    duration: 0

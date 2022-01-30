@@ -292,7 +292,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2947512663505120141}
-  - component: {fileID: 3825577839990568622}
+  - component: {fileID: 7637439423765172836}
+  - component: {fileID: 3392654942968212597}
   m_Layer: 0
   m_Name: PLAYER
   m_TagString: Untagged
@@ -318,7 +319,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3825577839990568622
+--- !u!136 &7637439423765172836
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5919450227532053056}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 1
+  m_Height: 3
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &3392654942968212597
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -338,7 +353,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 84c1a70bfe3aaab40929b1757073c8e1, type: 2}
   - {fileID: 11400000, guid: e0a7cae700c4e9c44bf17696edbdd776, type: 2}
   - {fileID: 11400000, guid: 79976155e0bf117469dfdd42a86f7309, type: 2}
-  - {fileID: 11400000, guid: 84c1a70bfe3aaab40929b1757073c8e1, type: 2}
+  - {fileID: 11400000, guid: 91a3bcb84163d83439e0fb334f1d7bf9, type: 2}
 --- !u!1 &6153387198083137144
 GameObject:
   m_ObjectHideFlags: 0
@@ -383,8 +398,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a49eec91d75ec54ab51d29194e61d88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 3825577839990568622}
-  playerAgent: {fileID: 0}
+  player: {fileID: 0}
+  casterPosition: {fileID: 0}
 --- !u!1001 &1975245457162981360
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -463,7 +478,7 @@ PrefabInstance:
     - target: {fileID: 6539053085181617804, guid: b08d5da15d14a544ea2d67c78d13e356, type: 3}
       propertyPath: character
       value: 
-      objectReference: {fileID: 3825577839990568622}
+      objectReference: {fileID: 0}
     - target: {fileID: 7968358489927484275, guid: b08d5da15d14a544ea2d67c78d13e356, type: 3}
       propertyPath: m_Name
       value: Healthbar

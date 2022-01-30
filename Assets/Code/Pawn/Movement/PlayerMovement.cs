@@ -4,6 +4,8 @@ using ARPG.Tools;
 using TeppichsTools.Logging;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 namespace ARPG.Pawn.Movement
 {
@@ -13,10 +15,12 @@ namespace ARPG.Pawn.Movement
 
         private StepLock movementLocker = new();
 
+        private bool isLeftClicking;
+
         private void OnDestroy()
         {
             movementLocker.locked -= ForceStop;
-            InputTranslator.Instance.setTargetPos -= SetMovementTarget;
+            InputTranslator.Instance.setLeftClick -= SetLeftClick;
             InputTranslator.Instance.setForceStop -= SetForceStop;
             InputTranslator.Instance.setCrouching -= SetCrouchSpeed;
         }
@@ -26,7 +30,7 @@ namespace ARPG.Pawn.Movement
             base.Awake();
 
             movementLocker.locked += ForceStop;
-            InputTranslator.Instance.setTargetPos += SetMovementTarget;
+            InputTranslator.Instance.setLeftClick += SetLeftClick;
             InputTranslator.Instance.setForceStop += SetForceStop;
             InputTranslator.Instance.setCrouching += SetCrouchSpeed;
 
@@ -35,9 +39,31 @@ namespace ARPG.Pawn.Movement
 
         private void Update()
         {
+            if (isLeftClicking)
+                CalculatePointerMovementTarget();
+
             //animationSpeed?.Invoke(agent.velocity.magnitude / 6f); // walk speed adjustment to not slide
             SetRotation();
         }
+
+        private void CalculatePointerMovementTarget()
+        {
+            //if (!Interactable.current)
+            //{
+            var screenPoint = Pointer.current.position.ReadValue();
+
+            Ray ray = Camera.main.ScreenPointToRay(screenPoint);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, 3))
+                SetMovementTarget(hit.point);
+            else
+                EditorDebug.LogError("raycast \t no collider found");
+            //}
+            //else
+            //    SetMovementTarget(Interactable.current.transform.position); // - direction * interactionRange
+        }
+
+        private void SetLeftClick(bool isLeftClicking) => this.isLeftClicking = isLeftClicking;
 
         public void SetMovementTarget(Vector3 inputTarget)
         {

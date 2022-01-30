@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 54a4efd8a2e840b46ac2c392478fc3a4, type: 3}
-  m_Name: MultiProjectileCircle
+  m_Name: Ring
   m_EditorClassIdentifier: 
-  cooldownDuration: 1
-  resourceCost: 20
+  cooldownDuration: 2
+  resourceCost: 30
   spawnAtCursor: 0
   spawnRange: 1
-  innerRadius: 0
-  outerRadius: 1
+  innerRadius: 4
+  outerRadius: 5
   isPiercing: 1
-  projectileAmount: 8
-  shapeAngle: 360
-  projectileSpeed: 8
-  despawnRange: 10
+  projectileAmount: 1
+  shapeAngle: 0
+  projectileSpeed: 0
+  despawnRange: 0
   projectile: {fileID: 2626277891086901119, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
   hitEffects:
   - statName: 3

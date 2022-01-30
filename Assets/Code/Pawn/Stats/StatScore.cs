@@ -11,7 +11,7 @@ namespace ARPG.Pawn
     [Serializable]
     public class StatScore
     {
-        //TODO: handle derived attributes - i.e. strength powers your damage
+        //TODO: handle derived attributes - i.e. strength powers your damageStat
 
         public event Action<float> maxHasChanged;
 
@@ -22,7 +22,7 @@ namespace ARPG.Pawn
             RecalculateValues();
         }
 
-        [SerializeField] protected float baseValue;
+        protected float baseValue;
 
         [SerializeField] protected readonly List<StatModifier> statModifiers = new List<StatModifier>();
         [SerializeField] protected List<StatModifier> equipmentStatModifiers = new List<StatModifier>();
@@ -83,7 +83,7 @@ namespace ARPG.Pawn
         {
             if (modifiers is null)
             {
-                Debug.LogError("modifiers was null");
+                EditorDebug.LogError("modifiers was null");
                 return;
             }
 

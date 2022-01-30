@@ -1,5 +1,5 @@
+using ARPG.Enums;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ARPG.Pawn
@@ -7,20 +7,20 @@ namespace ARPG.Pawn
     [Serializable]
     public struct Effect
     {
-        [SerializeField]
-        private StatScore stat;
+        public Effect(StatName stat, StatScore value, float duration)
+        {
+            this.statName = stat;
+            this.stat = value;
+            this.duration = duration;
+        }
+
+        [SerializeField] private StatName statName;
+        [SerializeField] private StatScore stat;
 
         /// <summary>
         /// The duration of the effect. If set to 0 the effect will be applied instantly
         /// </summary>
         [Range(0, 120)]
-        [SerializeField]
-        private float duration;
-
-        public Effect(StatScore stat, float duration)
-        {
-            this.stat = stat;
-            this.duration = duration;
-        }
+        [SerializeField] private float duration;
     }
 }

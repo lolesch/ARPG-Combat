@@ -1,5 +1,7 @@
 using ARPG.Combat;
+using ARPG.Pawn;
 using ARPG.Tools;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ARPG.Container
@@ -8,52 +10,70 @@ namespace ARPG.Container
     public class SpawnData : ScriptableObject
     {
         public Ticker CooldownTicker;
-
-        [SerializeField]
-        private bool spawnAtCursor = false;
-        public bool SpawnAtCursor { get => spawnAtCursor; }
-
+        //
+        [Tooltip("The duration (seconds) to wait before re-casting is enabled")]
         [Range(0f, 300f)]
         [SerializeField] private float cooldownDuration = 0f;
         public float CooldownDuration => cooldownDuration;
+        //
+        [Tooltip("The required resource amount consumed during casting")]
+        [Range(0u, 300u)]
+        [SerializeField] private uint resourceCost = 10;
+        public uint ResourceCost => resourceCost;
 
-        [Range(0, 300)]
-        [SerializeField]
-        private uint resourceCost = 10;
-        public uint ResourceCost { get => resourceCost; }
+        ///
+        [Header("Spawn Settings")]
+        //
+        [Tooltip("Spawn at the current cursor position? else spawn at the caster's position")]
+        [SerializeField] private bool spawnAtCursor = false;
+        public bool SpawnAtCursor => spawnAtCursor;
 
+        [Tooltip("The max distance to the caster the skill can spawn at")]
+        [Range(1f, 30f)]
+        [SerializeField] private float spawnRange = 5;
+        public float SpawnRange => spawnRange;
+
+        /// 
+        [Header("Projectile Settings")]
+
+        [Tooltip("The inner radius of the shape")]
+        [Range(0f, 14f)]
+        [SerializeField] private float innerRadius = 0f;
+        public float InnerRadius => innerRadius;
+
+        [Tooltip("The outer radius of the shape")]
+        [Range(0.1f, 15f)]
+        [SerializeField] private float outerRadius = 5;
+        public float OuterRadius => outerRadius;
+
+        [Tooltip("projectile passes through enemies? else despawn on first collision")]
+        [SerializeField] private bool isPiercing = false;
+        public bool IsPiercing => isPiercing;
+
+        ///
+        [Header("Path Settings")]
+
+        [Tooltip("The amount of projectiles spawned")]
         [Range(1u, 24u)]
-        [SerializeField]
-        private uint amountToSpawn = 1u;
-        public uint AmountToSpawn { get => amountToSpawn; }
+        [SerializeField] private uint projectileAmount = 1u;
+        public uint ProjectileAmount => projectileAmount;
 
-        [Range(1u, 360u)]
-        [SerializeField]
-        private uint fullAngle = 360u;
-        public float FullAngle { get => fullAngle; }
-
-        [Range(0f, 180f)]
-        [SerializeField]
-        private float minDist = 0f;
-        public float MinDistance { get => minDist; }
+        [Tooltip("The angle of launched projectiles centered on the caster's forward direction. 0 == line")]
+        [Range(0u, 360u)]
+        [SerializeField] private uint shapeAngle = 0u;
+        public float ShapeAngle => shapeAngle;
 
         [Range(0u, 30u)]
-        [SerializeField]
-        private uint projectileSpeed = 3u;
-        public float ProjectileSpeed { get => projectileSpeed; }
+        [SerializeField] private uint projectileSpeed = 3u;
+        public float ProjectileSpeed => projectileSpeed;
 
-        [Range(1, 15)]
-        [SerializeField]
-        private float maxDist = 5;
-        public float SkillRange { get => maxDist; }
+        [Range(0f, 30f)]
+        [SerializeField] private float despawnRange = 1;
+        public float DespawnRange => despawnRange;
 
-        [Range(0, 10)]
-        [SerializeField]
-        private float projectileDiameter = 1;
-        public float ProjectileRadius { get => projectileDiameter / 2; }
+        [SerializeField] private Projectile projectile;
+        public Projectile Projectile => projectile;
 
-        [SerializeField]
-        private DamageShape damageShape;
-        public DamageShape DamageShape { get => damageShape; }
+        [SerializeField] private List<Effect> hitEffects = new();
     }
 }

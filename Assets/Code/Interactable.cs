@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace ARPG.Input
 {
+    [RequireComponent(typeof(CapsuleCollider))]
     public abstract class Interactable : MonoBehaviour
     {
         public static Interactable current;
@@ -23,6 +24,9 @@ namespace ARPG.Input
         {
             if (Interaction == InteractionType.NONE)
                 EditorDebug.LogWarning($"Interaction \t {name} is missing an interaction type");
+
+            if (TryGetComponent(out Rigidbody rb) && rb.collisionDetectionMode == CollisionDetectionMode.Discrete)
+                EditorDebug.LogWarning("input Raycasting might miss this rigidBodie's collider since input is not in the fixedUpdate loop");
         }
 
 #if UNITY_EDITOR

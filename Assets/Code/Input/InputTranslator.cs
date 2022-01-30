@@ -1,4 +1,6 @@
+using ARPG.Enums;
 using System;
+using System.Collections;
 using TeppichsTools.Creation;
 using TeppichsTools.Logging;
 using UnityEngine;
@@ -13,6 +15,8 @@ namespace ARPG.Input
     /// </summary>
     public class InputTranslator : MonoSingleton<InputTranslator>
     {
+        public LayerMask layerMask = 1;
+
         [Header("Settings")]
         //[SerializeField] private bool[] quickCastSettings = new bool[6];
         [SerializeField] private bool isHoldToCrouch = true;
@@ -23,51 +27,39 @@ namespace ARPG.Input
         private Vector3 targetPosition;
         private Vector2 leftStickPosition;
         private RaycastHit hit;
-        private Vector3 screenPoint = Vector3.zero;
-
-        [SerializeField] private LayerMask layerToIgnoreRaycast = 4;
 
         [Header("Observation")]
         [SerializeField] private bool hasClickedOnUI;
         [SerializeField] private bool isCrouching;
         [SerializeField] private bool hasMovementInput;
-        [SerializeField] private bool isLeftClicking;
         [SerializeField] private bool isLeftSticking;
         [SerializeField] private bool isForcingStop;
 
         public event Action<int, Vector3> castSkill;
         public event Action<Vector3> setTargetPos;
+        public event Action<bool> setLeftClick;
+        public event Action<bool> setLeftStick;
         public event Action<bool> setForceStop;
         public event Action<bool> setCrouching;
 
         private void FixedUpdate()
         {
-            if (isLeftClicking)
-            {
-                screenPoint = Mouse.current.position.ReadValue();
-            }
+            setLeftStick?.Invoke(isLeftSticking);
 
-            if (isLeftSticking)
-            {
-                var xzVector = XZVector(leftStickPosition);
-                screenPoint = Camera.main.WorldToScreenPoint(xzVector + transform.position); // why transform.position? this is not the player 
-            }
-
-            Ray ray = Camera.main.ScreenPointToRay(screenPoint);
-
-            targetPosition = HitPosition(ray);
-
-            if (hasMovementInput)
-                setTargetPos?.Invoke(targetPosition);
+            //if (isLeftSticking)
+            //{
+            //    var xzVector = XZVector(leftStickPosition);
+            //    screenPoint = Camera.main.WorldToScreenPoint(xzVector + transform.position); // why transform.position? this is not the player 
+            //}
         }
 
-        private Vector3 HitPosition(Ray ray)
-        {
-            if (!Physics.Raycast(ray, out hit, Mathf.Infinity, layerToIgnoreRaycast))
-                EditorDebug.LogError("raycast \t no collider found");
-
-            return hit.point;
-        }
+        //private Vector3 HitPosition(Ray ray)
+        //{
+        //    if (!Physics.Raycast(ray, out hit, Mathf.Infinity, 3))
+        //        EditorDebug.LogError("raycast \t no collider found");
+        //
+        //    return hit.point;
+        //}
 
         private Vector3 XZVector(Vector2 target)
         {
@@ -93,26 +85,30 @@ namespace ARPG.Input
                 return;
 
             if (ctx.started)
-            {
-                //hasClickedOnUI = EventSystem.current.IsPointerOverGameObject();
+                //if (!EventSystem.current.IsPointerOverGameObject()) // some check for IsOverUI here
+                SetCurrentInteractable();
 
-                /// set the current interactable
-                // invoke action and have the interactable handle this?
-                screenPoint = Mouse.current.position.ReadValue();
+            setLeftClick?.Invoke(ctx.performed);
+
+            void SetCurrentInteractable()
+            {
+                var screenPoint = Pointer.current.position.ReadValue();
 
                 Ray ray = Camera.main.ScreenPointToRay(screenPoint);
 
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerToIgnoreRaycast))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~layerMask))
                 {
-                    EditorDebug.LogWarning(hit.collider.gameObject.name);
                     Interactable.current = hit.collider.TryGetComponent(out Interactable interactable) ? interactable : null;
+                    EditorDebug.LogWarning($"{hit.collider.gameObject.name} + isInteractable {null != interactable}");
+                }
+                else if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+                {
+                    Interactable.current = hit.collider.TryGetComponent(out Interactable interactable) ? interactable : null;
+                    EditorDebug.LogWarning($"{hit.collider.gameObject.name} + isInteractable {null != interactable}");
                 }
                 else
                     EditorDebug.LogError("raycast \t no collider found");
             }
-
-            isLeftClicking = ctx.performed;
-            hasMovementInput = isLeftClicking && !hasClickedOnUI;
         }
 
         public void RightClick(InputAction.CallbackContext ctx)
