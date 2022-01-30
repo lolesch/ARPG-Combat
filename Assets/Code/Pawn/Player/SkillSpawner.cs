@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using TeppichsTools.Logging;
 using ARPG.Pawn;
+using UnityEngine.InputSystem;
 
 namespace ARPG.Combat
 {
@@ -13,13 +14,15 @@ namespace ARPG.Combat
         //private Vector3[] projectileDirections;
         private SpawnData data;
 
+        //[SerializeField] private bool[] quickCastSettings = new bool[6];
+
         [SerializeField] private Player player;
-        [SerializeField] private Transform casterPosition;
+        [SerializeField] private Transform caster;
 
         private void OnDestroy() => InputTranslator.Instance.castSkill -= TryCast;
         private void Awake() => InputTranslator.Instance.castSkill += TryCast;
 
-        public void TryCast(int index, Vector3 pointerPorition)
+        public void TryCast(int index)
         {
             var skill = player.skills[index];
 
@@ -28,7 +31,6 @@ namespace ARPG.Combat
 
             if (data)
             {
-                /// check for cooldown before casting
                 if (data.CooldownTicker.IsTicking)
                     return;
 
@@ -43,29 +45,59 @@ namespace ARPG.Combat
                         //for (int i = 0; i < data.AmountToSpawn; i++)
                         //    SpawnObject(target, i);
 
-                        ///  maxSpawnRange
-                        var spawnPosition = pointerPorition;
-                        if (data.SpawnRange < XZDistance(pointerPorition, casterPosition.position))
-                            spawnPosition = XZDirection(pointerPorition, casterPosition.position) * data.SpawnRange;
 
-                        SpawnDamageShape(data.SpawnAtCursor ? spawnPosition : casterPosition.position);
+                        SpawnDamageShape(data.SpawnAtCursor ? CalculateSpawnPosition() : caster.position);
                     }
             }
 
             void SpawnDamageShape(Vector3 spawnPosition)
             {
                 data.Projectile.gameObject.SetActive(false);
-                var shape = Instantiate(data.Projectile.gameObject, spawnPosition, casterPosition.rotation, this.transform).GetComponent<Projectile>();
+                var shape = Instantiate(data.Projectile.gameObject, spawnPosition, caster.rotation, this.transform).GetComponent<Projectile>();
 
                 #region travel behaviour
                 shape.data = data;
                 shape.SpawnPosition = spawnPosition;
-                shape.TargetPosition = 0 < data.ProjectileSpeed ? spawnPosition + casterPosition.forward * data.ProjectileSpeed : spawnPosition;
+                shape.TargetPosition = 0 < data.ProjectileSpeed ? spawnPosition + caster.forward * data.ProjectileSpeed : spawnPosition;
                 #endregion
 
                 shape.gameObject.SetActive(true);
             }
+
+            Vector3 CalculateSpawnPosition()
+            {
+                Vector3 pointerPosition = caster.position;
+
+                var screenPoint = Pointer.current.position.ReadValue();
+
+                Ray ray = Camera.main.ScreenPointToRay(screenPoint);
+
+                if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, ~0))
+                {
+                    pointerPosition = hit.point;
+
+                    var dist = XZDistance(pointerPosition, caster.position);
+
+                    if (data.SpawnRange < dist)
+                    {
+                        var maxCastDistancePosition = caster.position + (XZDirection(pointerPosition, caster.position).normalized * data.SpawnRange);
+
+                        var rayOrigin = new Vector3(maxCastDistancePosition.x, 100, maxCastDistancePosition.z);
+
+                        ray = new Ray(rayOrigin, Vector3.down);
+
+                        if (Physics.Raycast(ray, out hit))
+                            pointerPosition = hit.point;
+                    }
+                }
+
+                return pointerPosition;
+            }
         }
+
+        private Vector3 XZDirection(Vector3 to, Vector3 from) => new Vector3(to.x - from.x, 0, to.z - from.z).normalized;
+
+        private float XZDistance(Vector3 to, Vector3 from) => new Vector3(to.x - from.x, 0, to.z - from.z).magnitude;
 
         //private void SpawnObject(Vector3 targetPos, int index)
         //{
@@ -83,10 +115,6 @@ namespace ARPG.Combat
         //    shape.GetComponentInChildren<Canvas>().transform.localScale = new Vector3(data.ProjectileRadius* 2, data.ProjectileRadius* 2, 0);
         //    #endregion
         //}
-
-        private Vector3 XZDirection(Vector3 to, Vector3 from) => new Vector3(to.x - from.x, 0, to.z - from.z).normalized;
-
-        private float XZDistance(Vector3 to, Vector3 from) => new Vector3(to.x - from.x, 0, to.z - from.z).magnitude;
 
         //private void CalculateDirections(Vector3 targetDirection)
         //{

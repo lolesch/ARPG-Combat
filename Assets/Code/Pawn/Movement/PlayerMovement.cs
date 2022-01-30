@@ -4,7 +4,6 @@ using ARPG.Tools;
 using TeppichsTools.Logging;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace ARPG.Pawn.Movement
@@ -48,19 +47,12 @@ namespace ARPG.Pawn.Movement
 
         private void CalculatePointerMovementTarget()
         {
-            //if (!Interactable.current)
-            //{
             var screenPoint = Pointer.current.position.ReadValue();
 
             Ray ray = Camera.main.ScreenPointToRay(screenPoint);
 
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, 3))
                 SetMovementTarget(hit.point);
-            else
-                EditorDebug.LogError("raycast \t no collider found");
-            //}
-            //else
-            //    SetMovementTarget(Interactable.current.transform.position); // - direction * interactionRange
         }
 
         private void SetLeftClick(bool isLeftClicking) => this.isLeftClicking = isLeftClicking;

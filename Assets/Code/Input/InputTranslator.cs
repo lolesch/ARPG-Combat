@@ -1,10 +1,7 @@
-using ARPG.Enums;
 using System;
-using System.Collections;
 using TeppichsTools.Creation;
 using TeppichsTools.Logging;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace ARPG.Input
@@ -18,13 +15,12 @@ namespace ARPG.Input
         public LayerMask layerMask = 1;
 
         [Header("Settings")]
-        //[SerializeField] private bool[] quickCastSettings = new bool[6];
         [SerializeField] private bool isHoldToCrouch = true;
 
         [Range(1f, 20f)]
         [SerializeField] private float gamepadMovementRadius = 15f;
 
-        private Vector3 targetPosition;
+        //private Vector3 targetPosition;
         private Vector2 leftStickPosition;
         private RaycastHit hit;
 
@@ -35,8 +31,7 @@ namespace ARPG.Input
         [SerializeField] private bool isLeftSticking;
         [SerializeField] private bool isForcingStop;
 
-        public event Action<int, Vector3> castSkill;
-        public event Action<Vector3> setTargetPos;
+        public event Action<int> castSkill;
         public event Action<bool> setLeftClick;
         public event Action<bool> setLeftStick;
         public event Action<bool> setForceStop;
@@ -47,10 +42,7 @@ namespace ARPG.Input
             setLeftStick?.Invoke(isLeftSticking);
 
             //if (isLeftSticking)
-            //{
-            //    var xzVector = XZVector(leftStickPosition);
-            //    screenPoint = Camera.main.WorldToScreenPoint(xzVector + transform.position); // why transform.position? this is not the player 
-            //}
+            //    screenPoint = Camera.main.WorldToScreenPoint(XZVector(leftStickPosition) + transform.position); // why transform.position? this is not the player 
         }
 
         //private Vector3 HitPosition(Ray ray)
@@ -76,8 +68,7 @@ namespace ARPG.Input
             return mousePosition.x < 0 || mousePosition.x > Screen.currentResolution.width || mousePosition.y < 0 || mousePosition.y > Screen.currentResolution.height;
         }
 
-        #region Movement
-
+        #region Interaction
 
         public void LeftClick(InputAction.CallbackContext ctx)
         {
@@ -85,7 +76,7 @@ namespace ARPG.Input
                 return;
 
             if (ctx.started)
-                //if (!EventSystem.current.IsPointerOverGameObject()) // some check for IsOverUI here
+                //if (!EventSystem.current.IsPointerOverGameObject()) // some check for IsOverUI here => no movement when interacting with UI
                 SetCurrentInteractable();
 
             setLeftClick?.Invoke(ctx.performed);
@@ -115,6 +106,7 @@ namespace ARPG.Input
         {
             if (CursorOutsideOfScreen())
                 return;
+
             if (ctx.started)
             {
                 //hasClickedOnUI = EventSystem.current.IsPointerOverGameObject();
@@ -166,10 +158,7 @@ namespace ARPG.Input
 
         #region Skills
 
-        private void CastSkill(int index)
-        {
-            castSkill?.Invoke(index, targetPosition);
-        }
+        private void CastSkill(int index) => castSkill?.Invoke(index);
 
         public void CastSkill0(InputAction.CallbackContext ctx)
         {
