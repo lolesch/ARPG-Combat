@@ -1,5 +1,5 @@
 ﻿using ARPG.Enums;
-using ARPG.Pawn;
+using ARPG.Pawns;
 using System;
 using TeppichsTools.Logging;
 using TMPro;
@@ -14,7 +14,7 @@ namespace ARPG.GUI
         [SerializeField] private TextMeshProUGUI currentText;
         [SerializeField] private Image resourceImage;
 
-        [SerializeField] private Character character;
+        [SerializeField] private Pawns.Pawn character;
         [SerializeField] private Resource resourceToUpdate;
         [SerializeField] private StatName statToUpdate;
 

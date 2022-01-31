@@ -4,9 +4,9 @@ using ARPG.Enums;
 using ARPG.Input;
 using TeppichsTools.Logging;
 
-namespace ARPG.Pawn
+namespace ARPG.Pawns
 {
-    public class Character : Interactable, ITakeDamage
+    public class Pawn : Interactable, ITakeDamage
     {
         public Dictionary<StatName, StatScore> stats = new Dictionary<StatName, StatScore>();
         public Dictionary<Resource, ResourceScore> resources = new Dictionary<Resource, ResourceScore>();
@@ -29,11 +29,22 @@ namespace ARPG.Pawn
 
         public void TakeDamage(float damage)
         {
-            stats.TryGetValue(StatName.HealthMax, out StatScore healthMax);
-            resources.TryGetValue(Resource.HealthCurrent, out ResourceScore health);
+            if (stats.TryGetValue(StatName.HealthMax, out StatScore healthMax))
+            {
 
-            health.AddToCurrentValue(-damage);
-            EditorDebug.Log($"{this.name} took {damage} damage and has {health.CurrentValue} of {healthMax.MaxValue} health ({health.CurrentValue * 100 / healthMax.MaxValue} %)");
+                if (resources.TryGetValue(Resource.HealthCurrent, out ResourceScore health))
+                {
+
+
+                    health.AddToCurrentValue(-damage);
+                    EditorDebug.Log($"{this.name} took {damage} damage and has {health.CurrentValue} of {healthMax.MaxValue} health ({health.CurrentValue * 100 / healthMax.MaxValue} %)");
+
+                    if (health.CurrentValue <= 0)
+                        Destroy(gameObject);
+                }
+            }
+            else
+                EditorDebug.Log($"target had no health stats");
         }
 
         protected override void Interact()

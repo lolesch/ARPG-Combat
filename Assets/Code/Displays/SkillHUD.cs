@@ -1,4 +1,4 @@
-﻿using ARPG.Pawn;
+﻿using ARPG.Pawns;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +7,7 @@ namespace ARPG.GUI
     public class SkillHUD : MonoBehaviour
     {
         [SerializeField] private List<SkillSlot> skillSlots = new(6);
-        [SerializeField] private Player player;
+        [SerializeField] private PlayerController player;
 
         void LateUpdate()
         {

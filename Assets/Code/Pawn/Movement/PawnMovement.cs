@@ -3,7 +3,7 @@ using TeppichsTools.Logging;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace ARPG.Pawn.Movement
+namespace ARPG.Pawns.Movement
 {
     [RequireComponent(typeof(NavMeshAgent))]
     public abstract class PawnMovement : MonoBehaviour
@@ -15,7 +15,7 @@ namespace ARPG.Pawn.Movement
         protected float maxSpeed = 5f;
 
         protected NavMeshAgent agent;
-        private Character character;
+        private Pawn character;
 
         [Header("Rotation")]
         [Range(1f, 40f)]
@@ -27,9 +27,9 @@ namespace ARPG.Pawn.Movement
             if (!agent)
                 EditorDebug.LogError($"Missing component of type {nameof(NavMeshAgent)} on {gameObject.name}");
 
-            character = GetComponentInParent<Character>();
+            character = GetComponentInParent<Pawn>();
             if (!character)
-                EditorDebug.LogError($"Missing component of type {nameof(Character)} on {gameObject.name}");
+                EditorDebug.LogError($"Missing component of type {nameof(Pawn)} on {gameObject.name}");
             else if (character.stats.TryGetValue(StatName.MovementSpeed, out StatScore speed))
             {
                 speed.maxHasChanged += SetSpeed;

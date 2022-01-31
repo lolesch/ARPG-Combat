@@ -1,3 +1,4 @@
+using ARPG.Tools;
 using System;
 using TeppichsTools.Creation;
 using TeppichsTools.Logging;
@@ -10,7 +11,7 @@ namespace ARPG.Input
     /// The InputTranslator takes all the player input - converts it into actions and invokes them so others can listen to these events.
     /// This way the InputTranslator doesn't have to know other classes but is always available for other classes.
     /// </summary>
-    public class InputTranslator : MonoSingleton<InputTranslator>
+    public class InputTranslator : Monoton<InputTranslator>
     {
         public LayerMask layerMask = 1;
 
@@ -53,19 +54,12 @@ namespace ARPG.Input
         //    return hit.point;
         //}
 
-        private Vector3 XZVector(Vector2 target)
-        {
-            // this should be a cross product, no?
-            Vector3 xz = new Vector3(target.x, 0, target.y);
-
-            return Quaternion.AngleAxis(45f, Vector3.up) * xz;
-        }
 
         private bool CursorOutsideOfScreen()
         {
-            Vector2 mousePosition = Mouse.current.position.ReadValue();
+            Vector2 pointerPosition = Pointer.current.position.ReadValue();
 
-            return mousePosition.x < 0 || mousePosition.x > Screen.currentResolution.width || mousePosition.y < 0 || mousePosition.y > Screen.currentResolution.height;
+            return pointerPosition.x < 0 || pointerPosition.x > Screen.currentResolution.width || pointerPosition.y < 0 || pointerPosition.y > Screen.currentResolution.height;
         }
 
         #region Interaction
@@ -127,6 +121,12 @@ namespace ARPG.Input
             hasMovementInput = isLeftSticking;
 
             //TODO: set Interactable in close range
+
+            //Vector3 XZVector(Vector2 target)
+            //{
+            //    // this should be a cross product, no?
+            //    return Quaternion.AngleAxis(45f, Vector3.up) * XZPlane.Vector(target);
+            //}
         }
 
         public void RightStick(InputAction.CallbackContext ctx)

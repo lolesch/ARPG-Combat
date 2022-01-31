@@ -27,12 +27,12 @@ namespace ARPG.Tools
         /// <summary>
         /// A Ticker adds up it's progress to reach a predefined duration by a given tickDelta
         /// </summary>
-        public Ticker(float duration, bool startLocked = false)
+        public Ticker(float duration, bool isDelayed = false)
         {
             if (0 < duration)
             {
                 this.duration = duration;
-                progress = startLocked ? 0 : duration;
+                progress = isDelayed ? 0 : duration;
             }
             else
                 EditorDebug.LogWarning($"The Ticker's duration is {duration} - so it will never tick");

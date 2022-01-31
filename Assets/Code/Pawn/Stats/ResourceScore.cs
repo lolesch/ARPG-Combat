@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace ARPG.Pawn
+namespace ARPG.Pawns
 {
     public class ResourceScore
     {

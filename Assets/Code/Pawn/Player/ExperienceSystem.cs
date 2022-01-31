@@ -3,7 +3,7 @@ using System;
 using TeppichsTools.Logging;
 using UnityEngine;
 
-namespace ARPG.Pawn
+namespace ARPG.Pawns
 {
     public class ExperienceSystem : Progress
     {

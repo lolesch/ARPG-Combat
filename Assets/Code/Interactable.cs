@@ -32,7 +32,7 @@ namespace ARPG.Input
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            Handles.color = Color.red;
+            Handles.color = current == this ? Color.black : Color.grey;
             Handles.DrawWireDisc(transform.position, transform.up, InteractionRange);
         }
 #endif

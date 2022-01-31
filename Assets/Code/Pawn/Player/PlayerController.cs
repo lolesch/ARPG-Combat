@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using TeppichsTools.Logging;
 using UnityEngine;
 
-namespace ARPG.Pawn
+namespace ARPG.Pawns
 {
-    public class Player : Character, IRegenerate
+    public class PlayerController : Pawn, IRegenerate
     {
         public List<Skill> skills = new(6);
 
@@ -37,6 +37,9 @@ namespace ARPG.Pawn
             Regenerate(StatName.HealthMax, Resource.HealthCurrent, StatName.HealthPerSecond);
             Regenerate(StatName.ManaMax, Resource.ManaCurrent, StatName.ManaPerSecond);
         }
+
+        // for debugging
+        public void SetInteractionRange(float value) => interactionRange = value;
 
         public void Regenerate(StatName max, Resource resource, StatName regen)
         {

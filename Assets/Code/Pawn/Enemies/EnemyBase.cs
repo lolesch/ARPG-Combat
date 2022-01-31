@@ -1,6 +1,6 @@
-namespace ARPG.Pawn.Enemy
+namespace ARPG.Pawns.Enemy
 {
-    public class EnemyBase : Character
+    public class EnemyBase : Pawn
     {
 
     }

@@ -5,7 +5,7 @@ using System.Linq;
 using TeppichsTools.Logging;
 using UnityEngine;
 
-namespace ARPG.Pawn
+namespace ARPG.Pawns
 {
     /// inpired by https://www.youtube.com/watch?v=SH25f3cXBVc - kudos to Kryzarel
     [Serializable]

@@ -1,5 +1,5 @@
 using ARPG.Combat;
-using ARPG.Pawn;
+using ARPG.Pawns;
 using ARPG.Tools;
 using System.Collections.Generic;
 using UnityEngine;
@@ -74,6 +74,10 @@ namespace ARPG.Container
         [SerializeField] private Projectile projectile;
         public Projectile Projectile => projectile;
 
-        [SerializeField] private List<Effect> hitEffects = new();
+        // needs to be a dictionary to get the effects by name
+        public List<Effect> hitEffects = new();
+
+        // tickrate
+        // duration (if DoT)
     }
 }

@@ -3,8 +3,9 @@ using ARPG.Input;
 using UnityEngine;
 using System;
 using TeppichsTools.Logging;
-using ARPG.Pawn;
+using ARPG.Pawns;
 using UnityEngine.InputSystem;
+using ARPG.Tools;
 
 namespace ARPG.Combat
 {
@@ -16,7 +17,7 @@ namespace ARPG.Combat
 
         //[SerializeField] private bool[] quickCastSettings = new bool[6];
 
-        [SerializeField] private Player player;
+        [SerializeField] private PlayerController player;
         [SerializeField] private Transform caster;
 
         private void OnDestroy() => InputTranslator.Instance.castSkill -= TryCast;
@@ -24,12 +25,7 @@ namespace ARPG.Combat
 
         public void TryCast(int index)
         {
-            var skill = player.skills[index];
-
-            if (skill)
-                data = skill.SpawnData;
-
-            if (data)
+            if (GetValidData(index))
             {
                 if (data.CooldownTicker.IsTicking)
                     return;
@@ -45,9 +41,18 @@ namespace ARPG.Combat
                         //for (int i = 0; i < data.AmountToSpawn; i++)
                         //    SpawnObject(target, i);
 
-
                         SpawnDamageShape(data.SpawnAtCursor ? CalculateSpawnPosition() : caster.position);
                     }
+            }
+
+            bool GetValidData(int index)
+            {
+                if (!player.skills[index].SpawnData)
+                    return false;
+
+                data = player.skills[index].SpawnData;
+                player.SetInteractionRange(data.SpawnAtCursor ? data.SpawnRange : data.DespawnRange);
+                return true;
             }
 
             void SpawnDamageShape(Vector3 spawnPosition)
@@ -74,13 +79,18 @@ namespace ARPG.Combat
 
                 if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, ~0))
                 {
+                    // if hit == Enemy => queue cast untill in range
+                    // cancle queue on other cast input
+
+                    // rotate to target
+
                     pointerPosition = hit.point;
 
-                    var dist = XZDistance(pointerPosition, caster.position);
+                    var dist = XZPlane.Magnitude(pointerPosition, caster.position);
 
                     if (data.SpawnRange < dist)
                     {
-                        var maxCastDistancePosition = caster.position + (XZDirection(pointerPosition, caster.position).normalized * data.SpawnRange);
+                        var maxCastDistancePosition = caster.position + (XZPlane.Direction(pointerPosition, caster.position) * data.SpawnRange);
 
                         var rayOrigin = new Vector3(maxCastDistancePosition.x, 100, maxCastDistancePosition.z);
 
@@ -94,10 +104,6 @@ namespace ARPG.Combat
                 return pointerPosition;
             }
         }
-
-        private Vector3 XZDirection(Vector3 to, Vector3 from) => new Vector3(to.x - from.x, 0, to.z - from.z).normalized;
-
-        private float XZDistance(Vector3 to, Vector3 from) => new Vector3(to.x - from.x, 0, to.z - from.z).magnitude;
 
         //private void SpawnObject(Vector3 targetPos, int index)
         //{

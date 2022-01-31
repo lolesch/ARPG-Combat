@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 
-namespace ARPG.Pawn
+namespace ARPG.Pawns
 {
     public class StatModifier
     {

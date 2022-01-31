@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
-namespace ARPG.Pawn.Movement
+namespace ARPG.Pawns.Movement
 {
     public class PlayerMovement : PawnMovement
     {

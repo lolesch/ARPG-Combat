@@ -201,9 +201,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8454536458504782131, guid: 2be80a6f16a111a46bd8340608e1303b, type: 3}
   m_PrefabInstance: {fileID: 1904776322}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &479224477 stripped
+--- !u!4 &529004725 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 294104050074499120, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+  m_PrefabInstance: {fileID: 6759401337317903352}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &529004729 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6813073419548404472, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+  m_CorrespondingSourceObject: {fileID: 8700461581752046360, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
   m_PrefabInstance: {fileID: 6759401337317903352}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -212,11 +217,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6126a069c35e3c459ef0856b3933d5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &529004725 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 294104050074499120, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
-  m_PrefabInstance: {fileID: 6759401337317903352}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &603326873
 GameObject:
   m_ObjectHideFlags: 0
@@ -450,17 +450,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8454536458504782131, guid: 2be80a6f16a111a46bd8340608e1303b, type: 3}
   m_PrefabInstance: {fileID: 3592777879675859208}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &796972683 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3573123236105448956, guid: 2be80a6f16a111a46bd8340608e1303b, type: 3}
-  m_PrefabInstance: {fileID: 3592777879675859208}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2bc4030071dc4f141a91170b8c061070, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &842784330
 GameObject:
   m_ObjectHideFlags: 0
@@ -833,10 +822,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 603326874}
     m_Modifications:
-    - target: {fileID: 82955307918951891, guid: 2be80a6f16a111a46bd8340608e1303b, type: 3}
-      propertyPath: character
-      value: 
-      objectReference: {fileID: 796972683}
     - target: {fileID: 1419312138051957763, guid: 2be80a6f16a111a46bd8340608e1303b, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -993,7 +978,7 @@ PrefabInstance:
     - target: {fileID: 3488149380571771702, guid: b65e2ecc88e1ecf4da4707486e83463f, type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 479224477}
+      objectReference: {fileID: 529004729}
     - target: {fileID: 4374649691205362987, guid: b65e2ecc88e1ecf4da4707486e83463f, type: 3}
       propertyPath: player
       value: 
@@ -1001,7 +986,7 @@ PrefabInstance:
     - target: {fileID: 4374649691205362987, guid: b65e2ecc88e1ecf4da4707486e83463f, type: 3}
       propertyPath: character
       value: 
-      objectReference: {fileID: 479224477}
+      objectReference: {fileID: 529004729}
     - target: {fileID: 4999308926124313563, guid: b65e2ecc88e1ecf4da4707486e83463f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1121,7 +1106,7 @@ PrefabInstance:
     - target: {fileID: 5455968331978413126, guid: b65e2ecc88e1ecf4da4707486e83463f, type: 3}
       propertyPath: character
       value: 
-      objectReference: {fileID: 479224477}
+      objectReference: {fileID: 529004729}
     - target: {fileID: 6473240051013393124, guid: b65e2ecc88e1ecf4da4707486e83463f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1262,7 +1247,7 @@ PrefabInstance:
     - target: {fileID: 3481246202405203953, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
       propertyPath: character
       value: 
-      objectReference: {fileID: 479224477}
+      objectReference: {fileID: 529004729}
     - target: {fileID: 3586684005033742086, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1

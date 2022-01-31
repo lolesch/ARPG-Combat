@@ -1,7 +1,7 @@
 using TeppichsTools.Logging;
 using UnityEngine;
 
-namespace ARPG.Pawn.Movement
+namespace ARPG.Pawns.Movement
 {
     public class FollowTarget : MonoBehaviour
     {
