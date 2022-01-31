@@ -8,8 +8,8 @@ namespace ARPG.Tools
     /// </summary>
     public class Ticker
     {
-        private float duration = 1f;
-        private float progress = 0f;
+        private float duration;
+        private float progress;
 
         /// <summary>
         /// progress has not reached duration
@@ -29,13 +29,8 @@ namespace ARPG.Tools
         /// </summary>
         public Ticker(float duration, bool isDelayed = false)
         {
-            if (0 < duration)
-            {
-                this.duration = duration;
-                progress = isDelayed ? 0 : duration;
-            }
-            else
-                EditorDebug.LogWarning($"The Ticker's duration is {duration} - so it will never tick");
+            this.duration = duration;
+            progress = isDelayed ? 0 : duration;
         }
 
         /// <summary>

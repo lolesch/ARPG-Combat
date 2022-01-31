@@ -7,11 +7,12 @@ namespace ARPG.Pawns
     [Serializable]
     public struct Effect
     {
-        public Effect(StatName stat, StatScore value, float duration)
+        public Effect(StatName stat, StatScore value, float duration, float tickrate = 0.2f)
         {
             this.statName = stat;
             this.stat = value;
             this.duration = duration;
+            this.tickrate = tickrate;
         }
 
         /// <summary>
@@ -25,6 +26,8 @@ namespace ARPG.Pawns
         [SerializeField] private StatScore stat;
         public StatScore Stat => stat;
 
-        public float TickRate => stat.MaxValue / (duration * 3); // pseudo code
+        [SerializeField] private float tickrate;
+        public float TickRate => tickrate; // every Tickrate seconds the effect is applyed
+                                           // 1/Tickrate = TicksPerSecond => 1 / 0.2f = 5 => this skill ticks 5 times per second
     }
 }

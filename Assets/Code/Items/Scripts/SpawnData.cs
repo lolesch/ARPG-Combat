@@ -1,4 +1,5 @@
 using ARPG.Combat;
+using ARPG.Enums;
 using ARPG.Pawns;
 using ARPG.Tools;
 using System.Collections.Generic;
@@ -46,9 +47,13 @@ namespace ARPG.Container
         [SerializeField] private float outerRadius = 5;
         public float OuterRadius => outerRadius;
 
-        [Tooltip("projectile passes through enemies? else despawn on first collision")]
-        [SerializeField] private bool isPiercing = false;
-        public bool IsPiercing => isPiercing;
+        [Range(0f, 20f)]
+        [SerializeField] private float lifetime = 0;
+        public float Lifetime => lifetime;
+
+        //[Tooltip("projectile passes through enemies? else despawn on first collision")]
+        //[SerializeField] private bool isPiercing = false;
+        //public bool IsPiercing => isPiercing;
 
         ///
         [Header("Path Settings")]
@@ -74,10 +79,13 @@ namespace ARPG.Container
         [SerializeField] private Projectile projectile;
         public Projectile Projectile => projectile;
 
+        [SerializeField] private List<InteractionType> targetTypes = new();
+        public List<InteractionType> TargetTypes => targetTypes;
+
         // needs to be a dictionary to get the effects by name
         public List<Effect> hitEffects = new();
 
-        // tickrate
-        // duration (if DoT)
+        // tickrate?
+        // duration (if DoT)?
     }
 }

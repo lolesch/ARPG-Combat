@@ -4,61 +4,69 @@ using UnityEditor;
 using ARPG.Container;
 using ARPG.Pawns.Enemy;
 using ARPG.Tools;
-using ARPG.Input;
-using ARPG.Pawns;
 using TeppichsTools.Logging;
 
 namespace ARPG.Combat
 {
     // TODO: make this poolable!
 
-    // TODO:
-    // list all that already have taken damage and exclude them untill reset
-    // reset after damageTick delay
-
-    public class Projectile : MonoBehaviour, IDealDamage
+    public class Projectile : MonoBehaviour, IDamageDealer
     {
-        [SerializeField] private List<ITakeDamage> damageTaker = new();
-        [SerializeField] private List<ITakeDamage> alreadyTakenDamage = new();
-        [SerializeField] private List<ITakeDamage> possibleDamageTakerInRange = new();
-        private float current;
+        [SerializeField] private List<Transform> possibledamageTaker = new();
+        [SerializeField] private List<IDamageTaker> damageTaker = new();
+        [SerializeField] private List<IDamageTaker> alreadyTakenDamage = new();
+
+        [SerializeField] private float current = 0;
+        private Vector3 targetPosition;
+        private Vector3 spawnPosition;
+        private Ticker ticker = new(0);
 
         [Header("Filled Automatically")]
         public SpawnData data;
-        public Vector3 TargetPosition;
-        public Vector3 SpawnPosition;
 
-        Ticker ticker = new(0);
+        void Awake() => spawnPosition = transform.position;
 
         void Update()
         {
-            ProjectileTraveling();
 
-            List<Interactable> interactables = new();
+            // projectile has lifetime && lifetime isn't over
+            if (0 < data.Lifetime && data.Lifetime < current)
+                Destroy(this.gameObject);
 
-            // TODO: make the projectile know it's targetGroup
-            foreach (var item in EnemyCollector.collection)
-                interactables.Add(item);
+            if (0 < data.ProjectileSpeed)
+                ProjectileTraveling();
 
-            DetectTargetsInRange(interactables);
+            // does this need to happen each update? => make it just before applying damage
+            GetPossibleDamageTaker();
 
+            DetectTargetsInRange();
+
+            // DPS = TotalDamage / Duration = DamagePerTick * TicksPerSecond
+            // TicksPerSecond = 1 / Tickrate
+
+            // => DamagePerTick = TotalDamage / (Duration * TicksPerSecond)
+            // => DamagePerTick = TotalDamage * Tickrate / Duration
 
             // change this into a dictionary => use tryGet
             if (data.hitEffects[0].StatName == Enums.StatName.Damage)
             {
                 var damage = data.hitEffects[0].Stat.MaxValue;
 
-                if (0 < data.hitEffects[0].Duration)
+                //TODO: whats the diff between Lifetime and EffectDuration?
+
+                if (0 < data.hitEffects[0].Duration) // Effect has duration
                 {
-                    if (!ticker.IsTicking)
+                    //TODO: this condition seems not to work as intended => use Coroutine?
+                    if (!ticker.IsTicking) // is off cooldown
                     {
                         var tickrate = data.hitEffects[0].TickRate;
+                        var duration = data.hitEffects[0].Duration;
 
-                        EditorDebug.LogWarning($"tickrate {tickrate}");
+                        EditorDebug.LogWarning($"tickrate {tickrate} | current {current}");
 
-                        ticker = new(tickrate);
+                        ticker = new(tickrate, true);
 
-                        damage = damage * tickrate;
+                        damage = (damage * tickrate) / duration; // damage per tick
 
                         foreach (var target in damageTaker)
                             DealDamage(target, damage);
@@ -73,62 +81,66 @@ namespace ARPG.Combat
                             DealDamage(target, damage);
                             alreadyTakenDamage.Add(target);
                         }
+
+                current += Time.deltaTime;
+
+                if (data.Lifetime <= 0 && data.ProjectileSpeed <= 0)
+                    Destroy(this.gameObject, .1f); // .1f is for debugging! remove this later!
             }
+
 
             void ProjectileTraveling()
             {
-                float progress01 = current / Vector3.Distance(TargetPosition, SpawnPosition);
+                targetPosition = spawnPosition + (transform.forward * data.DespawnRange);
 
-                if (SpawnPosition != TargetPosition && progress01 < 1)
-                    transform.position = Vector3.Lerp(SpawnPosition, TargetPosition, progress01);
+                float progress01 = current * data.ProjectileSpeed / Vector3.Distance(spawnPosition, targetPosition); // current / despawnRange?
+
+                if (progress01 < 1)
+                    transform.position = Vector3.Lerp(spawnPosition, targetPosition, progress01);
                 else
-                    Destroy(this.gameObject, data.hitEffects[0].Duration); // the .1f duration is for visual debugging
-
-                current += Time.deltaTime * data.ProjectileSpeed; /// [projectileSpeed] units per second
+                    Destroy(this.gameObject);
             }
 
-            void DetectTargetsInRange(List<Interactable> interactables)
+            void DetectTargetsInRange()
             {
                 damageTaker.Clear();
+                //alreadyTakenDamage.Clear();
 
-                foreach (var candidate in interactables)
-                {
-                    var dist = XZPlane.Magnitude(transform.position, candidate.transform.position);
+                if (0 < possibledamageTaker.Count)
+                    foreach (var candidate in possibledamageTaker)
+                    {
+                        var dist = XZPlane.Magnitude(transform.position, candidate.transform.position);
 
-                    if (data.InnerRadius <= dist && dist <= data.OuterRadius)
-                        if (candidate.TryGetComponent(out ITakeDamage target))
-                            damageTaker.Add(target);
-                }
+                        if (data.InnerRadius <= dist && dist <= data.OuterRadius)
+                        {
+                            candidate.TryGetComponent(out IDamageTaker target);
+                            if (!damageTaker.Contains(target))
+                                damageTaker.Add(target);
+                        }
+                    }
+            }
+
+            void GetPossibleDamageTaker()
+            {
+                possibledamageTaker.Clear();
+
+                foreach (var type in data.TargetTypes)
+                    switch (type)
+                    {
+                        case Enums.InteractionType.Enemy:
+                            foreach (var enemy in EnemyCollector.collection)
+                                possibledamageTaker.Add(enemy.transform);
+                            break;
+                        case Enums.InteractionType.Destroyable:
+                            foreach (var destroyable in DestroyableCollector.collection)
+                                possibledamageTaker.Add(destroyable.transform);
+                            break;
+                        default:
+                            break;
+                    }
             }
         }
 
-        //private void OnTriggerEnter(Collider other)
-        //{
-        //    possibleDamageTaker.Add(other.gameObject);
-        //    DetectObjectsInsideShape();
-        //}
-
-        //private void OnTriggerExit(Collider other)
-        //{
-        //    if (possibleDamageTaker.Contains(other))
-        //        possibleDamageTaker.Remove(other);
-        //
-        //    //foreach (var target in damageTaker)
-        //    //    DealDamage(target, 30);
-        //}
-
-        //public List<Interactable> DetectObjectsInsideShape()
-        //{
-        //    //possibleDamageTaker.Clear();
-        //    possibleDamageTakerInRange.Clear();
-        //    damageTaker.Clear();
-        //
-        //    DistanceCheck();
-        //
-        //    AngleCheck();
-        //
-        //    return damageTaker;
-        //
         //    void DistanceCheck()
         //    {
         //        foreach (var candidate in possibleDamageTaker)
@@ -149,9 +161,8 @@ namespace ARPG.Combat
         //            damageTaker.Add(candidate);
         //        }
         //    }
-        //}
 
-        public void DealDamage(ITakeDamage target, float damage) => target.TakeDamage(damage);
+        public void DealDamage(IDamageTaker target, float damage) => target.TakeDamage(damage);
 
 #if UNITY_EDITOR
         private void OnDrawGizmos()

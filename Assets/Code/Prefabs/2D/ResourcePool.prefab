@@ -144,7 +144,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8553456321314694335}
-  - component: {fileID: 8778918978677197715}
+  - component: {fileID: 948691525010083888}
   m_Layer: 5
   m_Name: ResourcePool
   m_TagString: Untagged
@@ -174,7 +174,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &8778918978677197715
+--- !u!114 &948691525010083888
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,15 +183,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2392752718047423036}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4092f83de5a4204d990e0f3f678257a, type: 3}
+  m_Script: {fileID: 11500000, guid: e5fc63b021a78dd438f0f6c1b15c0c60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  percentageText: {fileID: 6573732561175735059}
-  currentText: {fileID: 3616152826315123335}
   resourceImage: {fileID: 1905112781362683396}
-  character: {fileID: 0}
+  pawn: {fileID: 0}
   resourceToUpdate: 0
   statToUpdate: 0
+  percentageText: {fileID: 6573732561175735059}
+  currentText: {fileID: 3616152826315123335}
 --- !u!1 &2702960161381196135
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6660401373613737106
 Transform:
   m_ObjectHideFlags: 0
@@ -45,10 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 606c5b7a7000e204f8e7d1324f087c75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  innerRadiusParent: {fileID: 1924706599090785928}
-  damageTaker: []
-  possibleDamageTaker: []
-  possibleDamageTakerInRange: []
   data: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
   SpawnPosition: {x: 0, y: 0, z: 0}

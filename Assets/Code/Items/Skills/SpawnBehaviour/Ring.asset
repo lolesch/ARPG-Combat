@@ -18,14 +18,16 @@ MonoBehaviour:
   spawnRange: 1
   innerRadius: 4
   outerRadius: 5
-  isPiercing: 1
+  lifetime: 5
   projectileAmount: 1
   shapeAngle: 0
   projectileSpeed: 0
   despawnRange: 0
   projectile: {fileID: 2626277891086901119, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
+  targetTypes: 0100000005000000
   hitEffects:
-  - statName: 3
+  - duration: 5
+    statName: 3
     stat:
-      maxValue: 30
-    duration: 0
+      maxValue: 34
+    tickrate: 0.2

@@ -49,5 +49,13 @@ namespace ARPG.Pawns
                         if (stats.TryGetValue(regen, out StatScore regenValue))
                             current.AddToCurrentValue(regenValue.MaxValue * Time.deltaTime);
         }
+
+        protected override void Kill()
+        {
+            // if(!hardcoreCharacter)
+            //  respawn
+            // else
+            //  show death cause and 'createNewCharacter' menu
+        }
     }
 }

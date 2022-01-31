@@ -51,20 +51,17 @@ namespace ARPG.Combat
                     return false;
 
                 data = player.skills[index].SpawnData;
-                player.SetInteractionRange(data.SpawnAtCursor ? data.SpawnRange : data.DespawnRange);
+                player.SetInteractionRange(data.SpawnAtCursor ? data.SpawnRange : data.OuterRadius);
+
                 return true;
             }
 
             void SpawnDamageShape(Vector3 spawnPosition)
             {
                 data.Projectile.gameObject.SetActive(false);
-                var shape = Instantiate(data.Projectile.gameObject, spawnPosition, caster.rotation, this.transform).GetComponent<Projectile>();
+                var shape = Instantiate(data.Projectile.gameObject, spawnPosition, caster.rotation, transform.root).GetComponent<Projectile>();
 
-                #region travel behaviour
                 shape.data = data;
-                shape.SpawnPosition = spawnPosition;
-                shape.TargetPosition = 0 < data.ProjectileSpeed ? spawnPosition + caster.forward * data.ProjectileSpeed : spawnPosition;
-                #endregion
 
                 shape.gameObject.SetActive(true);
             }

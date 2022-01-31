@@ -286,6 +286,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6539053085181617804, guid: b08d5da15d14a544ea2d67c78d13e356, type: 3}
+      propertyPath: pawn
+      value: 
+      objectReference: {fileID: 8500239049881543882}
+    - target: {fileID: 6539053085181617804, guid: b08d5da15d14a544ea2d67c78d13e356, type: 3}
       propertyPath: character
       value: 
       objectReference: {fileID: 8500239049881543882}
