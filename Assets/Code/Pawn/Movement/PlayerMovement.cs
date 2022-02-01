@@ -14,12 +14,12 @@ namespace ARPG.Pawns.Movement
 
         private StepLock movementLocker = new();
 
-        private bool isLeftClicking;
+        private bool hasMovementInput;
 
         private void OnDestroy()
         {
             movementLocker.locked -= ForceStop;
-            InputTranslator.Instance.setLeftClick -= SetLeftClick;
+            InputTranslator.Instance.setMoving -= SetMove;
             InputTranslator.Instance.setForceStop -= SetForceStop;
             InputTranslator.Instance.setCrouching -= SetCrouchSpeed;
         }
@@ -29,7 +29,7 @@ namespace ARPG.Pawns.Movement
             base.Awake();
 
             movementLocker.locked += ForceStop;
-            InputTranslator.Instance.setLeftClick += SetLeftClick;
+            InputTranslator.Instance.setMoving += SetMove;
             InputTranslator.Instance.setForceStop += SetForceStop;
             InputTranslator.Instance.setCrouching += SetCrouchSpeed;
 
@@ -38,7 +38,7 @@ namespace ARPG.Pawns.Movement
 
         private void Update()
         {
-            if (isLeftClicking)
+            if (hasMovementInput)
                 CalculatePointerMovementTarget();
 
             //animationSpeed?.Invoke(agent.velocity.magnitude / 6f); // walk speed adjustment to not slide
@@ -55,29 +55,26 @@ namespace ARPG.Pawns.Movement
                 SetMovementTarget(hit.point);
         }
 
-        private void SetLeftClick(bool isLeftClicking) => this.isLeftClicking = isLeftClicking;
+        private void SetMove(bool hasMovingInput) => this.hasMovementInput = hasMovingInput;
 
         public void SetMovementTarget(Vector3 inputTarget)
         {
-            if (movementLocker.Unlocked)
+            // switch case?
+            if (Interactable.current == null)
+                SetDestination(FindNavigableLocationAt(inputTarget));
+
+            else if (Interactable.current.Interaction == InteractionType.Enemy || Interactable.current.Interaction == InteractionType.Destroyable)
             {
-                // switch case?
-                if (Interactable.current == null)
-                    SetDestination(FindNavigableLocationAt(inputTarget));
+                Vector3 target = Interactable.current.transform.position;
+                target = target - GetDirection(transform.position, target) * Mathf.Min(/* TODO: skill attack range or default meele attack range */20 + Interactable.current.InteractionRange, Vector3.Distance(transform.position, target));
+                SetDestination(FindNavigableLocationAt(target));
+            }
 
-                else if (Interactable.current.Interaction == InteractionType.Enemy || Interactable.current.Interaction == InteractionType.Destroyable)
-                {
-                    Vector3 target = Interactable.current.transform.position;
-                    target = target - GetDirection(transform.position, target) * Mathf.Min(/* TODO: skill attack range or default meele attack range */20 + Interactable.current.InteractionRange, Vector3.Distance(transform.position, target));
-                    SetDestination(FindNavigableLocationAt(target));
-                }
-
-                else if (Interactable.current.Interaction == InteractionType.NPC || Interactable.current.Interaction == InteractionType.Container)
-                {
-                    Vector3 target = Interactable.current.transform.position;
-                    target = target - GetDirection(transform.position, target) * Mathf.Min(Interactable.current.InteractionRange, Vector3.Distance(transform.position, target));
-                    SetDestination(FindNavigableLocationAt(target));
-                }
+            else if (Interactable.current.Interaction == InteractionType.NPC || Interactable.current.Interaction == InteractionType.Container)
+            {
+                Vector3 target = Interactable.current.transform.position;
+                target = target - GetDirection(transform.position, target) * Mathf.Min(Interactable.current.InteractionRange, Vector3.Distance(transform.position, target));
+                SetDestination(FindNavigableLocationAt(target));
             }
         }
 

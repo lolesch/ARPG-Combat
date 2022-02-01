@@ -33,18 +33,18 @@ namespace ARPG.Input
         [SerializeField] private bool isForcingStop;
 
         public event Action<int> castSkill;
-        public event Action<bool> setLeftClick;
+        public event Action<bool> setMoving;
         public event Action<bool> setLeftStick;
         public event Action<bool> setForceStop;
         public event Action<bool> setCrouching;
 
-        private void FixedUpdate()
-        {
-            setLeftStick?.Invoke(isLeftSticking);
-
-            //if (isLeftSticking)
-            //    screenPoint = Camera.main.WorldToScreenPoint(XZVector(leftStickPosition) + transform.position); // why transform.position? this is not the player 
-        }
+        //private void FixedUpdate()
+        //{
+        //    //setLeftStick?.Invoke(isLeftSticking);
+        //
+        //    //if (isLeftSticking)
+        //    //    screenPoint = Camera.main.WorldToScreenPoint(XZVector(leftStickPosition) + transform.position); // why transform.position? this is not the player 
+        //}
 
         //private Vector3 HitPosition(Ray ray)
         //{
@@ -53,7 +53,6 @@ namespace ARPG.Input
         //
         //    return hit.point;
         //}
-
 
         private bool CursorOutsideOfScreen()
         {
@@ -73,7 +72,7 @@ namespace ARPG.Input
                 //if (!EventSystem.current.IsPointerOverGameObject()) // some check for IsOverUI here => no movement when interacting with UI
                 SetCurrentInteractable();
 
-            setLeftClick?.Invoke(ctx.performed);
+            setMoving?.Invoke(ctx.performed);
 
             void SetCurrentInteractable()
             {

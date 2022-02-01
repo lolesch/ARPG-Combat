@@ -18,16 +18,16 @@ MonoBehaviour:
   spawnRange: 1
   innerRadius: 0
   outerRadius: 0.5
+  shapeAngle: 60
   lifetime: 0
   projectileAmount: 5
-  shapeAngle: 60
+  projectileDistribution: 0
   projectileSpeed: 25
   despawnRange: 15
   projectile: {fileID: 2626277891086901119, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
   targetTypes: 0100000005000000
   hitEffects:
-  - duration: 0
-    statName: 3
-    stat:
-      maxValue: 5
-    tickrate: 0.2
+  - statName: 3
+    amount: 8
+    modifyer: 100
+    duration: 0

@@ -82,6 +82,15 @@ namespace ARPG.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ForceStop"",
+                    ""type"": ""Button"",
+                    ""id"": ""eabd715e-1c6d-4c19-bda6-c67bb1d2ef23"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -150,6 +159,17 @@ namespace ARPG.Input
                     ""action"": ""Skill5"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7dd10be4-39da-4b5a-a2b0-f71c0be9ae62"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""ForceStop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -186,6 +206,7 @@ namespace ARPG.Input
             m_PlayerInput_Skill3 = m_PlayerInput.FindAction("Skill3", throwIfNotFound: true);
             m_PlayerInput_Skill4 = m_PlayerInput.FindAction("Skill4", throwIfNotFound: true);
             m_PlayerInput_Skill5 = m_PlayerInput.FindAction("Skill5", throwIfNotFound: true);
+            m_PlayerInput_ForceStop = m_PlayerInput.FindAction("ForceStop", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -251,6 +272,7 @@ namespace ARPG.Input
         private readonly InputAction m_PlayerInput_Skill3;
         private readonly InputAction m_PlayerInput_Skill4;
         private readonly InputAction m_PlayerInput_Skill5;
+        private readonly InputAction m_PlayerInput_ForceStop;
         public struct PlayerInputActions
         {
             private @PlayerInputAsset m_Wrapper;
@@ -261,6 +283,7 @@ namespace ARPG.Input
             public InputAction @Skill3 => m_Wrapper.m_PlayerInput_Skill3;
             public InputAction @Skill4 => m_Wrapper.m_PlayerInput_Skill4;
             public InputAction @Skill5 => m_Wrapper.m_PlayerInput_Skill5;
+            public InputAction @ForceStop => m_Wrapper.m_PlayerInput_ForceStop;
             public InputActionMap Get() { return m_Wrapper.m_PlayerInput; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -288,6 +311,9 @@ namespace ARPG.Input
                     @Skill5.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill5;
                     @Skill5.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill5;
                     @Skill5.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill5;
+                    @ForceStop.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnForceStop;
+                    @ForceStop.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnForceStop;
+                    @ForceStop.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnForceStop;
                 }
                 m_Wrapper.m_PlayerInputActionsCallbackInterface = instance;
                 if (instance != null)
@@ -310,6 +336,9 @@ namespace ARPG.Input
                     @Skill5.started += instance.OnSkill5;
                     @Skill5.performed += instance.OnSkill5;
                     @Skill5.canceled += instance.OnSkill5;
+                    @ForceStop.started += instance.OnForceStop;
+                    @ForceStop.performed += instance.OnForceStop;
+                    @ForceStop.canceled += instance.OnForceStop;
                 }
             }
         }
@@ -331,6 +360,7 @@ namespace ARPG.Input
             void OnSkill3(InputAction.CallbackContext context);
             void OnSkill4(InputAction.CallbackContext context);
             void OnSkill5(InputAction.CallbackContext context);
+            void OnForceStop(InputAction.CallbackContext context);
         }
     }
 }

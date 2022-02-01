@@ -10,6 +10,7 @@
         Damage = 3,
         ManaMax = 4,
         ManaPerSecond = 5,
+        Slow = 6,
     }
 
     [System.Serializable]

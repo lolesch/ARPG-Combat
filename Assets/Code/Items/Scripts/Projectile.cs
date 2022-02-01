@@ -50,7 +50,7 @@ namespace ARPG.Combat
             // change this into a dictionary => use tryGet
             if (data.hitEffects[0].StatName == Enums.StatName.Damage)
             {
-                var damage = data.hitEffects[0].Stat.MaxValue;
+                var damage = data.hitEffects[0].Amount;
 
                 //TODO: whats the diff between Lifetime and EffectDuration?
 
@@ -59,10 +59,8 @@ namespace ARPG.Combat
                     //TODO: this condition seems not to work as intended => use Coroutine?
                     if (!ticker.IsTicking) // is off cooldown
                     {
-                        var tickrate = data.hitEffects[0].TickRate;
+                        var tickrate = 0.2f;// data.hitEffects[0].TickRate;
                         var duration = data.hitEffects[0].Duration;
-
-                        EditorDebug.LogWarning($"tickrate {tickrate} | current {current}");
 
                         ticker = new(tickrate, true);
 
@@ -85,7 +83,7 @@ namespace ARPG.Combat
                 current += Time.deltaTime;
 
                 if (data.Lifetime <= 0 && data.ProjectileSpeed <= 0)
-                    Destroy(this.gameObject, .1f); // .1f is for debugging! remove this later!
+                    Destroy(this.gameObject, .1f); // .1f is for debugging! remove this once there are vfx to show the skill's impact/shape
             }
 
 
@@ -93,7 +91,7 @@ namespace ARPG.Combat
             {
                 targetPosition = spawnPosition + (transform.forward * data.DespawnRange);
 
-                float progress01 = current * data.ProjectileSpeed / Vector3.Distance(spawnPosition, targetPosition); // current / despawnRange?
+                float progress01 = current * data.ProjectileSpeed / Vector3.Distance(spawnPosition, targetPosition); // dist == despawnRange?
 
                 if (progress01 < 1)
                     transform.position = Vector3.Lerp(spawnPosition, targetPosition, progress01);
@@ -104,7 +102,6 @@ namespace ARPG.Combat
             void DetectTargetsInRange()
             {
                 damageTaker.Clear();
-                //alreadyTakenDamage.Clear();
 
                 if (0 < possibledamageTaker.Count)
                     foreach (var candidate in possibledamageTaker)
@@ -141,16 +138,6 @@ namespace ARPG.Combat
             }
         }
 
-        //    void DistanceCheck()
-        //    {
-        //        foreach (var candidate in possibleDamageTaker)
-        //        {
-        //            float dist = Vector3.Distance(candidate.transform.position, transform.position);
-        //            if (data.InnerRadius <= dist && dist <= data.OuterRadius) // this should include the projectiles radius as it would travel the full range and therefore extend it
-        //                possibleDamageTakerInRange.Add(candidate);
-        //        }
-        //    }
-        //
         //    void AngleCheck()
         //    {
         //        foreach (var candidate in possibleDamageTakerInRange)

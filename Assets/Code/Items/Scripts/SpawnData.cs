@@ -47,13 +47,17 @@ namespace ARPG.Container
         [SerializeField] private float outerRadius = 5;
         public float OuterRadius => outerRadius;
 
+        [Tooltip("The angle of the projectile centered on it's forward direction")]
+        [Range(0u, 360u)]
+        [SerializeField] private uint shapeAngle = 360u;
+        public float ShapeAngle => shapeAngle;
+
         [Range(0f, 20f)]
         [SerializeField] private float lifetime = 0;
         public float Lifetime => lifetime;
 
-        //[Tooltip("projectile passes through enemies? else despawn on first collision")]
         //[SerializeField] private bool isPiercing = false;
-        //public bool IsPiercing => isPiercing;
+        //[SerializeField] private bool isHoming = false;
 
         ///
         [Header("Path Settings")]
@@ -63,15 +67,17 @@ namespace ARPG.Container
         [SerializeField] private uint projectileAmount = 1u;
         public uint ProjectileAmount => projectileAmount;
 
-        [Tooltip("The angle of launched projectiles centered on the caster's forward direction. 0 == line")]
+        [Tooltip("The angle of launched projectiles centered on the caster's forward direction. Use this when launching multiple projectiles")]
         [Range(0u, 360u)]
-        [SerializeField] private uint shapeAngle = 0u;
-        public float ShapeAngle => shapeAngle;
+        [SerializeField] private uint projectileDistribution = 0u;
+        public float ProjectileDistribution => projectileDistribution;
 
+        [Tooltip("The traveling speed of the projectile")]
         [Range(0u, 30u)]
         [SerializeField] private uint projectileSpeed = 3u;
         public float ProjectileSpeed => projectileSpeed;
 
+        [Tooltip("The maximal travel distance before despawning the projectile")]
         [Range(0f, 30f)]
         [SerializeField] private float despawnRange = 1;
         public float DespawnRange => despawnRange;
@@ -79,6 +85,7 @@ namespace ARPG.Container
         [SerializeField] private Projectile projectile;
         public Projectile Projectile => projectile;
 
+        [Tooltip("The type of Interactables to target with this projectile")]
         [SerializeField] private List<InteractionType> targetTypes = new();
         public List<InteractionType> TargetTypes => targetTypes;
 

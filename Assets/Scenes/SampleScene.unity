@@ -256,6 +256,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 4228668416095400373, guid: 2be80a6f16a111a46bd8340608e1303b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4229042572934584021, guid: 2be80a6f16a111a46bd8340608e1303b, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -1490,7 +1494,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1022739317}
-  m_LocalRotation: {x: 0.6532815, y: -0.27059805, z: 0.27059805, w: 0.6532815}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1511,13 +1515,13 @@ RectTransform:
   - {fileID: 940520346}
   - {fileID: 229991571}
   - {fileID: 1770371032}
-  m_Father: {fileID: 529004725}
-  m_RootOrder: 7
+  m_Father: {fileID: 2113378842}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.01}
-  m_SizeDelta: {x: 10, y: 10}
+  m_AnchoredPosition: {x: 0, y: -0.99}
+  m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1022739319
 MonoBehaviour:
@@ -2106,6 +2110,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 603326874}
     m_Modifications:
+    - target: {fileID: 4228668416095400373, guid: 2be80a6f16a111a46bd8340608e1303b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6991491696843435733, guid: 2be80a6f16a111a46bd8340608e1303b, type: 3}
       propertyPath: m_Name
       value: Enemy (1)
@@ -2255,6 +2263,7 @@ Transform:
   - {fileID: 773363664}
   - {fileID: 842784334}
   - {fileID: 705507995}
+  - {fileID: 1022739318}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2276,6 +2285,10 @@ PrefabInstance:
     - target: {fileID: 3822604589904601132, guid: 2be80a6f16a111a46bd8340608e1303b, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4228668416095400373, guid: 2be80a6f16a111a46bd8340608e1303b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4229042572934584021, guid: 2be80a6f16a111a46bd8340608e1303b, type: 3}
       propertyPath: m_Layer
@@ -2482,6 +2495,10 @@ PrefabInstance:
     - target: {fileID: 3822604589904601132, guid: 2be80a6f16a111a46bd8340608e1303b, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4228668416095400373, guid: 2be80a6f16a111a46bd8340608e1303b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4229042572934584021, guid: 2be80a6f16a111a46bd8340608e1303b, type: 3}
       propertyPath: m_Layer
@@ -2855,7 +2872,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 316930982407997966, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
       propertyPath: m_Name
-      value: HealthbarCanvas
+      value: PlayerHealthbarCanvas
       objectReference: {fileID: 0}
     - target: {fileID: 454953498952350671, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
       propertyPath: m_RootOrder
@@ -2899,6 +2916,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 454953498952350671, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 848460235062614935, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1289294296348784948, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
@@ -3041,9 +3062,33 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 529004725}
+    - target: {fileID: 6596234151692674249, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9063079
+      objectReference: {fileID: 0}
+    - target: {fileID: 6596234151692674249, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.42261827
+      objectReference: {fileID: 0}
+    - target: {fileID: 6596234151692674249, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6596234151692674249, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6596234151692674249, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 6734134527707506766, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6791005636014289280, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7012703683138211990, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
       propertyPath: m_ActionEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[1].m_Mode

@@ -154,6 +154,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 43a03a68-fbba-4365-abc6-b8ef24a94d31
     m_ActionName: PlayerInput/Skill5[/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 660850840498718442}
+        m_TargetAssemblyTypeName: ARPG.Input.InputTranslator, ARPG
+        m_MethodName: ForceStop
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: eabd715e-1c6d-4c19-bda6-c67bb1d2ef23
+    m_ActionName: PlayerInput/ForceStandStill[/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Desktop
   m_DefaultActionMap: PlayerInput
@@ -171,14 +187,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c41b9169910204db0b53f6164f73aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
   isHoldToCrouch: 1
   gamepadMovementRadius: 15
-  layerToIgnoreRaycast:
-    serializedVersion: 2
-    m_Bits: 4294967291
   hasClickedOnUI: 0
   isCrouching: 0
   hasMovementInput: 0
-  isLeftClicking: 0
   isLeftSticking: 0
   isForcingStop: 0
