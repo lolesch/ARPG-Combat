@@ -1,4 +1,5 @@
-﻿using ARPG.Enums;
+﻿using ARPG.Combat;
+using ARPG.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,8 +25,8 @@ namespace ARPG.Pawns
 
         protected float baseValue;
 
-        [SerializeField] protected readonly List<StatModifier> statModifiers = new List<StatModifier>();
-        [SerializeField] protected List<StatModifier> equipmentStatModifiers = new List<StatModifier>();
+        [SerializeField] protected readonly List<StatModifier> tempStatModifiers = new List<StatModifier>();
+        [SerializeField] protected List<StatModifier> permanentStatModifiers = new List<StatModifier>();
 
         [SerializeField] protected float maxValue;
         public float MaxValue => maxValue;
@@ -33,8 +34,8 @@ namespace ARPG.Pawns
         #region StatModifiers
         public void AddModifier(StatModifier mod)
         {
-            statModifiers.Add(mod);
-            statModifiers.Sort(CompareModifierOrder);
+            tempStatModifiers.Add(mod);
+            tempStatModifiers.Sort(CompareModifierOrder);
             RecalculateValues();
         }
 
@@ -50,7 +51,7 @@ namespace ARPG.Pawns
 
         public bool RemoveModifier(StatModifier mod)
         {
-            if (statModifiers.Remove(mod))
+            if (tempStatModifiers.Remove(mod))
             {
                 RecalculateValues();
 
@@ -60,17 +61,17 @@ namespace ARPG.Pawns
             return false;
         }
 
-        public bool RemoveAllModifiersOfOrigin(object origin)
+        public bool RemoveAllModifiersOfOrigin(EffectApplier origin)
         {
             bool wasRemoved = false;
 
-            for (int i = statModifiers.Count; i >= 0; i--)
+            for (int i = tempStatModifiers.Count; i >= 0; i--)
             {
-                if (statModifiers[i].Origin == origin)
+                if (tempStatModifiers[i].Origin == origin)
                 {
                     RecalculateValues();
                     wasRemoved = true;
-                    statModifiers.RemoveAt(i);
+                    tempStatModifiers.RemoveAt(i);
                 }
             }
 
@@ -87,9 +88,9 @@ namespace ARPG.Pawns
                 return;
             }
 
-            equipmentStatModifiers = modifiers;
+            permanentStatModifiers = modifiers;
 
-            equipmentStatModifiers.Sort(CompareModifierOrder);
+            permanentStatModifiers.Sort(CompareModifierOrder);
             RecalculateValues();
         }
         #endregion
@@ -99,14 +100,14 @@ namespace ARPG.Pawns
             float sumValue = baseValue;
             float sumPercentAdd = 0;
 
-            if (statModifiers is null)
+            if (tempStatModifiers is null)
             {
                 EditorDebug.LogError("statModifiers was null");
 
                 return;
             }
 
-            if (equipmentStatModifiers is null)
+            if (permanentStatModifiers is null)
             {
                 EditorDebug.LogError("equipmentStatModifiers was null");
 
@@ -114,18 +115,18 @@ namespace ARPG.Pawns
             }
 
             List<StatModifier> allMods =
-                statModifiers.Union(equipmentStatModifiers).OrderBy(stat => stat.Type).ToList();
+                tempStatModifiers.Union(permanentStatModifiers).OrderBy(stat => stat.Type).ToList();
 
             foreach (StatModifier mod in allMods.Where(stat => stat.Type == StatModifierType.Flat))
-                sumValue += mod.Value;
+                sumValue += mod.Amount;
 
             foreach (StatModifier mod in allMods.Where(x => x.Type == StatModifierType.PercentAdd))
-                sumPercentAdd += mod.Value;
+                sumPercentAdd += mod.Amount;
 
             sumValue *= 1 + sumPercentAdd;
 
             foreach (StatModifier mod in allMods.Where(x => x.Type == StatModifierType.PercentMult))
-                sumValue *= 1 + mod.Value;
+                sumValue *= 1 + mod.Amount;
 
             maxValue = (float)Math.Round(sumValue, 4);
 

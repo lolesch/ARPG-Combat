@@ -6,17 +6,23 @@
     {
         HealthMax = 0,
         HealthPerSecond = 1,
-        MovementSpeed = 2,
-        Damage = 3,
-        ManaMax = 4,
-        ManaPerSecond = 5,
-        Slow = 6,
+        ManaMax = 2,
+        ManaPerSecond = 3,
+
+        MovementSpeed = 4,
     }
 
     [System.Serializable]
-    public enum Resource
+    public enum ResourceName
     {
         HealthCurrent = 0,
         ManaCurrent = 1,
+    }
+
+    [System.Serializable]
+    public enum EffectName
+    {
+        Slow
+        //Damage = 3,
     }
 }

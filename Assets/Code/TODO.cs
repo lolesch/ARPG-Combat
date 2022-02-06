@@ -2,13 +2,15 @@ using UnityEngine;
 
 public class TODO : MonoBehaviour
 {
-    // done // cast skills should fire projectiles that can trigger effects 
-    // done // => add skill effects
+    // TODO: rework damage on projectiles / DoT while in the projectiles shape
+
+    // who is ticking the effect durationTicker?
+    // who is ticking the tickRate during the effect duration?
+
     // => consider StatModifyerTypes on effects
     // => trigger effects on targets
 
-    // done // make player rotate to pointer while froceStop is true
-
+    // make casting skills at interactables rotate the player in that direction
     // make casting skills at enemies move the player into range
 
     // make projectiles poolable

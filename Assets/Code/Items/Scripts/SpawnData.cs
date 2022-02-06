@@ -2,7 +2,9 @@ using ARPG.Combat;
 using ARPG.Enums;
 using ARPG.Pawns;
 using ARPG.Tools;
+using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace ARPG.Container
@@ -89,10 +91,10 @@ namespace ARPG.Container
         [SerializeField] private List<InteractionType> targetTypes = new();
         public List<InteractionType> TargetTypes => targetTypes;
 
-        // needs to be a dictionary to get the effects by name
-        public List<Effect> hitEffects = new();
+        public List<StatusEffect> statusEffects = new();
 
-        // tickrate?
-        // duration (if DoT)?
+        public List<DamageEffect> damageEffects = new();
+
+        public List<HitEffect> hitEffects = new();
     }
 }

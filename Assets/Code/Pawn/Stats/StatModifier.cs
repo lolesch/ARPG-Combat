@@ -1,28 +1,31 @@
 ﻿using ARPG.Enums;
 using System;
-using System.Collections;
+using UnityEngine;
 
-namespace ARPG.Pawns
+namespace ARPG.Combat
 {
+    [Serializable]
     public class StatModifier
     {
-        public readonly float Value;
-        public readonly StatModifierType Type;
-        private object origin;
-        public object Origin => origin;
-
-        // where to handle min and max values and random rolls?
-
-        public StatModifier(float value, StatModifierType type, object origin)
+        public StatModifier(float amount, StatModifierType type, EffectApplier origin)
         {
-            Value = value;
-            Type = type;
+            this.amount = amount;
+            this.type = type;
             this.origin = origin;
         }
 
-        public void SetOrigin(object origin)
-        {
-            this.origin = origin;
-        }
+        public float Amount => amount;
+        [Tooltip("The modifier's amount")]
+        [SerializeField] private float amount;
+
+        public StatModifierType Type => type;
+        [Tooltip("The order in wich modifiers are applied")]
+        [SerializeField] private StatModifierType type;
+
+        public EffectApplier Origin => origin;
+        [Tooltip("The order in wich modifiers are applied")]
+        [SerializeField] private EffectApplier origin;
+
+        public void SetOrigin(EffectApplier origin) => this.origin = origin;
     }
 }

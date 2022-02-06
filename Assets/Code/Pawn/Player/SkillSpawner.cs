@@ -20,8 +20,8 @@ namespace ARPG.Combat
         [SerializeField] private PlayerController player;
         [SerializeField] private Transform caster;
 
-        private void OnDestroy() => InputTranslator.Instance.castSkill -= TryCast;
-        private void Awake() => InputTranslator.Instance.castSkill += TryCast;
+        private void OnDestroy() => InputTranslator.Instance.SetCasting -= TryCast;
+        private void Awake() => InputTranslator.Instance.SetCasting += TryCast;
 
         public void TryCast(int index)
         {
@@ -30,7 +30,7 @@ namespace ARPG.Combat
                 if (data.CooldownTicker.IsTicking)
                     return;
 
-                if (player.resources.TryGetValue(Enums.Resource.ManaCurrent, out ResourceScore current))
+                if (player.resources.TryGetValue(Enums.ResourceName.ManaCurrent, out ResourceScore current))
                     if (data.ResourceCost <= current.CurrentValue)
                     {
                         data.CooldownTicker.Restart();

@@ -10,7 +10,7 @@ namespace ARPG.GUI
         [SerializeField] protected Image resourceImage;
 
         [SerializeField] protected Pawn pawn;
-        [SerializeField] protected Resource resourceToUpdate;
+        [SerializeField] protected ResourceName resourceToUpdate;
         [SerializeField] protected StatName statToUpdate;
 
         protected float max;

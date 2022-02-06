@@ -5,6 +5,7 @@ namespace ARPG.Pawns
 {
     public class ResourceScore
     {
+        // TODO: replace StatScore with float field
         public ResourceScore(StatScore stat)
         {
             this.stat = stat;
@@ -37,18 +38,14 @@ namespace ARPG.Pawns
         {
             currentValue = Mathf.Clamp(currentValue + value, 0, Stat.MaxValue);
 
-            currentPercent = CurrentValue * 100 / Stat.MaxValue;
-
-            currentHasChanged?.Invoke(currentPercent);
+            currentHasChanged?.Invoke(CurrentValue * 100 / Stat.MaxValue);
         }
 
         private void SetCurrentValue(float value)
         {
             currentValue = Mathf.Clamp(value, 0, Stat.MaxValue);
 
-            currentPercent = CurrentValue / Stat.MaxValue;
-
-            currentHasChanged?.Invoke(currentPercent);
+            currentHasChanged?.Invoke(CurrentValue / Stat.MaxValue);
         }
 
         //public void SetScore(StatScore stat)

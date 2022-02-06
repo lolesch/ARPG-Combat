@@ -20,7 +20,7 @@ namespace ARPG.Pawns
             stats.Add(StatName.ManaMax, new StatScore(60));
             stats.Add(StatName.ManaPerSecond, new StatScore(12));
 
-            resources.Add(Resource.ManaCurrent, new ResourceScore(new StatScore(60)));
+            resources.Add(ResourceName.ManaCurrent, new ResourceScore(new StatScore(60)));
             //if (resources.TryGetValue(Resource.ManaCurrent, out ResourceScore manaCurrent))
             //    manaCurrent.AddToCurrentValue(60);
 
@@ -34,14 +34,14 @@ namespace ARPG.Pawns
                 if (skill.SpawnData.CooldownTicker.IsTicking)
                     skill.SpawnData.CooldownTicker.Tick(Time.deltaTime);
 
-            Regenerate(StatName.HealthMax, Resource.HealthCurrent, StatName.HealthPerSecond);
-            Regenerate(StatName.ManaMax, Resource.ManaCurrent, StatName.ManaPerSecond);
+            Regenerate(StatName.HealthMax, ResourceName.HealthCurrent, StatName.HealthPerSecond);
+            Regenerate(StatName.ManaMax, ResourceName.ManaCurrent, StatName.ManaPerSecond);
         }
 
         // for debugging
         public void SetInteractionRange(float value) => interactionRange = value;
 
-        public void Regenerate(StatName max, Resource resource, StatName regen)
+        public void Regenerate(StatName max, ResourceName resource, StatName regen)
         {
             if (stats.TryGetValue(max, out StatScore maxValue))
                 if (resources.TryGetValue(resource, out ResourceScore current))

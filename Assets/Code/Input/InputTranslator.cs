@@ -1,4 +1,4 @@
-using ARPG.Tools;
+using ARPG.Enums;
 using System;
 using TeppichsTools.Creation;
 using TeppichsTools.Logging;
@@ -13,15 +13,11 @@ namespace ARPG.Input
     /// </summary>
     public class InputTranslator : Monoton<InputTranslator>
     {
-        public LayerMask layerMask = 1;
-
-        [Header("Settings")]
-        [SerializeField] private bool isHoldToCrouch = true;
+        [SerializeField] private LayerMask layerMask = 1;
 
         [Range(1f, 20f)]
-        [SerializeField] private float gamepadMovementRadius = 15f;
+        [SerializeField] private float gamepadMovementRadius = 15f; // maybe use the selected skill's range
 
-        //private Vector3 targetPosition;
         private Vector2 leftStickPosition;
         private RaycastHit hit;
 
@@ -32,47 +28,31 @@ namespace ARPG.Input
         [SerializeField] private bool isLeftSticking;
         [SerializeField] private bool isForcingStop;
 
-        public event Action<int> castSkill;
-        public event Action<bool> setMoving;
-        public event Action<bool> setLeftStick;
-        public event Action<bool> setForceStop;
-        public event Action<bool> setCrouching;
+        public event Action<int> SetCasting;
+        public event Action<bool> SetMoving;
+        public event Action<bool> SetForceStop;
 
-        //private void FixedUpdate()
-        //{
-        //    //setLeftStick?.Invoke(isLeftSticking);
-        //
-        //    //if (isLeftSticking)
-        //    //    screenPoint = Camera.main.WorldToScreenPoint(XZVector(leftStickPosition) + transform.position); // why transform.position? this is not the player 
-        //}
-
-        //private Vector3 HitPosition(Ray ray)
-        //{
-        //    if (!Physics.Raycast(ray, out hit, Mathf.Infinity, 3))
-        //        EditorDebug.LogError("raycast \t no collider found");
-        //
-        //    return hit.point;
-        //}
-
-        private bool CursorOutsideOfScreen()
+        private static bool CursorWithinScreen()
         {
             Vector2 pointerPosition = Pointer.current.position.ReadValue();
-
-            return pointerPosition.x < 0 || pointerPosition.x > Screen.currentResolution.width || pointerPosition.y < 0 || pointerPosition.y > Screen.currentResolution.height;
+            return 0 <= pointerPosition.x && pointerPosition.x <= Screen.currentResolution.width && 0 <= pointerPosition.y && pointerPosition.y <= Screen.currentResolution.height;
         }
 
         #region Interaction
 
         public void LeftClick(InputAction.CallbackContext ctx)
         {
-            if (CursorOutsideOfScreen())
+            if (!CursorWithinScreen())
                 return;
 
             if (ctx.started)
                 //if (!EventSystem.current.IsPointerOverGameObject()) // some check for IsOverUI here => no movement when interacting with UI
                 SetCurrentInteractable();
 
-            setMoving?.Invoke(ctx.performed);
+            if (isForcingStop || Interactable.current && Interactable.current.Interaction == InteractionType.Enemy || Interactable.current && Interactable.current.Interaction == InteractionType.Destroyable)
+                CastSkill0(ctx);
+            else
+                SetMoving?.Invoke(ctx.performed);
 
             void SetCurrentInteractable()
             {
@@ -97,15 +77,12 @@ namespace ARPG.Input
 
         public void RightClick(InputAction.CallbackContext ctx)
         {
-            if (CursorOutsideOfScreen())
+            if (!CursorWithinScreen())
                 return;
 
             if (ctx.started)
-            {
-                //hasClickedOnUI = EventSystem.current.IsPointerOverGameObject();
-                if (!hasClickedOnUI)
-                    CastSkill1(ctx);
-            }
+                //if (!EventSystem.current.IsPointerOverGameObject()) // some check for IsOverUI here => no movement when interacting with UI
+                CastSkill1(ctx);
         }
 
         public void LeftStick(InputAction.CallbackContext ctx)
@@ -116,8 +93,7 @@ namespace ARPG.Input
             /// range factor
             leftStickPosition *= gamepadMovementRadius;
 
-            isLeftSticking = ctx.performed;
-            hasMovementInput = isLeftSticking;
+            SetMoving?.Invoke(ctx.performed);
 
             //TODO: set Interactable in close range
 
@@ -126,10 +102,16 @@ namespace ARPG.Input
             //    // this should be a cross product, no?
             //    return Quaternion.AngleAxis(45f, Vector3.up) * XZPlane.Vector(target);
             //}
-        }
 
-        public void RightStick(InputAction.CallbackContext ctx)
-        {
+            //screenPoint = Camera.main.WorldToScreenPoint(XZVector(leftStickPosition) + transform.position); // why transform.position? this is not the player 
+
+            //private Vector3 HitPosition(Ray ray)
+            //{
+            //    if (!Physics.Raycast(ray, out hit, Mathf.Infinity, 3))
+            //        EditorDebug.LogError("raycast \t no collider found");
+            //
+            //    return hit.point;
+            //}
         }
 
         public void ForceStop(InputAction.CallbackContext ctx)
@@ -138,34 +120,35 @@ namespace ARPG.Input
                 CastSkill(0);
 
             isForcingStop = ctx.performed;
-            setForceStop?.Invoke(isForcingStop);
+            SetForceStop?.Invoke(isForcingStop);
         }
 
-        public void Crouch(InputAction.CallbackContext ctx)
-        {
-            if (isHoldToCrouch)
-                isCrouching = ctx.performed;
-            else
-            {
-                if (ctx.started)
-                    isCrouching = !isCrouching;
-            }
-            setCrouching(isCrouching);
-        }
+        //public void Crouch(InputAction.CallbackContext ctx)
+        //{
+        //    if (isHoldToCrouch)
+        //        isCrouching = ctx.performed;
+        //    else
+        //    {
+        //        if (ctx.started)
+        //            isCrouching = !isCrouching;
+        //    }
+        //    SetCrouching(isCrouching);
+        //}
 
         #endregion
 
         #region Skills
 
-        private void CastSkill(int index) => castSkill?.Invoke(index);
+        private void CastSkill(int index)
+        {
+            // TODO: rotate towards target and cast in that directions
+            SetCasting?.Invoke(index);
+        }
 
         public void CastSkill0(InputAction.CallbackContext ctx)
         {
-            //if (isForcingStop || Interactable.current && Interactable.current.Interaction == InteractionType.Enemy || Interactable.current && Interactable.current.Interaction == InteractionType.Destroyable)
-            //{
-            //    if (ctx.started)
-            //        CastSkill(0);
-            //}
+            if (ctx.started)
+                CastSkill(0);
         }
 
         public void CastSkill1(InputAction.CallbackContext ctx)

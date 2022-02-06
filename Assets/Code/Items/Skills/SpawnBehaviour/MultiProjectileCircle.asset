@@ -29,5 +29,5 @@ MonoBehaviour:
   hitEffects:
   - statName: 3
     amount: 20
-    modifyer: 100
+    modifier: 300
     duration: 0

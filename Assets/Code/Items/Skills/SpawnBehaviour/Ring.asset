@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54a4efd8a2e840b46ac2c392478fc3a4, type: 3}
   m_Name: Ring
   m_EditorClassIdentifier: 
+  CooldownTicker:
+    duration: 2
+    progress: 2
   cooldownDuration: 2
   resourceCost: 30
   spawnAtCursor: 0
@@ -28,6 +31,8 @@ MonoBehaviour:
   targetTypes: 0100000005000000
   hitEffects:
   - statName: 3
-    amount: 30
-    modifyer: 100
+    modifier:
+      value: 30
+      type: 100
     duration: 5
+    tickrate: 0

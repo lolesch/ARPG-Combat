@@ -19,9 +19,8 @@ namespace ARPG.Pawns.Movement
         private void OnDestroy()
         {
             movementLocker.locked -= ForceStop;
-            InputTranslator.Instance.setMoving -= SetMove;
-            InputTranslator.Instance.setForceStop -= SetForceStop;
-            InputTranslator.Instance.setCrouching -= SetCrouchSpeed;
+            InputTranslator.Instance.SetMoving -= SetMove;
+            InputTranslator.Instance.SetForceStop -= SetForceStop;
         }
 
         protected override void Awake()
@@ -29,9 +28,8 @@ namespace ARPG.Pawns.Movement
             base.Awake();
 
             movementLocker.locked += ForceStop;
-            InputTranslator.Instance.setMoving += SetMove;
-            InputTranslator.Instance.setForceStop += SetForceStop;
-            InputTranslator.Instance.setCrouching += SetCrouchSpeed;
+            InputTranslator.Instance.SetMoving += SetMove;
+            InputTranslator.Instance.SetForceStop += SetForceStop;
 
             agent.updateRotation = false;
         }

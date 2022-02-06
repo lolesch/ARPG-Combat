@@ -449,31 +449,31 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: IsRolling
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: HasWeapon
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 1
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Run Blend
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Attack Blend
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -601,12 +601,12 @@ AnimatorStateMachine:
   - {fileID: 7081037421058264439}
   m_EntryTransitions: []
   m_StateMachineTransitions:
-  - first: {fileID: 88971067981640112}
-    second:
-    - {fileID: -3071642482843719796}
   - first: {fileID: 8604625601209958095}
     second:
     - {fileID: -4549267393374609828}
+  - first: {fileID: 88971067981640112}
+    second:
+    - {fileID: -3071642482843719796}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: -50, y: 240, z: 0}
   m_EntryPosition: {x: -48, y: 372, z: 0}
