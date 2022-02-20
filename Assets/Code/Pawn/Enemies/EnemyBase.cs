@@ -8,7 +8,7 @@ namespace ARPG.Pawns.Enemy
         {
             DropLoot();
 
-            base.Kill();
+            Destroy(gameObject);
 
             void DropLoot() => EditorDebug.Log($"{name} is dropping Loot");
         }

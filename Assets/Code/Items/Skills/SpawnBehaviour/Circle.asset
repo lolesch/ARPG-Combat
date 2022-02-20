@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Circle
   m_EditorClassIdentifier: 
   CooldownTicker:
-    duration: 0
-    progress: 0
+    progress: 2.0004854
   cooldownDuration: 2
   resourceCost: 30
   spawnAtCursor: 1
@@ -29,4 +28,44 @@ MonoBehaviour:
   despawnRange: 0
   projectile: {fileID: 2626277891086901119, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
   targetTypes: 0100000005000000
-  effects: []
+  effects:
+  - rid: 5201751225000001545
+  - rid: 5201751225000001542
+  - rid: 5201751231087247366
+  - rid: 5201751231087247374
+  references:
+    version: 2
+    RefIds:
+    - rid: 5201751225000001542
+      type: {class: StatusEffect, ns: ARPG.Combat, asm: ARPG}
+      data:
+        statName: 5
+        modifier:
+          amount: -20
+          type: 300
+        duration: 5
+        ticker:
+          progress: 0
+    - rid: 5201751225000001545
+      type: {class: ResourceEffect, ns: ARPG.Combat, asm: ARPG}
+      data:
+        resourceName: 2
+        amount: 30
+    - rid: 5201751231087247366
+      type: {class: ResourceOverTimeEffect, ns: ARPG.Combat, asm: ARPG}
+      data:
+        resourceName: 2
+        amount: 20
+        ticker:
+          progress: 0
+        repeatTicker:
+          progress: 0
+        duration: 5
+        repeatRate: 0.2
+    - rid: 5201751231087247374
+      type: {class: ConditionEffect, ns: ARPG.Combat, asm: ARPG}
+      data:
+        cc: 8
+        duration: 0
+        ticker:
+          progress: 0

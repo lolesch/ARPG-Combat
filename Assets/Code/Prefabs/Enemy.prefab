@@ -89,6 +89,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionRange: 2
   interaction: 1
+  pawnStats: {fileID: 11400000, guid: bc9089d9b7889544bb589b4303f037d0, type: 2}
+  stats:
+    keyData: 
+    valueData: []
+  resources:
+    keyData: 
+  activeResourceEffects: []
+  activeStatusEffects: []
+  activeConditionEffects: []
 --- !u!114 &1940929914830444345
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -27,13 +27,13 @@ namespace ARPG.Combat
         {
             if (GetValidData(index))
             {
-                if (data.CooldownTicker.IsTicking)
+                if (data.CooldownTicker.HasRemainingDuration)
                     return;
 
                 if (player.resources.TryGetValue(Enums.ResourceName.ManaCurrent, out ResourceScore current))
                     if (data.ResourceCost <= current.CurrentValue)
                     {
-                        data.CooldownTicker.Restart();
+                        data.CooldownTicker.Start();
                         current.AddToCurrentValue(-data.ResourceCost);
 
                         //CalculateDirections(XZDirection(target, transform.position));

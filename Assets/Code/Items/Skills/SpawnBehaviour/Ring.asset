@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Ring
   m_EditorClassIdentifier: 
   CooldownTicker:
-    duration: 2
-    progress: 2
+    progress: 2.0000927
   cooldownDuration: 2
   resourceCost: 30
   spawnAtCursor: 0
@@ -22,17 +21,26 @@ MonoBehaviour:
   innerRadius: 4
   outerRadius: 5
   shapeAngle: 0
-  lifetime: 5
+  lifetime: 1
   projectileAmount: 1
   projectileDistribution: 0
   projectileSpeed: 0
   despawnRange: 0
   projectile: {fileID: 2626277891086901119, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
   targetTypes: 0100000005000000
-  hitEffects:
-  - statName: 3
-    modifier:
-      value: 30
-      type: 100
-    duration: 5
-    tickrate: 0
+  effects:
+  - rid: 5201751231087247372
+  references:
+    version: 2
+    RefIds:
+    - rid: 5201751231087247372
+      type: {class: ResourceOverTimeEffect, ns: ARPG.Combat, asm: ARPG}
+      data:
+        resourceName: 2
+        amount: 50
+        ticker:
+          progress: 0
+        repeatTicker:
+          progress: 0.3
+        duration: 3
+        repeatRate: 0.3

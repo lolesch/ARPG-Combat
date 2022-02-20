@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54a4efd8a2e840b46ac2c392478fc3a4, type: 3}
   m_Name: MultiProjectile
   m_EditorClassIdentifier: 
+  CooldownTicker:
+    duration: 0.5
+    progress: 0.5
   cooldownDuration: 0.5
   resourceCost: 10
   spawnAtCursor: 0
@@ -26,8 +29,14 @@ MonoBehaviour:
   despawnRange: 15
   projectile: {fileID: 2626277891086901119, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
   targetTypes: 0100000005000000
-  hitEffects:
-  - statName: 3
-    amount: 8
-    modifier: 100
-    duration: 0
+  effects:
+  - rid: 5201751225000001539
+  references:
+    version: 2
+    RefIds:
+    - rid: 5201751225000001539
+      type: {class: ResourceEffect, ns: ARPG.Combat, asm: ARPG}
+      data:
+        resourceName: 2
+        amount: 20
+        duration: 0

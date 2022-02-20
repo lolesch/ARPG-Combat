@@ -1,4 +1,4 @@
-﻿namespace ARPG.Pawns.Enemy
+﻿namespace ARPG.Pawns.Destroyables
 {
-    public class DestroyableCollector : Collector<Destoyable> { }
+    public class DestroyableCollector : Collector<Destroyable> { }
 }

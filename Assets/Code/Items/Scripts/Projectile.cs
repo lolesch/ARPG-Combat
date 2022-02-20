@@ -4,8 +4,8 @@ using UnityEditor;
 using ARPG.Container;
 using ARPG.Pawns.Enemy;
 using ARPG.Tools;
+using ARPG.Pawns.Destroyables;
 using TeppichsTools.Logging;
-using ARPG.Pawns;
 
 namespace ARPG.Combat
 {
@@ -13,9 +13,9 @@ namespace ARPG.Combat
 
     public class Projectile : MonoBehaviour
     {
-        [SerializeField] private List<Transform> possibledamageTaker = new();
-        [SerializeField] private List<IDamageTaker> damageTaker = new();
-        [SerializeField] private List<IDamageTaker> alreadyTakenDamage = new();
+        [SerializeField] private List<Transform> possibleDamageTaker = new();
+        [SerializeField] private List<IEffectReceiver> effectReceiver = new();
+        [SerializeField] private List<IEffectReceiver> alreadyReceivedEffect = new();
 
         [SerializeField] private float current = 0;
         private Vector3 targetPosition;
@@ -39,107 +39,110 @@ namespace ARPG.Combat
 
             DetectTargetsInRange();
 
-            // TODO: rework damage on projectiles / DoT while in the projectiles shape
+            // TODO: rework damage on projectiles / DoT as groundEffect
             // => 
+            //TODO: whats the diff between Lifetime and EffectDuration?
 
-            //// change this into a dictionary => use tryGet
-            //if (data.effects[0].StatName == Enums.StatName.Damage)
-            //{
-            //    var damage = data.effects[0].Modifier.Value;
-            //
-            //    //TODO: whats the diff between Lifetime and EffectDuration?
-            //
-            //    if (0 < data.effects[0].Duration) // Effect has duration
-            //    {
-            //        //TODO: this condition seems not to work as intended => use Coroutine?
-            //        if (!ticker.IsTicking) // is off cooldown
-            //        {
-            //            var tickrate = 0.2f;// data.hitEffects[0].TickRate;
-            //            var duration = data.effects[0].Duration;
-            //
-            //            ticker = new(tickrate, true);
-            //
-            //            // DPS = TotalDamage / Duration
-            //            // DPS = DamagePerTick * TicksPerSecond
-            //
-            //            // TicksPerSecond = 1 / Tickrate
-            //
-            //            // DamagePerTick = TotalDamage / (Duration * TicksPerSecond)
-            //            // DamagePerTick = TotalDamage * Tickrate / Duration
-            //
-            //            damage = damage * tickrate / duration; // damage per tick
-            //
-            //            foreach (var target in damageTaker)
-            //                DealDamage(target, damage);
-            //        }
-            //
-            //        ticker.Tick(Time.deltaTime);
-            //    }
-            //    else
-            //        foreach (var target in damageTaker)
-            //            if (!alreadyTakenDamage.Contains(target))
-            //            {
-            //                DealDamage(target, damage);
-            //                alreadyTakenDamage.Add(target);
-            //            }
-            //
-            //    current += Time.deltaTime;
-            //
-            //    // instant and stationary
-            //    if (data.Lifetime <= 0 && data.ProjectileSpeed <= 0)
-            //        Destroy(this.gameObject, .1f); // .1f is for debugging! remove this once there are vfx to show the skill's impact/shape
-            //}
-
-            void ProjectileTraveling()
-            {
-                targetPosition = spawnPosition + (transform.forward * data.DespawnRange);
-
-                float progress01 = current * data.ProjectileSpeed / Vector3.Distance(spawnPosition, targetPosition); // dist == despawnRange?
-
-                if (progress01 < 1)
-                    transform.position = Vector3.Lerp(spawnPosition, targetPosition, progress01);
-                else
-                    Destroy(this.gameObject);
-            }
-
-            void DetectTargetsInRange()
-            {
-                GetPossibleDamageTaker();
-
-                damageTaker.Clear();
-
-                if (0 < possibledamageTaker.Count)
-                    foreach (var candidate in possibledamageTaker)
+            #region invoke
+            foreach (var receiver in effectReceiver)
+                foreach (var effect in data.effects)
+                    if (!alreadyReceivedEffect.Contains(receiver))
                     {
-                        var dist = XZPlane.Magnitude(transform.position, candidate.transform.position);
-
-                        if (data.InnerRadius <= dist && dist <= data.OuterRadius)
-                        {
-                            candidate.TryGetComponent(out IDamageTaker target);
-                            if (!damageTaker.Contains(target))
-                                damageTaker.Add(target);
-                        }
+                        effect.ApplyEffect(receiver);
+                        alreadyReceivedEffect.Add(receiver);
                     }
+            #endregion
 
-                void GetPossibleDamageTaker()
+            //if (0 < data.effects[0].Duration) // Effect has duration
+            //{
+            //    //TODO: this condition seems not to work as intended => use Coroutine?
+            //    if (!ticker.IsTicking) // is off cooldown
+            //    {
+            //        var tickrate = 0.2f;// data.hitEffects[0].TickRate;
+            //        var duration = data.effects[0].Duration;
+            //
+            //        ticker = new(tickrate, true);
+            //
+            //        // DPS = TotalDamage / Duration
+            //        // DPS = DamagePerTick * TicksPerSecond
+            //
+            //        // TicksPerSecond = 1 / Tickrate
+            //
+            //        // DamagePerTick = TotalDamage / (Duration * TicksPerSecond)
+            //        // DamagePerTick = TotalDamage * Tickrate / Duration
+            //
+            //        damage = damage * tickrate / duration; // damage per tick
+            //
+            //        foreach (var target in damageTaker)
+            //            DealDamage(target, damage);
+            //    }
+            //
+            //    ticker.Tick(Time.deltaTime);
+            //}
+            //else
+            //    foreach (var target in damageTaker)
+            //        if (!alreadyTakenDamage.Contains(target))
+            //        {
+            //            DealDamage(target, damage);
+            //            alreadyTakenDamage.Add(target);
+            //        }
+
+            current += Time.deltaTime;
+
+            // instant and stationary
+            if (data.Lifetime <= 0 && data.ProjectileSpeed <= 0)
+                Destroy(this.gameObject, .1f); // .1f is for debugging! remove this once there are vfx to show the skill's impact/shape
+        }
+
+        void ProjectileTraveling()
+        {
+            targetPosition = spawnPosition + (transform.forward * data.DespawnRange);
+
+            float progress01 = current * data.ProjectileSpeed / Vector3.Distance(spawnPosition, targetPosition); // dist == despawnRange?
+
+            if (progress01 < 1)
+                transform.position = Vector3.Lerp(spawnPosition, targetPosition, progress01);
+            else
+                Destroy(this.gameObject);
+        }
+
+        void DetectTargetsInRange()
+        {
+            GetPossibleDamageTaker();
+
+            //damageTaker.Clear();
+
+            if (0 < possibleDamageTaker.Count)
+                foreach (var candidate in possibleDamageTaker)
                 {
-                    possibledamageTaker.Clear();
+                    var dist = XZPlane.Magnitude(transform.position, candidate.transform.position);
 
-                    foreach (var type in data.TargetTypes)
-                        switch (type)
-                        {
-                            case Enums.InteractionType.Enemy:
-                                foreach (var enemy in EnemyCollector.collection)
-                                    possibledamageTaker.Add(enemy.transform);
-                                break;
-                            case Enums.InteractionType.Destroyable:
-                                foreach (var destroyable in DestroyableCollector.collection)
-                                    possibledamageTaker.Add(destroyable.transform);
-                                break;
-                            default:
-                                break;
-                        }
+                    if (data.InnerRadius <= dist && dist <= data.OuterRadius)
+                    {
+                        candidate.TryGetComponent(out IEffectReceiver target);
+                        if (!effectReceiver.Contains(target))
+                            effectReceiver.Add(target);
+                    }
                 }
+
+            void GetPossibleDamageTaker()
+            {
+                possibleDamageTaker.Clear();
+
+                foreach (var type in data.TargetTypes)
+                    switch (type)
+                    {
+                        case Enums.InteractionType.Enemy:
+                            foreach (var enemy in EnemyCollector.collection)
+                                possibleDamageTaker.Add(enemy.transform);
+                            break;
+                        case Enums.InteractionType.Destroyable:
+                            foreach (var destroyable in DestroyableCollector.collection)
+                                possibleDamageTaker.Add(destroyable.transform);
+                            break;
+                        default:
+                            break;
+                    }
             }
         }
 
@@ -154,7 +157,7 @@ namespace ARPG.Combat
         //        }
         //    }
 
-        public void DealDamage(IDamageTaker target, float damage) => target.TakeDamage(damage);
+        //public void DealDamage(IDamageTaker target, float damage) => target.AddToCurrentHealth(damage);
 
         //public void ApplyEffect(IEffectReceiver receiver, DamageEffect effect)
         //{

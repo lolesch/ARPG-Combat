@@ -1,10 +1,8 @@
 using ARPG.Combat;
 using ARPG.Enums;
-using ARPG.Pawns;
 using ARPG.Tools;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace ARPG.Container
@@ -91,10 +89,6 @@ namespace ARPG.Container
         [SerializeField] private List<InteractionType> targetTypes = new();
         public List<InteractionType> TargetTypes => targetTypes;
 
-        public List<StatusEffect> statusEffects = new();
-
-        public List<DamageEffect> damageEffects = new();
-
-        public List<HitEffect> hitEffects = new();
+        [SerializeReference] public List<IEffect> effects = new();
     }
 }

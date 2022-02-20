@@ -5,12 +5,13 @@ namespace ARPG.Pawns
 {
     public class ResourceScore
     {
-        // TODO: replace StatScore with float field
         public ResourceScore(StatScore stat)
         {
             this.stat = stat;
             RecalculateValues();
         }
+
+        //void Awake() => Stat.maxHasChanged += RecalculateValues;
 
         [SerializeField] private StatScore stat;
         public StatScore Stat => stat;
@@ -47,10 +48,5 @@ namespace ARPG.Pawns
 
             currentHasChanged?.Invoke(CurrentValue / Stat.MaxValue);
         }
-
-        //public void SetScore(StatScore stat)
-        //{
-        //    this.stat = stat;
-        //}
     }
 }

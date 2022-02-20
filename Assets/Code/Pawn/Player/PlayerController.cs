@@ -1,4 +1,3 @@
-using ARPG.Combat;
 using ARPG.Container;
 using ARPG.Enums;
 using ARPG.Tools;
@@ -8,7 +7,7 @@ using UnityEngine;
 
 namespace ARPG.Pawns
 {
-    public class PlayerController : Pawn, IRegenerate
+    public class PlayerController : Pawn
     {
         public List<Skill> skills = new(6);
 
@@ -16,11 +15,9 @@ namespace ARPG.Pawns
         {
             base.Awake();
 
-            stats.Add(StatName.HealthPerSecond, new StatScore(5));
-            stats.Add(StatName.ManaMax, new StatScore(60));
-            stats.Add(StatName.ManaPerSecond, new StatScore(12));
-
+            // needs resources in the player starting stats
             resources.Add(ResourceName.ManaCurrent, new ResourceScore(new StatScore(60)));
+
             //if (resources.TryGetValue(Resource.ManaCurrent, out ResourceScore manaCurrent))
             //    manaCurrent.AddToCurrentValue(60);
 
@@ -28,32 +25,23 @@ namespace ARPG.Pawns
                 skill.SpawnData.CooldownTicker = new Ticker(skill.SpawnData.CooldownDuration, false);
         }
 
-        private void LateUpdate()
+        void Update()
         {
             foreach (var skill in skills)
-                if (skill.SpawnData.CooldownTicker.IsTicking)
+                if (skill.SpawnData.CooldownTicker.HasRemainingDuration)
                     skill.SpawnData.CooldownTicker.Tick(Time.deltaTime);
-
-            Regenerate(StatName.HealthMax, ResourceName.HealthCurrent, StatName.HealthPerSecond);
-            Regenerate(StatName.ManaMax, ResourceName.ManaCurrent, StatName.ManaPerSecond);
         }
 
         // for debugging
         public void SetInteractionRange(float value) => interactionRange = value;
 
-        public void Regenerate(StatName max, ResourceName resource, StatName regen)
-        {
-            if (stats.TryGetValue(max, out StatScore maxValue))
-                if (resources.TryGetValue(resource, out ResourceScore current))
-                    if (current.CurrentValue < maxValue.MaxValue)
-                        if (stats.TryGetValue(regen, out StatScore regenValue))
-                            current.AddToCurrentValue(regenValue.MaxValue * Time.deltaTime);
-        }
-
         protected override void Kill()
         {
+            EditorDebug.LogWarning($"{this.name} died");
+            Debug.Break();
+
             // if(!hardcoreCharacter)
-            //  respawn
+            //  Respawn();
             // else
             //  show death cause and 'createNewCharacter' menu
         }

@@ -93,6 +93,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionRange: 10
   interaction: 3
+  pawnStats: {fileID: 11400000, guid: 87659f0f8abcd464bb899b161cdc5622, type: 2}
+  stats:
+    keyData: 
+    valueData: []
+  resources:
+    keyData: 
+  activeResourceEffects: []
+  activeStatusEffects: []
+  activeConditionEffects: []
   skills:
   - {fileID: 11400000, guid: e0a7cae700c4e9c44bf17696edbdd776, type: 2}
   - {fileID: 11400000, guid: 79976155e0bf117469dfdd42a86f7309, type: 2}

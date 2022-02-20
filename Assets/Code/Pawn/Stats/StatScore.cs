@@ -13,6 +13,8 @@ namespace ARPG.Pawns
     public class StatScore
     {
         //TODO: handle derived attributes - i.e. strength powers your damageStat
+        // => new class DerivedStats with a list of stats and a modifier of the stat conversion
+        // foreach stat add that much to it's modifiers
 
         public event Action<float> maxHasChanged;
 
@@ -25,17 +27,15 @@ namespace ARPG.Pawns
 
         protected float baseValue;
 
-        [SerializeField] protected readonly List<StatModifier> tempStatModifiers = new List<StatModifier>();
-        [SerializeField] protected List<StatModifier> permanentStatModifiers = new List<StatModifier>();
+        [SerializeField] protected readonly List<StatModifier> statModifiers = new List<StatModifier>();
 
         [SerializeField] protected float maxValue;
         public float MaxValue => maxValue;
 
-        #region StatModifiers
         public void AddModifier(StatModifier mod)
         {
-            tempStatModifiers.Add(mod);
-            tempStatModifiers.Sort(CompareModifierOrder);
+            statModifiers.Add(mod);
+            statModifiers.Sort(CompareModifierOrder);
             RecalculateValues();
         }
 
@@ -51,7 +51,7 @@ namespace ARPG.Pawns
 
         public bool RemoveModifier(StatModifier mod)
         {
-            if (tempStatModifiers.Remove(mod))
+            if (statModifiers.Remove(mod))
             {
                 RecalculateValues();
 
@@ -65,67 +65,66 @@ namespace ARPG.Pawns
         {
             bool wasRemoved = false;
 
-            for (int i = tempStatModifiers.Count; i >= 0; i--)
+            for (int i = statModifiers.Count; i >= 0; i--)
             {
-                if (tempStatModifiers[i].Origin == origin)
+                if (statModifiers[i].Origin == origin)
                 {
                     RecalculateValues();
                     wasRemoved = true;
-                    tempStatModifiers.RemoveAt(i);
+                    statModifiers.RemoveAt(i);
                 }
             }
 
             return wasRemoved;
         }
-        #endregion
-
-        #region EquipmentStatModifiers
-        public void SetEquipmentModifiers(List<StatModifier> modifiers)
-        {
-            if (modifiers is null)
-            {
-                EditorDebug.LogError("modifiers was null");
-                return;
-            }
-
-            permanentStatModifiers = modifiers;
-
-            permanentStatModifiers.Sort(CompareModifierOrder);
-            RecalculateValues();
-        }
-        #endregion
 
         public virtual void RecalculateValues()
         {
             float sumValue = baseValue;
             float sumPercentAdd = 0;
 
-            if (tempStatModifiers is null)
+            if (statModifiers is null)
             {
                 EditorDebug.LogError("statModifiers was null");
 
                 return;
             }
 
-            if (permanentStatModifiers is null)
-            {
-                EditorDebug.LogError("equipmentStatModifiers was null");
+            statModifiers.OrderBy(stat => stat.Type).ToList();
 
-                return;
-            }
-
-            List<StatModifier> allMods =
-                tempStatModifiers.Union(permanentStatModifiers).OrderBy(stat => stat.Type).ToList();
-
-            foreach (StatModifier mod in allMods.Where(stat => stat.Type == StatModifierType.Flat))
+            foreach (StatModifier mod in statModifiers.Where(stat => stat.Type == StatModifierType.Flat))
                 sumValue += mod.Amount;
 
-            foreach (StatModifier mod in allMods.Where(x => x.Type == StatModifierType.PercentAdd))
+            foreach (StatModifier mod in statModifiers.Where(x => x.Type == StatModifierType.PercentAdd))
                 sumPercentAdd += mod.Amount;
 
             sumValue *= 1 + sumPercentAdd;
 
-            foreach (StatModifier mod in allMods.Where(x => x.Type == StatModifierType.PercentMult))
+            foreach (StatModifier mod in statModifiers.Where(x => x.Type == StatModifierType.PercentMult))
+                sumValue *= 1 + mod.Amount;
+
+            maxValue = (float)Math.Round(sumValue, 4);
+
+            maxHasChanged?.Invoke(MaxValue);
+        }
+
+        public virtual void RecalculateValuesDeleteMe()
+        {
+            float sumValue = baseValue;
+
+            if (statModifiers is null)
+            {
+                EditorDebug.LogError("statModifiers was null");
+
+                return;
+            }
+
+            statModifiers.OrderBy(stat => stat.Type).ToList();
+
+            sumValue += statModifiers.Where(stat => stat.Type == StatModifierType.Flat).Sum(s => s.Amount);
+            sumValue *= 1 + statModifiers.Where(stat => stat.Type == StatModifierType.PercentAdd).Sum(s => s.Amount);
+
+            foreach (StatModifier mod in statModifiers.Where(x => x.Type == StatModifierType.PercentMult))
                 sumValue *= 1 + mod.Amount;
 
             maxValue = (float)Math.Round(sumValue, 4);

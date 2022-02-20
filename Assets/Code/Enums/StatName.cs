@@ -9,20 +9,8 @@
         ManaMax = 2,
         ManaPerSecond = 3,
 
-        MovementSpeed = 4,
-    }
-
-    [System.Serializable]
-    public enum ResourceName
-    {
-        HealthCurrent = 0,
-        ManaCurrent = 1,
-    }
-
-    [System.Serializable]
-    public enum EffectName
-    {
-        Slow
-        //Damage = 3,
+        AttackDamage = 4,
+        AttackSpeed = 5,
+        MovementSpeed = 6,
     }
 }

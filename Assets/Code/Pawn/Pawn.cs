@@ -2,55 +2,80 @@ using System.Collections.Generic;
 using ARPG.Combat;
 using ARPG.Enums;
 using ARPG.Input;
+using ARPG.Tools;
 using TeppichsTools.Logging;
 using UnityEngine;
 
 namespace ARPG.Pawns
 {
-    public class Pawn : Interactable, IDamageTaker, IEffectReceiver
+    public abstract class Pawn : Interactable, IRegenerate, IEffectReceiver
     {
-        public Dictionary<StatName, StatScore> stats = new Dictionary<StatName, StatScore>();
-        public Dictionary<ResourceName, ResourceScore> resources = new Dictionary<ResourceName, ResourceScore>();
+        [SerializeField] private PawnStats pawnStats;
 
-        public List<StatusEffect> activeEffects = new();
+        public StatNameToScore stats = new();
 
-        void Update()
-        {
-            foreach (var effect in activeEffects)
-            {
-                if (!stats.TryGetValue(effect.StatName, out StatScore stat))
-                    return;
+        public ResourceNameToScore resources = new();
 
-                // is overTime-Effect?
-                if (0 < effect.Duration)
-                {
-                    //if (effect.DurationTicker.IsTicking)
-                    //{
-                    //    effect.DurationTicker.Tick(Time.deltaTime);
-                    //
-                    //    if (effect.TickrateTicker.IsTicking)
-                    //        effect.TickrateTicker.Tick(Time.deltaTime);
-                    //    else
-                    //    {
-                    //        effect.TickrateTicker.Restart();
-                    //
-                    //        StatModifier statModifier = new(effect.TickValue, effect.Modifier.Type, effect.Modifier.Origin);
-                    //
-                    //        stat.AddModifier(statModifier);
-                    //    }
-                }
-                else
-                    stat.AddModifier(effect.Modifier);
-            }
-        }
+        public List<ResourceOverTimeEffect> activeResourceEffects = new();
+        public List<StatusEffect> activeStatusEffects = new();
+        public List<ConditionEffect> activeConditionEffects = new();
 
         protected virtual void Awake()
         {
-            stats.Add(StatName.HealthMax, new StatScore(100));
+            foreach (var value in pawnStats.BaseValues)
+                stats.Add(value.Key, new StatScore(value.Value));
+
             SetCurrentHealth();
         }
 
-        public void SetCurrentHealth()
+        void Update()
+        {
+            for (int i = activeResourceEffects.Count - 1; 0 <= i; i--)
+            {
+                var effect = activeResourceEffects[i];
+
+                if (effect.Ticker.HasRemainingDuration)
+                {
+                    effect.Ticker.Tick(Time.deltaTime);
+
+                    //effect.OverTimeEffect(this, Time.deltaTime);
+
+                    ApplyEffect(effect);
+                }
+                else
+                    effect.RemoveEffect(this);
+            }
+
+            void ApplyEffect(ResourceOverTimeEffect effect)
+            {
+                if (effect.RepeatTicker.HasRemainingDuration)
+                    effect.RepeatTicker.Tick(Time.deltaTime);
+                else
+                {
+                    effect.RepeatTicker.Restart();
+
+                    switch (effect.ResourceName)
+                    {
+                        case ResourceEffectName.Heal:
+                            AddToCurrentHealth(effect.Amount / Mathf.RoundToInt(effect.Duration / effect.RepeatTicker.duration));
+                            break;
+                        case ResourceEffectName.Damage:
+                            AddToCurrentHealth(-effect.Amount / Mathf.RoundToInt(effect.Duration / effect.RepeatTicker.duration));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        void LateUpdate()
+        {
+            Regenerate(StatName.HealthMax, ResourceName.HealthCurrent, StatName.HealthPerSecond);
+            Regenerate(StatName.ManaMax, ResourceName.ManaCurrent, StatName.ManaPerSecond);
+        }
+
+        protected void SetCurrentHealth()
         {
             if (stats.TryGetValue(StatName.HealthMax, out StatScore healthMax))
             {
@@ -60,37 +85,72 @@ namespace ARPG.Pawns
             }
         }
 
-        public void TakeDamage(float damage)
+        public void AddToCurrentHealth(float amount)
         {
-            if (stats.TryGetValue(StatName.HealthMax, out StatScore healthMax))
+            if (resources.TryGetValue(ResourceName.HealthCurrent, out ResourceScore health))
             {
-                if (resources.TryGetValue(ResourceName.HealthCurrent, out ResourceScore health))
-                {
-                    health.AddToCurrentValue(-damage);
-                    EditorDebug.Log($"{this.name} took {damage} damage and has {health.CurrentValue} of {healthMax.MaxValue} health ({health.CurrentValue * 100 / healthMax.MaxValue} %)");
+                health.AddToCurrentValue(amount);
 
-                    if (health.CurrentValue <= 0)
-                        Kill();
-                }
+                if (health.CurrentValue <= 0)
+                    Kill();
             }
             else
                 EditorDebug.Log($"target had no health stats");
         }
 
-        protected override void Interact() => throw new System.NotImplementedException();
-
-        protected virtual void Kill() => Destroy(gameObject);
-
-        public void ReceiveEffect(StatusEffect effect)
+        public void Regenerate(StatName max, ResourceName resource, StatName regen)
         {
-            //effect.Apply(this as IEffectReceiver);
-
-            activeEffects.Add(effect);
+            if (stats.TryGetValue(max, out StatScore maxValue))
+                if (resources.TryGetValue(resource, out ResourceScore current))
+                    if (current.CurrentValue < maxValue.MaxValue)
+                        if (stats.TryGetValue(regen, out StatScore regenValue))
+                            current.AddToCurrentValue(regenValue.MaxValue * Time.deltaTime);
         }
 
-        public void ApplyBuff(StatusEffect statusEffect)
+        protected override void Interact() => throw new System.NotImplementedException();
+
+        protected abstract void Kill();
+
+        public void ReceiveResourceEffect(ResourceEffect effect)
+        {
+            switch (effect.ResourceName)
+            {
+                case ResourceEffectName.Heal:
+                    AddToCurrentHealth(effect.Amount);
+                    break;
+
+                case ResourceEffectName.Damage:
+                    AddToCurrentHealth(-effect.Amount);
+                    break;
+                default:
+                    break;
+            }
+        }
+        public void RemoveResourceEffect(ResourceEffect effect) { }
+
+        public void ReceiveResourceOverTimeEffect(ResourceOverTimeEffect effect) => activeResourceEffects.Add(effect);
+        public void RemoveResourceOverTimeEffect(ResourceOverTimeEffect effect) => activeResourceEffects.Remove(effect);
+
+        public void ReceiveStatusEffect(StatusEffect effect)
+        {
+            // add statMod to corresponding Stat
+            if (stats.TryGetValue(effect.StatName, out StatScore stat))
+                stat.AddModifier(effect.Modifier);
+
+            // TODO: remove statMod after duration
+        }
+        public void RemoveStatusEffect(StatusEffect effect)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ReceiveConditionEffect(ConditionEffect effect) => throw new System.NotImplementedException();
+        public void RemoveConditionEffect(ConditionEffect effect)
         {
             throw new System.NotImplementedException();
         }
     }
+
+    [System.Serializable] public class StatNameToScore : UnitySerializedDictionary<StatName, StatScore> { }
+    [System.Serializable] public class ResourceNameToScore : UnitySerializedDictionary<ResourceName, ResourceScore> { }
 }

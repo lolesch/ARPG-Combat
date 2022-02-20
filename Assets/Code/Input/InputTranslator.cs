@@ -63,12 +63,12 @@ namespace ARPG.Input
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~layerMask))
                 {
                     Interactable.current = hit.collider.TryGetComponent(out Interactable interactable) ? interactable : null;
-                    EditorDebug.LogWarning($"{hit.collider.gameObject.name} + isInteractable {null != interactable}");
+                    EditorDebug.LogWarning($"{hit.collider.gameObject.name} | isInteractable {null != interactable}");
                 }
                 else if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
                 {
                     Interactable.current = hit.collider.TryGetComponent(out Interactable interactable) ? interactable : null;
-                    EditorDebug.LogWarning($"{hit.collider.gameObject.name} + isInteractable {null != interactable}");
+                    EditorDebug.LogWarning($"{hit.collider.gameObject.name} | isInteractable {null != interactable}");
                 }
                 else
                     EditorDebug.LogError("raycast \t no collider found");

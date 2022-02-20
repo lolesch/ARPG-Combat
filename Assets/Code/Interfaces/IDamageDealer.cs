@@ -4,7 +4,7 @@ namespace ARPG.Combat
 {
     public interface IDamageDealer
     {
-        void DealDamage(IDamageTaker target, float damage);
+        void DealDamage(DamageTaker target, float damage);
     }
 
     public interface EffectApplier

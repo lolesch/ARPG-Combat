@@ -3486,6 +3486,34 @@ PrefabInstance:
       propertyPath: playerAgent
       value: 
       objectReference: {fileID: 529004725}
+    - target: {fileID: 8700461581752046360, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+      propertyPath: pawnStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 87659f0f8abcd464bb899b161cdc5622, type: 2}
+    - target: {fileID: 8700461581752046360, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+      propertyPath: baseValues
+      value: 
+      objectReference: {fileID: 11400000, guid: 87659f0f8abcd464bb899b161cdc5622, type: 2}
+    - target: {fileID: 8700461581752046360, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+      propertyPath: stats.keyData.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8700461581752046360, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+      propertyPath: stats.valueData.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8700461581752046360, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+      propertyPath: stats.keyData.Array.data[1]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8700461581752046360, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+      propertyPath: stats.valueData.Array.data[0].maxValue
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8700461581752046360, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
+      propertyPath: stats.valueData.Array.data[1].maxValue
+      value: 6551
+      objectReference: {fileID: 0}
     - target: {fileID: 8828489460519579985, guid: ca96161aeb5d63e48bea438a0015be3d, type: 3}
       propertyPath: m_EventMask.m_Bits
       value: 119
