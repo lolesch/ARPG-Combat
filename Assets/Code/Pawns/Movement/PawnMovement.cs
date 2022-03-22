@@ -8,50 +8,46 @@ namespace ARPG.Pawns.Movement
     [RequireComponent(typeof(NavMeshAgent))]
     public abstract class PawnMovement : MonoBehaviour
     {
-        [Header("Movement")]
-        [Range(.01f, .99f)]
-        [SerializeField] protected float crouchFactor = .5f;
-
-        protected float maxSpeed = 5f;
-
         protected NavMeshAgent agent;
-        private Pawn character;
+        protected Pawn pawn;
+        protected Animator animator;
 
         [Header("Rotation")]
         [Range(1f, 40f)]
         [SerializeField] protected float rotationSpeed = 17f;
 
-        protected virtual void Awake()
+        protected virtual void OnValidate()
         {
             agent = GetComponent<NavMeshAgent>();
             if (!agent)
                 EditorDebug.LogError($"Missing component of type {nameof(NavMeshAgent)} on {gameObject.name}");
 
-            character = GetComponentInParent<Pawn>();
-            if (!character)
+            pawn = GetComponent<Pawn>();
+            if (!pawn)
                 EditorDebug.LogError($"Missing component of type {nameof(Pawn)} on {gameObject.name}");
-            else if (character.stats.TryGetValue(StatName.MovementSpeed, out StatScore speed))
-            {
-                speed.maxHasChanged += SetSpeed;
-                maxSpeed = speed.MaxValue;
-            }
 
-            agent.speed = maxSpeed;
+            animator = GetComponentInChildren<Animator>();
+            if (!animator)
+                EditorDebug.LogError($"Missing component of type {nameof(Animator)} on {gameObject.name}");
         }
 
-        private void OnDestroy()
+        private void OnEnable()
         {
-            if (character.stats.TryGetValue(StatName.MovementSpeed, out StatScore speed))
+            if (pawn.stats.TryGetValue(StatName.MovementSpeed, out StatScore speed))
+            {
+                speed.maxHasChanged += SetSpeed;
+
+                SetSpeed(speed);
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (pawn.stats.TryGetValue(StatName.MovementSpeed, out StatScore speed))
                 speed.maxHasChanged -= SetSpeed;
         }
 
-        protected void SetSpeed(float speed)
-        {
-            maxSpeed = speed;
-            agent.speed = maxSpeed;
-        }
-
-        protected void SetCrouchSpeed(bool isCrouching) => agent.speed = isCrouching ? maxSpeed * crouchFactor : maxSpeed;
+        protected void SetSpeed(StatScore speed) => agent.speed = speed.MaxValue;
 
         protected void SetDestination(Vector3 target)
         {

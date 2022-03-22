@@ -19,17 +19,15 @@ namespace ARPG.Pawns.Movement
         private void OnDestroy()
         {
             movementLocker.locked -= ForceStop;
-            InputTranslator.Instance.SetMoving -= SetMove;
-            InputTranslator.Instance.SetForceStop -= SetForceStop;
+            InputReceiver.Instance.SetMoving -= SetMove;
+            InputReceiver.Instance.SetForceStop -= SetForceStop;
         }
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
-
             movementLocker.locked += ForceStop;
-            InputTranslator.Instance.SetMoving += SetMove;
-            InputTranslator.Instance.SetForceStop += SetForceStop;
+            InputReceiver.Instance.SetMoving += SetMove;
+            InputReceiver.Instance.SetForceStop += SetForceStop;
 
             agent.updateRotation = false;
         }
@@ -37,9 +35,16 @@ namespace ARPG.Pawns.Movement
         private void Update()
         {
             if (hasMovementInput)
+            {
                 CalculatePointerMovementTarget();
 
-            //animationSpeed?.Invoke(agent.velocity.magnitude / 6f); // walk speed adjustment to not slide
+            }
+
+            if (pawn.stats.TryGetValue(StatName.MovementSpeed, out StatScore speed))
+                animator.SetFloat("Run Blend", agent.velocity.magnitude / speed.baseValue); // TODO: Caution! baseValue can be 0
+
+            // make pawnRotation a component that listens to several rotation invokers
+            // casting a skill can rotate the pawn without the need of movement input
             SetRotation();
         }
 
@@ -125,7 +130,7 @@ namespace ARPG.Pawns.Movement
             return transform.position;
         }
 
-        public void SetRotation()
+        private void SetRotation()
         {
             var rotationTarget = agent.steeringTarget;
             rotationTarget.y = transform.position.y;

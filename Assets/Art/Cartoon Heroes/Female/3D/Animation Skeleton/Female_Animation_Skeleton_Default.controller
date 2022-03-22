@@ -677,7 +677,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 2201073984333775614}
   m_Tag: 
-  m_SpeedParameter: 
+  m_SpeedParameter: Run Blend
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 

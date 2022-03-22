@@ -47,12 +47,12 @@ namespace ARPG.GUI
             gameObject.SetActive(true);
         }
 
-        protected void UpdateMax(float max)
+        protected void UpdateMax(StatScore stat)
         {
-            if (this.max != max)
+            if (this.max != stat.MaxValue)
             {
-                this.max = max;
-                UpdateGUI(max, current);
+                this.max = stat.MaxValue;
+                UpdateGUI(stat.MaxValue, current);
             }
         }
 

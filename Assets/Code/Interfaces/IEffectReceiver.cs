@@ -2,6 +2,7 @@
 {
     public interface IEffectReceiver
     {
+        // this might change => rework how effects are defined
         void ReceiveResourceEffect(ResourceEffect effect);
         void RemoveResourceEffect(ResourceEffect effect);
         void ReceiveResourceOverTimeEffect(ResourceOverTimeEffect effect);

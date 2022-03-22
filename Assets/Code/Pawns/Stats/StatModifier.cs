@@ -7,7 +7,7 @@ namespace ARPG.Combat
     [Serializable]
     public class StatModifier
     {
-        public StatModifier(float amount, StatModifierType type, EffectApplier origin)
+        public StatModifier(float amount, StatModifierType type, IEffectApplier origin)
         {
             this.amount = amount;
             this.type = type;
@@ -22,10 +22,10 @@ namespace ARPG.Combat
         [Tooltip("The order in wich modifiers are applied")]
         [SerializeField] private StatModifierType type;
 
-        public EffectApplier Origin => origin;
+        public IEffectApplier Origin => origin;
         [Tooltip("The order in wich modifiers are applied")]
-        [SerializeField] private EffectApplier origin;
+        [SerializeField] private IEffectApplier origin;
 
-        public void SetOrigin(EffectApplier origin) => this.origin = origin;
+        public void SetOrigin(IEffectApplier origin) => this.origin = origin;
     }
 }

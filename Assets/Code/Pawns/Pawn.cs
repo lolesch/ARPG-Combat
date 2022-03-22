@@ -67,10 +67,7 @@ namespace ARPG.Pawns
                     }
                 }
             }
-        }
 
-        void LateUpdate()
-        {
             Regenerate(StatName.HealthMax, ResourceName.HealthCurrent, StatName.HealthPerSecond);
             Regenerate(StatName.ManaMax, ResourceName.ManaCurrent, StatName.ManaPerSecond);
         }

@@ -20,8 +20,8 @@ namespace ARPG.Combat
         [SerializeField] private PlayerController player;
         [SerializeField] private Transform caster;
 
-        private void OnDestroy() => InputTranslator.Instance.SetCasting -= TryCast;
-        private void Awake() => InputTranslator.Instance.SetCasting += TryCast;
+        private void OnDestroy() => InputReceiver.Instance.SetCasting -= TryCast;
+        private void Awake() => InputReceiver.Instance.SetCasting += TryCast;
 
         public void TryCast(int index)
         {
@@ -30,16 +30,19 @@ namespace ARPG.Combat
                 if (data.CooldownTicker.HasRemainingDuration)
                     return;
 
-                if (player.resources.TryGetValue(Enums.ResourceName.ManaCurrent, out ResourceScore current))
-                    if (data.ResourceCost <= current.CurrentValue)
+                if (player.resources.TryGetValue(Enums.ResourceName.ManaCurrent, out ResourceScore resource))
+                    if (data.ResourceCost <= resource.CurrentValue)
                     {
                         data.CooldownTicker.Start();
-                        current.AddToCurrentValue(-data.ResourceCost);
+                        resource.AddToCurrentValue(-data.ResourceCost);
 
+                        // Spawn multiple projectiles:
                         //CalculateDirections(XZDirection(target, transform.position));
                         //
                         //for (int i = 0; i < data.AmountToSpawn; i++)
                         //    SpawnObject(target, i);
+
+                        // TODO: do the Ray magic here to get the direction/rotation towards the target position
 
                         SpawnDamageShape(data.SpawnAtCursor ? CalculateSpawnPosition() : caster.position);
                     }
@@ -59,6 +62,9 @@ namespace ARPG.Combat
             void SpawnDamageShape(Vector3 spawnPosition)
             {
                 data.Projectile.gameObject.SetActive(false);
+
+                // TODO: caster.rotation might not be the target direction
+                // => Quaternion.LookRotation(directionVector)
                 var shape = Instantiate(data.Projectile.gameObject, spawnPosition, caster.rotation, transform.root).GetComponent<Projectile>();
 
                 shape.data = data;

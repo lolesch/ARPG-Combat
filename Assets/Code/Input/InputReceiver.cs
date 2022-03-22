@@ -11,7 +11,7 @@ namespace ARPG.Input
     /// The InputTranslator takes all the player input - converts it into actions and invokes them so others can listen to these events.
     /// This way the InputTranslator doesn't have to know other classes but is always available for other classes.
     /// </summary>
-    public class InputTranslator : Monoton<InputTranslator>
+    public class InputReceiver : Monoton<InputReceiver>
     {
         [SerializeField] private LayerMask layerMask = 1;
 

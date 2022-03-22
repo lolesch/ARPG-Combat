@@ -16,7 +16,7 @@ namespace ARPG.Pawns
         // => new class DerivedStats with a list of stats and a modifier of the stat conversion
         // foreach stat add that much to it's modifiers
 
-        public event Action<float> maxHasChanged;
+        public event Action<StatScore> maxHasChanged;
 
         public StatScore(float baseValue = 0)
         {
@@ -25,7 +25,7 @@ namespace ARPG.Pawns
             RecalculateValues();
         }
 
-        protected float baseValue;
+        public readonly float baseValue;
 
         [SerializeField] protected readonly List<StatModifier> statModifiers = new List<StatModifier>();
 
@@ -61,7 +61,7 @@ namespace ARPG.Pawns
             return false;
         }
 
-        public bool RemoveAllModifiersOfOrigin(EffectApplier origin)
+        public bool RemoveAllModifiersOfOrigin(IEffectApplier origin)
         {
             bool wasRemoved = false;
 
@@ -105,7 +105,7 @@ namespace ARPG.Pawns
 
             maxValue = (float)Math.Round(sumValue, 4);
 
-            maxHasChanged?.Invoke(MaxValue);
+            maxHasChanged?.Invoke(this);
         }
 
         public virtual void RecalculateValuesDeleteMe()
@@ -129,7 +129,7 @@ namespace ARPG.Pawns
 
             maxValue = (float)Math.Round(sumValue, 4);
 
-            maxHasChanged?.Invoke(MaxValue);
+            maxHasChanged?.Invoke(this);
         }
     }
 }

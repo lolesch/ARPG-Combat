@@ -13,14 +13,13 @@ namespace ARPG.Combat
 
     public class Projectile : MonoBehaviour
     {
-        [SerializeField] private List<Transform> possibleDamageTaker = new();
+        [SerializeField] private List<Transform> possibleEffectReceiver = new();
         [SerializeField] private List<IEffectReceiver> effectReceiver = new();
         [SerializeField] private List<IEffectReceiver> alreadyReceivedEffect = new();
 
         [SerializeField] private float current = 0;
         private Vector3 targetPosition;
         private Vector3 spawnPosition;
-        private Ticker ticker = new(0);
 
         [Header("Filled Automatically")]
         public SpawnData data;
@@ -29,21 +28,19 @@ namespace ARPG.Combat
 
         void Update()
         {
-            // projectile has lifetime && lifetime is over
+            // if projectile's lifetime is over
             if (0 < data.Lifetime && data.Lifetime < current)
                 Destroy(this.gameObject);
 
             if (0 < data.ProjectileSpeed)
                 ProjectileTraveling();
 
-
             DetectTargetsInRange();
 
             // TODO: rework damage on projectiles / DoT as groundEffect
             // => 
-            //TODO: whats the diff between Lifetime and EffectDuration?
 
-            #region invoke
+            #region ApplyEffects
             foreach (var receiver in effectReceiver)
                 foreach (var effect in data.effects)
                     if (!alreadyReceivedEffect.Contains(receiver))
@@ -53,39 +50,39 @@ namespace ARPG.Combat
                     }
             #endregion
 
-            //if (0 < data.effects[0].Duration) // Effect has duration
-            //{
-            //    //TODO: this condition seems not to work as intended => use Coroutine?
-            //    if (!ticker.IsTicking) // is off cooldown
-            //    {
-            //        var tickrate = 0.2f;// data.hitEffects[0].TickRate;
-            //        var duration = data.effects[0].Duration;
-            //
-            //        ticker = new(tickrate, true);
-            //
-            //        // DPS = TotalDamage / Duration
-            //        // DPS = DamagePerTick * TicksPerSecond
-            //
-            //        // TicksPerSecond = 1 / Tickrate
-            //
-            //        // DamagePerTick = TotalDamage / (Duration * TicksPerSecond)
-            //        // DamagePerTick = TotalDamage * Tickrate / Duration
-            //
-            //        damage = damage * tickrate / duration; // damage per tick
-            //
-            //        foreach (var target in damageTaker)
-            //            DealDamage(target, damage);
-            //    }
-            //
-            //    ticker.Tick(Time.deltaTime);
-            //}
-            //else
-            //    foreach (var target in damageTaker)
-            //        if (!alreadyTakenDamage.Contains(target))
-            //        {
-            //            DealDamage(target, damage);
-            //            alreadyTakenDamage.Add(target);
-            //        }
+            /// if (0 < data.effects[0].Duration) // Effect has duration
+            /// {
+            ///    //TODO: this condition seems not to work as intended => use Coroutine?
+            ///    if (!ticker.IsTicking) // is off cooldown
+            ///    {
+            ///        var tickrate = 0.2f;// data.hitEffects[0].TickRate;
+            ///        var duration = data.effects[0].Duration;
+            ///
+            ///        ticker = new(tickrate, true);
+            ///
+            ///        // DPS = TotalDamage / Duration
+            ///        // DPS = DamagePerTick * TicksPerSecond
+            ///
+            ///        // TicksPerSecond = 1 / Tickrate
+            ///
+            ///        // DamagePerTick = TotalDamage / (Duration * TicksPerSecond)
+            ///        // DamagePerTick = TotalDamage * Tickrate / Duration
+            ///
+            ///        damage = damage * tickrate / duration; // damage per tick
+            ///
+            ///        foreach (var target in damageTaker)
+            ///            DealDamage(target, damage);
+            ///    }
+            ///
+            ///    ticker.Tick(Time.deltaTime);
+            /// }
+            /// else
+            ///    foreach (var target in damageTaker)
+            ///        if (!alreadyTakenDamage.Contains(target))
+            ///        {
+            ///            DealDamage(target, damage);
+            ///            alreadyTakenDamage.Add(target);
+            ///        }
 
             current += Time.deltaTime;
 
@@ -112,8 +109,8 @@ namespace ARPG.Combat
 
             //damageTaker.Clear();
 
-            if (0 < possibleDamageTaker.Count)
-                foreach (var candidate in possibleDamageTaker)
+            if (0 < possibleEffectReceiver.Count)
+                foreach (var candidate in possibleEffectReceiver)
                 {
                     var dist = XZPlane.Magnitude(transform.position, candidate.transform.position);
 
@@ -127,18 +124,18 @@ namespace ARPG.Combat
 
             void GetPossibleDamageTaker()
             {
-                possibleDamageTaker.Clear();
+                possibleEffectReceiver.Clear();
 
                 foreach (var type in data.TargetTypes)
                     switch (type)
                     {
                         case Enums.InteractionType.Enemy:
                             foreach (var enemy in EnemyCollector.collection)
-                                possibleDamageTaker.Add(enemy.transform);
+                                possibleEffectReceiver.Add(enemy.transform);
                             break;
                         case Enums.InteractionType.Destroyable:
                             foreach (var destroyable in DestroyableCollector.collection)
-                                possibleDamageTaker.Add(destroyable.transform);
+                                possibleEffectReceiver.Add(destroyable.transform);
                             break;
                         default:
                             break;
