@@ -228,8 +228,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resourceImage: {fileID: 3811685872850051658}
   pawn: {fileID: 0}
-  resourceToUpdate: 0
-  statToUpdate: 0
+  resourceToUpdate: 1
+  statToUpdate: 1
 --- !u!114 &198904632870805669
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 606c5b7a7000e204f8e7d1324f087c75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  possibleEffectReceiver: []
+  current: 0
   data: {fileID: 0}
-  TargetPosition: {x: 0, y: 0, z: 0}
-  SpawnPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &4198729437118225661
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +301,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 127
 --- !u!1 &8594358894088185688
 GameObject:
   m_ObjectHideFlags: 0

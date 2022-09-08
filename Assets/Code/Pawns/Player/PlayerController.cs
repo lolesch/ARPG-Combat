@@ -15,21 +15,31 @@ namespace ARPG.Pawns
         {
             base.Awake();
 
-            // needs resources in the player starting stats
-            resources.Add(ResourceName.ManaCurrent, new ResourceScore(new StatScore(60)));
-
-            //if (resources.TryGetValue(Resource.ManaCurrent, out ResourceScore manaCurrent))
-            //    manaCurrent.AddToCurrentValue(60);
+            SetCurrentMana();
 
             foreach (var skill in skills)
-                skill.SpawnData.CooldownTicker = new Ticker(skill.SpawnData.CooldownDuration, false);
+                skill.SpawnData.CooldownTicker = new Ticker(skill.SpawnData.CooldownDuration, true);
         }
 
-        void Update()
+        protected override void Update()
         {
+            base.Update();
+
+            Regenerate(ResourceName.ManaCurrent, StatName.ManaPerSecond);
+
             foreach (var skill in skills)
                 if (skill.SpawnData.CooldownTicker.HasRemainingDuration)
                     skill.SpawnData.CooldownTicker.Tick(Time.deltaTime);
+        }
+
+        protected void SetCurrentMana()
+        {
+            if (stats.TryGetValue(StatName.ManaMax, out StatScore manaMax))
+            {
+                resources.Add(ResourceName.ManaCurrent, new ResourceScore(manaMax));
+                //if (resources.TryGetValue(ResourceName.ManaCurrent, out ResourceScore manaCurrent))
+                //    manaCurrent.AddToCurrentValue(manaMax.MaxValue);
+            }
         }
 
         // for debugging

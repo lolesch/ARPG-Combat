@@ -20,7 +20,17 @@ namespace ARPG.Pawns.Destroyables
         }
         public void RemoveResourceEffect(ResourceEffect effect) => throw new System.NotImplementedException();
 
-        public void ReceiveResourceOverTimeEffect(ResourceOverTimeEffect effect) => throw new System.NotImplementedException();
+        public void ReceiveResourceOverTimeEffect(ResourceOverTimeEffect effect)
+        {
+            switch (effect.ResourceName)
+            {
+                case ResourceEffectName.Damage:
+                    Kill();
+                    break;
+                default:
+                    break;
+            }
+        }
         public void RemoveResourceOverTimeEffect(ResourceOverTimeEffect effect) => throw new System.NotImplementedException();
 
         public void ReceiveConditionEffect(ConditionEffect effect) => throw new System.NotImplementedException();

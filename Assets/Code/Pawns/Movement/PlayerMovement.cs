@@ -19,15 +19,15 @@ namespace ARPG.Pawns.Movement
         private void OnDestroy()
         {
             movementLocker.locked -= ForceStop;
-            InputReceiver.Instance.SetMoving -= SetMove;
-            InputReceiver.Instance.SetForceStop -= SetForceStop;
+            InputReceiver.Instance.OnSetMoving -= SetMove;
+            InputReceiver.Instance.OnSetForceStop -= SetForceStop;
         }
 
         protected void Awake()
         {
             movementLocker.locked += ForceStop;
-            InputReceiver.Instance.SetMoving += SetMove;
-            InputReceiver.Instance.SetForceStop += SetForceStop;
+            InputReceiver.Instance.OnSetMoving += SetMove;
+            InputReceiver.Instance.OnSetForceStop += SetForceStop;
 
             agent.updateRotation = false;
         }
@@ -40,8 +40,8 @@ namespace ARPG.Pawns.Movement
 
             }
 
-            if (pawn.stats.TryGetValue(StatName.MovementSpeed, out StatScore speed))
-                animator.SetFloat("Run Blend", agent.velocity.magnitude / speed.baseValue); // TODO: Caution! baseValue can be 0
+            if (pawn.stats.TryGetValue(StatName.MovementSpeed, out StatScore speed) && 0 < speed.MaxValue)
+                animator.SetFloat("Run Blend", agent.velocity.magnitude / speed.baseValue);
 
             // make pawnRotation a component that listens to several rotation invokers
             // casting a skill can rotate the pawn without the need of movement input

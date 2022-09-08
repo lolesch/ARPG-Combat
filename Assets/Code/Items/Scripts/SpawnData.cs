@@ -20,7 +20,7 @@ namespace ARPG.Container
         [Tooltip("The required resource amount consumed during casting")]
         [Range(0u, 300u)]
         [SerializeField] private uint resourceCost = 10;
-        public uint ResourceCost => resourceCost;
+        public uint ManaCost => resourceCost;
 
         ///
         [Header("Spawn Settings")]

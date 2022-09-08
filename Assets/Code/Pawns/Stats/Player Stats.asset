@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Player Stats
   m_EditorClassIdentifier: 
   BaseValues:
-    keyData: 00000000010000000200000003000000040000000500000006000000
+    keyData: 01000000020000000300000004000000050000000600000007000000
     valueData:
     - 100
-    - 5
+    - 2
     - 60
-    - 12
+    - 15
+    - 10
     - 1
-    - 1
-    - 6
+    - 4

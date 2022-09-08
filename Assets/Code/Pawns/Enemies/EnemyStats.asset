@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: EnemyStats
   m_EditorClassIdentifier: 
   BaseValues:
-    keyData: 00000000010000000200000003000000040000000500000006000000
+    keyData: 01000000020000000300000004000000050000000600000007000000
     valueData:
     - 100
-    - 0
-    - 0
-    - 0
-    - 10
     - 1
-    - 0
+    - 60
+    - 2
+    - 5
+    - 1
+    - 1

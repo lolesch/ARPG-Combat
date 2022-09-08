@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using ARPG.Combat;
 using ARPG.Enums;
 using ARPG.Input;
 using ARPG.Tools;
+using System.Collections.Generic;
 using TeppichsTools.Logging;
 using UnityEngine;
 
@@ -28,7 +28,7 @@ namespace ARPG.Pawns
             SetCurrentHealth();
         }
 
-        void Update()
+        protected virtual void Update()
         {
             for (int i = activeResourceEffects.Count - 1; 0 <= i; i--)
             {
@@ -68,8 +68,7 @@ namespace ARPG.Pawns
                 }
             }
 
-            Regenerate(StatName.HealthMax, ResourceName.HealthCurrent, StatName.HealthPerSecond);
-            Regenerate(StatName.ManaMax, ResourceName.ManaCurrent, StatName.ManaPerSecond);
+            Regenerate(ResourceName.HealthCurrent, StatName.HealthPerSecond);
         }
 
         protected void SetCurrentHealth()
@@ -95,13 +94,12 @@ namespace ARPG.Pawns
                 EditorDebug.Log($"target had no health stats");
         }
 
-        public void Regenerate(StatName max, ResourceName resource, StatName regen)
+        public void Regenerate(ResourceName resource, StatName regen)
         {
-            if (stats.TryGetValue(max, out StatScore maxValue))
-                if (resources.TryGetValue(resource, out ResourceScore current))
-                    if (current.CurrentValue < maxValue.MaxValue)
-                        if (stats.TryGetValue(regen, out StatScore regenValue))
-                            current.AddToCurrentValue(regenValue.MaxValue * Time.deltaTime);
+            if (resources.TryGetValue(resource, out ResourceScore current))
+                if (current.CurrentValue < current.Stat.MaxValue)
+                    if (stats.TryGetValue(regen, out StatScore regenValue))
+                        current.AddToCurrentValue(regenValue.MaxValue * Time.deltaTime);
         }
 
         protected override void Interact() => throw new System.NotImplementedException();

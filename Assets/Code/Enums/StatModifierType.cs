@@ -5,6 +5,8 @@ namespace ARPG.Enums
     /// The int is used as the order the modifiers are applied 
     public enum StatModifierType
     {
+        NONE = 0,
+
         [Tooltip("Flat modifiers are applied additively")]
         Flat = 100,
 

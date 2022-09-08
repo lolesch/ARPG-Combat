@@ -3,12 +3,16 @@
     [System.Serializable]
     public enum ResourceName
     {
-        HealthCurrent = 0,
-        ManaCurrent = 1,
+        NONE = 0,
+
+        HealthCurrent = 1,
+        ManaCurrent = 2,
     }
 
     public enum ResourceEffectName
     {
+        NONE = 0,
+
         Heal = 1,
         Damage = 2,
     }

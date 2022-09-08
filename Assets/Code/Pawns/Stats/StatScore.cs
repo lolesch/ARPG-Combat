@@ -131,5 +131,18 @@ namespace ARPG.Pawns
 
             maxHasChanged?.Invoke(this);
         }
+        protected virtual void RecalculateValuesDeleteMeToo()
+        {
+            if (statModifiers == null)
+                return;
+
+            var sumValue = baseValue;
+
+            sumValue += statModifiers.Sum(s => s.Amount);
+
+            maxValue = Mathf.Max(sumValue, 0);
+
+            maxHasChanged?.Invoke(this);
+        }
     }
 }

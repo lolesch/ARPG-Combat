@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace ARPG.GUI
+namespace ARPG.Displays
 {
     public class UpdateResourceGlobes : UpdateHealthbarGUI
     {

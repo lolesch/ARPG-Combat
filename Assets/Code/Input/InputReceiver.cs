@@ -8,8 +8,8 @@ using UnityEngine.InputSystem;
 namespace ARPG.Input
 {
     /// <summary>
-    /// The InputTranslator takes all the player input - converts it into actions and invokes them so others can listen to these events.
-    /// This way the InputTranslator doesn't have to know other classes but is always available for other classes.
+    /// The InputReceiver takes all the player input - converts it into actions and invokes them so others can listen to these events.
+    /// This way the InputReceiver doesn't have to know other classes but can be referenced as instance.
     /// </summary>
     public class InputReceiver : Monoton<InputReceiver>
     {
@@ -28,47 +28,57 @@ namespace ARPG.Input
         [SerializeField] private bool isLeftSticking;
         [SerializeField] private bool isForcingStop;
 
-        public event Action<int> SetCasting;
-        public event Action<bool> SetMoving;
-        public event Action<bool> SetForceStop;
+        public event Action<int> OnSetCasting;
+        public event Action<bool> OnSetMoving;
+        public event Action<bool> OnSetForceStop;
 
-        private static bool CursorWithinScreen()
+        /// <summary>
+        /// Returns true if the passed position extends the screen's current resolution
+        /// </summary>
+        /// <param name="position"></param>
+        /// <remarks>
+        /// Make sure that the position is calculated with the transform's lossyScale in mind.
+        /// </remarks>
+        public static bool IsOutsideOfScreen(Vector2 position)
         {
-            Vector2 pointerPosition = Pointer.current.position.ReadValue();
-            return 0 <= pointerPosition.x && pointerPosition.x <= Screen.currentResolution.width && 0 <= pointerPosition.y && pointerPosition.y <= Screen.currentResolution.height;
+            return
+                position.x < 0 ||
+                position.x > Screen.currentResolution.width ||
+                position.y < 0 ||
+                position.y > Screen.currentResolution.height;
         }
 
         #region Interaction
 
         public void LeftClick(InputAction.CallbackContext ctx)
         {
-            if (!CursorWithinScreen())
+            var pointerPosition = Pointer.current.position.ReadValue();
+
+            if (IsOutsideOfScreen(pointerPosition))
                 return;
 
             if (ctx.started)
                 //if (!EventSystem.current.IsPointerOverGameObject()) // some check for IsOverUI here => no movement when interacting with UI
-                SetCurrentInteractable();
+                SetCurrentInteractable(pointerPosition);
 
             if (isForcingStop || Interactable.current && Interactable.current.Interaction == InteractionType.Enemy || Interactable.current && Interactable.current.Interaction == InteractionType.Destroyable)
                 CastSkill0(ctx);
             else
-                SetMoving?.Invoke(ctx.performed);
+                OnSetMoving?.Invoke(ctx.performed);
 
-            void SetCurrentInteractable()
+            void SetCurrentInteractable(Vector2 pointerPosition)
             {
-                var screenPoint = Pointer.current.position.ReadValue();
-
-                Ray ray = Camera.main.ScreenPointToRay(screenPoint);
+                Ray ray = Camera.main.ScreenPointToRay(pointerPosition);
 
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~layerMask))
                 {
                     Interactable.current = hit.collider.TryGetComponent(out Interactable interactable) ? interactable : null;
-                    EditorDebug.LogWarning($"{hit.collider.gameObject.name} | isInteractable {null != interactable}");
+                    EditorDebug.LogWarning($"{hit.collider.gameObject.name} | isInteractable {null != interactable} | {~layerMask}");
                 }
                 else if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
                 {
                     Interactable.current = hit.collider.TryGetComponent(out Interactable interactable) ? interactable : null;
-                    EditorDebug.LogWarning($"{hit.collider.gameObject.name} | isInteractable {null != interactable}");
+                    EditorDebug.LogWarning($"{hit.collider.gameObject.name} | isInteractable {null != interactable} | {layerMask}");
                 }
                 else
                     EditorDebug.LogError("raycast \t no collider found");
@@ -77,7 +87,7 @@ namespace ARPG.Input
 
         public void RightClick(InputAction.CallbackContext ctx)
         {
-            if (!CursorWithinScreen())
+            if (IsOutsideOfScreen(Pointer.current.position.ReadValue()))
                 return;
 
             if (ctx.started)
@@ -93,7 +103,7 @@ namespace ARPG.Input
             /// range factor
             leftStickPosition *= gamepadMovementRadius;
 
-            SetMoving?.Invoke(ctx.performed);
+            OnSetMoving?.Invoke(ctx.performed);
 
             //TODO: set Interactable in close range
 
@@ -120,7 +130,7 @@ namespace ARPG.Input
                 CastSkill(0);
 
             isForcingStop = ctx.performed;
-            SetForceStop?.Invoke(isForcingStop);
+            OnSetForceStop?.Invoke(isForcingStop);
         }
 
         //public void Crouch(InputAction.CallbackContext ctx)
@@ -142,7 +152,7 @@ namespace ARPG.Input
         private void CastSkill(int index)
         {
             // TODO: rotate towards target and cast in that directions
-            SetCasting?.Invoke(index);
+            OnSetCasting?.Invoke(index);
         }
 
         public void CastSkill0(InputAction.CallbackContext ctx)

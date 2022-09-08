@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ARPG.GUI
+namespace ARPG.Displays
 {
     public class SkillHUD : MonoBehaviour
     {
-        [SerializeField] private List<SkillSlot> skillSlots = new(6);
         [SerializeField] private PlayerController player;
+        [SerializeField] private List<SkillSlot> skillSlots = new(6);
+
+        private void OnEnable()
+        {
+            if (!player)
+                this.enabled = false;
+        }
 
         void LateUpdate()
         {

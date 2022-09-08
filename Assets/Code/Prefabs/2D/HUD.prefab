@@ -110,6 +110,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4999308927024866565}
     m_Modifications:
+    - target: {fileID: 948691525010083888, guid: 0a5ab41d08cea8845b742abb5c8c027f, type: 3}
+      propertyPath: statToUpdate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 948691525010083888, guid: 0a5ab41d08cea8845b742abb5c8c027f, type: 3}
+      propertyPath: resourceToUpdate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2392752718047423036, guid: 0a5ab41d08cea8845b742abb5c8c027f, type: 3}
       propertyPath: m_Name
       value: HealthPool
@@ -705,6 +713,14 @@ PrefabInstance:
     - target: {fileID: 257428964361136337, guid: 0a5ab41d08cea8845b742abb5c8c027f, type: 3}
       propertyPath: m_FillAmount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 948691525010083888, guid: 0a5ab41d08cea8845b742abb5c8c027f, type: 3}
+      propertyPath: statToUpdate
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 948691525010083888, guid: 0a5ab41d08cea8845b742abb5c8c027f, type: 3}
+      propertyPath: resourceToUpdate
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1905112781362683396, guid: 0a5ab41d08cea8845b742abb5c8c027f, type: 3}
       propertyPath: m_Color.b

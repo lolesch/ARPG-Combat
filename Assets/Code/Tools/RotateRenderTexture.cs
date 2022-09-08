@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 using ARPG.Tools;
 
-namespace ARPG.GUI
+namespace ARPG.Displays
 {
     public class RotateRenderTexture : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
     {

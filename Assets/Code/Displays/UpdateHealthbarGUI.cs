@@ -3,7 +3,7 @@ using ARPG.Pawns;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ARPG.GUI
+namespace ARPG.Displays
 {
     public class UpdateHealthbarGUI : MonoBehaviour
     {
@@ -52,15 +52,15 @@ namespace ARPG.GUI
             if (this.max != stat.MaxValue)
             {
                 this.max = stat.MaxValue;
-                UpdateGUI(stat.MaxValue, current);
+                UpdateGUI(max, current);
             }
         }
 
-        protected void UpdateCurrent(float current)
+        protected void UpdateCurrent(ResourceScore resource)
         {
-            if (this.current != current)
+            if (this.current != resource.CurrentValue)
             {
-                this.current = current;
+                this.current = resource.CurrentValue;
                 UpdateGUI(max, current);
             }
         }
@@ -68,7 +68,7 @@ namespace ARPG.GUI
         protected virtual void UpdateGUI(float max, float current)
         {
             if (resourceImage)
-                resourceImage.fillAmount = current / 100;
+                resourceImage.fillAmount = current / 100; // is this in percent?
 
             if (current == 0 || max == 0)
                 gameObject.SetActive(false);

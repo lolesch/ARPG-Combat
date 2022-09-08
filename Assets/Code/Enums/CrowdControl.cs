@@ -4,6 +4,8 @@ namespace ARPG.Enums
 {
     public enum CrowdControl
     {
+        NONE = 0,
+
         [Tooltip("unable to move, attack, or cast while being untargetable and invulnerable")]
         Stasis = 1,
 

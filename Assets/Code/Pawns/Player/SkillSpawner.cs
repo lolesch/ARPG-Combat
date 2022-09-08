@@ -1,11 +1,10 @@
 using ARPG.Container;
 using ARPG.Input;
-using UnityEngine;
-using System;
-using TeppichsTools.Logging;
 using ARPG.Pawns;
-using UnityEngine.InputSystem;
 using ARPG.Tools;
+using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace ARPG.Combat
 {
@@ -20,8 +19,8 @@ namespace ARPG.Combat
         [SerializeField] private PlayerController player;
         [SerializeField] private Transform caster;
 
-        private void OnDestroy() => InputReceiver.Instance.SetCasting -= TryCast;
-        private void Awake() => InputReceiver.Instance.SetCasting += TryCast;
+        private void OnDestroy() => InputReceiver.Instance.OnSetCasting -= TryCast;
+        private void Awake() => InputReceiver.Instance.OnSetCasting += TryCast;
 
         public void TryCast(int index)
         {
@@ -30,11 +29,13 @@ namespace ARPG.Combat
                 if (data.CooldownTicker.HasRemainingDuration)
                     return;
 
-                if (player.resources.TryGetValue(Enums.ResourceName.ManaCurrent, out ResourceScore resource))
-                    if (data.ResourceCost <= resource.CurrentValue)
+                if (player.resources.TryGetValue(Enums.ResourceName.ManaCurrent, out ResourceScore mana))
+                    if (data.ManaCost <= mana.CurrentValue)
                     {
                         data.CooldownTicker.Start();
-                        resource.AddToCurrentValue(-data.ResourceCost);
+                        mana.AddToCurrentValue(-data.ManaCost);
+
+                        // TODO: continue here
 
                         // Spawn multiple projectiles:
                         //CalculateDirections(XZDirection(target, transform.position));

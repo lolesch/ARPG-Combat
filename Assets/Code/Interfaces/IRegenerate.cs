@@ -2,5 +2,5 @@
 
 namespace ARPG.Combat
 {
-    public interface IRegenerate { void Regenerate(StatName max, ResourceName resource, StatName regen); }
+    public interface IRegenerate { void Regenerate(ResourceName resource, StatName regen); }
 }
