@@ -11,7 +11,6 @@ namespace ARPG.Combat
     [Serializable]
     public class SkillSpawner : MonoBehaviour
     {
-        //private Vector3[] projectileDirections;
         private SpawnData data;
 
         //[SerializeField] private bool[] quickCastSettings = new bool[6];
@@ -35,17 +34,15 @@ namespace ARPG.Combat
                         data.CooldownTicker.Start();
                         mana.AddToCurrentValue(-data.ManaCost);
 
-                        // TODO: continue here
-
                         // Spawn multiple projectiles:
-                        //CalculateDirections(XZDirection(target, transform.position));
-                        //
-                        //for (int i = 0; i < data.AmountToSpawn; i++)
-                        //    SpawnObject(target, i);
+                        for (int i = 0; i < data.ProjectileAmount; i++)
+                            // TODO what about min spawn distance?
 
-                        // TODO: do the Ray magic here to get the direction/rotation towards the target position
-
-                        SpawnDamageShape(data.SpawnAtCursor ? CalculateSpawnPosition() : caster.position);
+                            //TODO FIX ROTATIONS!
+                            if (data.SpawnAtCursor)
+                                SpawnDamageShape(CalculateSpawnPosition().Item1, CalculateSpawnPosition().Item2);
+                            else
+                                SpawnDamageShape(caster.position, CalculateSpawnPosition().Item2);
                     }
             }
 
@@ -60,26 +57,28 @@ namespace ARPG.Combat
                 return true;
             }
 
-            void SpawnDamageShape(Vector3 spawnPosition)
+            void SpawnDamageShape(Vector3 spawnPosition, Vector3 direction)
             {
                 data.Projectile.gameObject.SetActive(false);
 
                 // TODO: caster.rotation might not be the target direction
                 // => Quaternion.LookRotation(directionVector)
-                var shape = Instantiate(data.Projectile.gameObject, spawnPosition, caster.rotation, transform.root).GetComponent<Projectile>();
+                var shape = Instantiate(data.Projectile.gameObject, spawnPosition, Quaternion.LookRotation(direction), transform.root).GetComponent<Projectile>();
 
                 shape.data = data;
 
                 shape.gameObject.SetActive(true);
+
+                Debug.Break();
             }
 
-            Vector3 CalculateSpawnPosition()
+            (Vector3, Vector3) CalculateSpawnPosition()
             {
-                Vector3 pointerPosition = caster.position;
+                var pointerHit = caster.position;
 
-                var screenPoint = Pointer.current.position.ReadValue();
+                var pointerPosition = Pointer.current.position.ReadValue();
 
-                Ray ray = Camera.main.ScreenPointToRay(screenPoint);
+                Ray ray = Camera.main.ScreenPointToRay(pointerPosition);
 
                 if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, ~0))
                 {
@@ -88,25 +87,36 @@ namespace ARPG.Combat
 
                     // rotate to target
 
-                    pointerPosition = hit.point;
+                    pointerHit = hit.point;
 
-                    var dist = XZPlane.Magnitude(pointerPosition, caster.position);
+                    var dist = XZPlane.Magnitude(pointerHit, caster.position);
 
                     if (data.SpawnRange < dist)
                     {
-                        var maxCastDistancePosition = caster.position + (XZPlane.Direction(pointerPosition, caster.position) * data.SpawnRange);
+                        var maxCastDistancePosition = caster.position + (XZPlane.Direction(pointerHit, caster.position) * data.SpawnRange);
 
                         var rayOrigin = new Vector3(maxCastDistancePosition.x, 100, maxCastDistancePosition.z);
 
                         ray = new Ray(rayOrigin, Vector3.down);
 
                         if (Physics.Raycast(ray, out hit))
-                            pointerPosition = hit.point;
+                            pointerHit = hit.point;
                     }
                 }
 
-                return pointerPosition;
+                // TODO return the direction to turn in or the rotation itself
+                return (pointerHit, Quaternion.Euler(0, DirectionAngle(index), 0) * caster.forward);
             }
+        }
+
+        private float DirectionAngle(int index)
+        {
+            if (data.ProjectileAmount <= 1)
+                return 0;
+            else if (data.ShapeAngle % 360 == 0)
+                return (data.ShapeAngle / data.ProjectileAmount) * index;
+            else
+                return data.ShapeAngle * .5f - (data.ShapeAngle / (data.ProjectileAmount - 1) * index);
         }
 
         //private void SpawnObject(Vector3 targetPos, int index)
@@ -121,27 +131,9 @@ namespace ARPG.Combat
         //    shape.projectileSpeed = data.ProjectileSpeed;
         //    shape.GetComponent<CapsuleCollider>().radius = data.ProjectileRadius;
         //    shape.spawnPosition = position;
-        //    shape.target = data.SpawnAtCursor? position : transform.position + projectileDirections[index] * data.MaxDistance;
-        //    shape.GetComponentInChildren<Canvas>().transform.localScale = new Vector3(data.ProjectileRadius* 2, data.ProjectileRadius* 2, 0);
+        //    shape.target = data.SpawnAtCursor ? position : transform.position + projectileDirections[index] * data.MaxDistance;
+        //    shape.GetComponentInChildren<Canvas>().transform.localScale = new Vector3(data.ProjectileRadius * 2, data.ProjectileRadius * 2, 0);
         //    #endregion
-        //}
-
-        //private void CalculateDirections(Vector3 targetDirection)
-        //{
-        //    projectileDirections = new Vector3[data.AmountToSpawn];
-        //
-        //    for (int i = 0; i < projectileDirections.Length; i++)
-        //        projectileDirections[i] = Quaternion.Euler(0, DirectionAngle(i), 0) * targetDirection;
-        //}
-
-        //private float DirectionAngle(int index)
-        //{
-        //    if (data.AmountToSpawn <= 1)
-        //        return 0;
-        //    else if (data.FullAngle % 360 == 0)
-        //        return (data.FullAngle / data.AmountToSpawn) * index;
-        //    else
-        //        return data.FullAngle * .5f - (data.FullAngle / (data.AmountToSpawn - 1) * index);
         //}
 
         //private Vector3 CalculateStartPosition(Vector3 targetPos, int index)

@@ -1,11 +1,11 @@
-using UnityEngine;
-using System.Collections.Generic;
-using UnityEditor;
 using ARPG.Container;
+using ARPG.Pawns.Destroyables;
 using ARPG.Pawns.Enemy;
 using ARPG.Tools;
-using ARPG.Pawns.Destroyables;
-using TeppichsTools.Logging;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
 
 namespace ARPG.Combat
 {
@@ -17,7 +17,7 @@ namespace ARPG.Combat
         [SerializeField] private List<IEffectReceiver> effectReceiver = new();
         [SerializeField] private List<IEffectReceiver> alreadyReceivedEffect = new();
 
-        [SerializeField] private float current = 0;
+        [SerializeField] private float lifetime = 0;
         private Vector3 targetPosition;
         private Vector3 spawnPosition;
 
@@ -29,7 +29,7 @@ namespace ARPG.Combat
         void Update()
         {
             // if projectile's lifetime is over
-            if (0 < data.Lifetime && data.Lifetime < current)
+            if (0 < data.Lifetime && data.Lifetime < lifetime)
                 Destroy(this.gameObject);
 
             if (0 < data.ProjectileSpeed)
@@ -84,7 +84,7 @@ namespace ARPG.Combat
             ///            alreadyTakenDamage.Add(target);
             ///        }
 
-            current += Time.deltaTime;
+            lifetime += Time.deltaTime;
 
             // instant and stationary
             if (data.Lifetime <= 0 && data.ProjectileSpeed <= 0)
@@ -95,7 +95,7 @@ namespace ARPG.Combat
         {
             targetPosition = spawnPosition + (transform.forward * data.DespawnRange);
 
-            float progress01 = current * data.ProjectileSpeed / Vector3.Distance(spawnPosition, targetPosition); // dist == despawnRange?
+            float progress01 = lifetime * data.ProjectileSpeed / data.DespawnRange;
 
             if (progress01 < 1)
                 transform.position = Vector3.Lerp(spawnPosition, targetPosition, progress01);
@@ -109,7 +109,7 @@ namespace ARPG.Combat
 
             //damageTaker.Clear();
 
-            if (0 < possibleEffectReceiver.Count)
+            if (possibleEffectReceiver.Any())
                 foreach (var candidate in possibleEffectReceiver)
                 {
                     var dist = XZPlane.Magnitude(transform.position, candidate.transform.position);
@@ -169,7 +169,8 @@ namespace ARPG.Combat
             {
                 Handles.color = Color.red;
                 Handles.DrawWireDisc(transform.position, Vector3.up, data.OuterRadius, 2f);
-                Handles.DrawWireDisc(transform.position, Vector3.up, data.InnerRadius);
+                if (0 < data.InnerRadius)
+                    Handles.DrawWireDisc(transform.position, Vector3.up, data.InnerRadius);
             }
         }
 #endif
