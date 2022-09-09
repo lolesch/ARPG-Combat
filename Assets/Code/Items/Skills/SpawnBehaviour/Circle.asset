@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Circle
   m_EditorClassIdentifier: 
   CooldownTicker:
-    progress: 2
+    progress: 2.002741
   cooldownDuration: 2
-  resourceCost: 30
+  manaCost: 10
   spawnAtCursor: 1
   spawnRange: 10
   innerRadius: 0
@@ -23,7 +23,6 @@ MonoBehaviour:
   shapeAngle: 0
   lifetime: 0
   projectileAmount: 1
-  projectileDistribution: 0
   projectileSpeed: 0
   despawnRange: 0
   projectile: {fileID: 2626277891086901119, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}

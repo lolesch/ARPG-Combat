@@ -13,20 +13,18 @@ MonoBehaviour:
   m_Name: MultiProjectileAtCursor
   m_EditorClassIdentifier: 
   CooldownTicker:
-    duration: 0.5
-    progress: 0.5
+    progress: 0.5073462
   cooldownDuration: 0.5
-  resourceCost: 10
-  spawnAtCursor: 0
-  spawnRange: 1
+  manaCost: 10
+  spawnAtCursor: 1
+  spawnRange: 7
   innerRadius: 0
-  outerRadius: 0.5
-  shapeAngle: 60
-  lifetime: 0
-  projectileAmount: 5
-  projectileDistribution: 0
+  outerRadius: 0.3
+  shapeAngle: 100
+  lifetime: 1
+  projectileAmount: 7
   projectileSpeed: 25
-  despawnRange: 15
+  despawnRange: 5
   projectile: {fileID: 2626277891086901119, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
   targetTypes: 0100000005000000
   effects:
@@ -39,4 +37,3 @@ MonoBehaviour:
       data:
         resourceName: 2
         amount: 20
-        duration: 0

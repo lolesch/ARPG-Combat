@@ -12,22 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54a4efd8a2e840b46ac2c392478fc3a4, type: 3}
   m_Name: MultiProjectileCircle
   m_EditorClassIdentifier: 
+  CooldownTicker:
+    progress: 1.0084369
   cooldownDuration: 1
-  resourceCost: 20
+  manaCost: 10
   spawnAtCursor: 0
-  spawnRange: 1
+  spawnRange: 0
   innerRadius: 0
   outerRadius: 1
   shapeAngle: 360
   lifetime: 0
   projectileAmount: 8
-  projectileDistribution: 0
   projectileSpeed: 6
   despawnRange: 10
   projectile: {fileID: 2626277891086901119, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
   targetTypes: 0100000005000000
-  hitEffects:
-  - statName: 3
-    amount: 20
-    modifier: 300
-    duration: 0
+  effects: []
+  references:
+    version: 2
+    RefIds: []
