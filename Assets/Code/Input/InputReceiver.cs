@@ -64,7 +64,8 @@ namespace ARPG.Input
             if (isForcingStop || Interactable.current && Interactable.current.Interaction == InteractionType.Enemy || Interactable.current && Interactable.current.Interaction == InteractionType.Destroyable)
                 CastSkill0(ctx);
             else
-                OnSetMoving?.Invoke(ctx.performed);
+                OnSetMoving?.Invoke(ctx.performed); // TODO: rework movement to calculate the target position here
+                                                    // this alowes different calculation for mouse/gamepad input 
 
             void SetCurrentInteractable(Vector2 pointerPosition)
             {

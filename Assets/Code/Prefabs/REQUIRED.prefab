@@ -255,6 +255,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 454953498952350671}
     m_Modifications:
+    - target: {fileID: 659768728422110613, guid: 9cada609539660148ba50c3805475a38, type: 3}
+      propertyPath: skills.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 95ea08acfa45fbd4aa81f7dc7479243b, type: 2}
     - target: {fileID: 2947512663505120141, guid: 9cada609539660148ba50c3805475a38, type: 3}
       propertyPath: m_RootOrder
       value: 2

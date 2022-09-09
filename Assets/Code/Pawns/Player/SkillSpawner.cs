@@ -34,15 +34,13 @@ namespace ARPG.Combat
                         data.CooldownTicker.Start();
                         mana.AddToCurrentValue(-data.ManaCost);
 
-                        // Spawn multiple projectiles:
                         for (int i = 0; i < data.ProjectileAmount; i++)
-                            // TODO what about min spawn distance?
+                        {
+                            var position = CalculateSpawnPosition();
+                            var rotation = CalculateProjectileRotation(position, i);
 
-                            //TODO FIX ROTATIONS!
-                            if (data.SpawnAtCursor)
-                                SpawnDamageShape(CalculateSpawnPosition().Item1, CalculateSpawnPosition().Item2);
-                            else
-                                SpawnDamageShape(caster.position, CalculateSpawnPosition().Item2);
+                            SpawnDamageShape(position, rotation);
+                        }
                     }
             }
 
@@ -52,71 +50,91 @@ namespace ARPG.Combat
                     return false;
 
                 data = player.skills[index].SpawnData;
+
                 player.SetInteractionRange(data.SpawnAtCursor ? data.SpawnRange : data.OuterRadius);
 
                 return true;
             }
 
-            void SpawnDamageShape(Vector3 spawnPosition, Vector3 direction)
+            Vector3 CalculateSpawnPosition()
+            {
+                var spawnPosition = caster.position;
+
+                if (!data.SpawnAtCursor)
+                    return spawnPosition;
+                else // spawn at the cursors position
+                {
+                    var pointerPosition = Pointer.current.position.ReadValue();
+
+                    Ray ray = Camera.main.ScreenPointToRay(pointerPosition);
+
+                    if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, ~0))
+                    {
+                        spawnPosition = hit.point;
+
+                        var distance = XZPlane.Distance(spawnPosition, caster.position);
+
+                        if (distance < data.SpawnRange)
+                            return spawnPosition;
+                        else
+                        {
+                            // if(data.MoveInRangeBeforeCasting)
+                            //      queue cast untill moved into range?
+                            //      cancle queue on other cast input
+                            // else
+
+                            var maxCastDistancePosition = caster.position + (XZPlane.Direction(spawnPosition, caster.position) * data.SpawnRange);
+
+                            var rayOrigin = new Vector3(maxCastDistancePosition.x, 100, maxCastDistancePosition.z);
+
+                            ray = new Ray(rayOrigin, Vector3.down);
+
+                            if (Physics.Raycast(ray, out hit))
+                            {
+                                spawnPosition = hit.point;
+
+                                return spawnPosition;
+                            }
+                            else // we did not hit anything
+                                return spawnPosition;
+                        }
+                    }
+                    else // we did not hit anything
+                        return spawnPosition;
+                }
+            }
+
+            Quaternion CalculateProjectileRotation(Vector3 spawnPosition, int porjectileIndex)
+            {
+                if (spawnPosition == caster.position)
+                    spawnPosition = caster.position + caster.forward; // could calculate the direction towards the cursor instead
+
+                var direction = XZPlane.Direction(spawnPosition, caster.position);
+
+                var forwardRotation = Quaternion.LookRotation(direction);
+                return Quaternion.Euler(0, DirectionAngle(porjectileIndex), 0) * forwardRotation;
+
+                float DirectionAngle(int index)
+                {
+                    if (data.ProjectileAmount <= 1)
+                        return 0;
+                    else if (data.ShapeAngle % 360 == 0)
+                        return (data.ShapeAngle / data.ProjectileAmount) * index;
+                    else
+                        return data.ShapeAngle * .5f - (data.ShapeAngle / (data.ProjectileAmount - 1) * index);
+                }
+            }
+
+            void SpawnDamageShape(Vector3 spawnPosition, Quaternion projectileRotation)
             {
                 data.Projectile.gameObject.SetActive(false);
 
-                // TODO: caster.rotation might not be the target direction
-                // => Quaternion.LookRotation(directionVector)
-                var shape = Instantiate(data.Projectile.gameObject, spawnPosition, Quaternion.LookRotation(direction), transform.root).GetComponent<Projectile>();
+                var shape = Instantiate(data.Projectile.gameObject, spawnPosition, projectileRotation, transform.root).GetComponent<Projectile>();
 
                 shape.data = data;
 
                 shape.gameObject.SetActive(true);
-
-                Debug.Break();
             }
-
-            (Vector3, Vector3) CalculateSpawnPosition()
-            {
-                var pointerHit = caster.position;
-
-                var pointerPosition = Pointer.current.position.ReadValue();
-
-                Ray ray = Camera.main.ScreenPointToRay(pointerPosition);
-
-                if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, ~0))
-                {
-                    // if hit == Enemy => queue cast untill in range
-                    // cancle queue on other cast input
-
-                    // rotate to target
-
-                    pointerHit = hit.point;
-
-                    var dist = XZPlane.Magnitude(pointerHit, caster.position);
-
-                    if (data.SpawnRange < dist)
-                    {
-                        var maxCastDistancePosition = caster.position + (XZPlane.Direction(pointerHit, caster.position) * data.SpawnRange);
-
-                        var rayOrigin = new Vector3(maxCastDistancePosition.x, 100, maxCastDistancePosition.z);
-
-                        ray = new Ray(rayOrigin, Vector3.down);
-
-                        if (Physics.Raycast(ray, out hit))
-                            pointerHit = hit.point;
-                    }
-                }
-
-                // TODO return the direction to turn in or the rotation itself
-                return (pointerHit, Quaternion.Euler(0, DirectionAngle(index), 0) * caster.forward);
-            }
-        }
-
-        private float DirectionAngle(int index)
-        {
-            if (data.ProjectileAmount <= 1)
-                return 0;
-            else if (data.ShapeAngle % 360 == 0)
-                return (data.ShapeAngle / data.ProjectileAmount) * index;
-            else
-                return data.ShapeAngle * .5f - (data.ShapeAngle / (data.ProjectileAmount - 1) * index);
         }
 
         //private void SpawnObject(Vector3 targetPos, int index)

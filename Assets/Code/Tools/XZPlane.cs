@@ -12,12 +12,12 @@ namespace ARPG.Tools
         public static Vector3 Vector(Vector3 vector) => new Vector3(vector.x, 0, vector.z);
         public static Vector3 Vector(Vector3 to, Vector3 from) => Vector(to - from);
 
-        public static float Magnitude(Vector2 vector) => Vector(vector).magnitude;
-        public static float Magnitude(Vector3 vector) => Vector(vector).magnitude;
-        public static float Magnitude(Vector3 to, Vector3 from) => Vector(to, from).magnitude;
+        public static float Distance(Vector2 vector) => Vector(vector).magnitude;
+        public static float Distance(Vector3 vector) => Vector(vector).magnitude;
+        public static float Distance(Vector3 to, Vector3 from) => Vector(to - from).magnitude;
 
         public static Vector3 Direction(Vector2 vector) => Vector(vector).normalized;
         public static Vector3 Direction(Vector3 vector) => Vector(vector).normalized;
-        public static Vector3 Direction(Vector3 to, Vector3 from) => Vector(to, from).normalized;
+        public static Vector3 Direction(Vector3 to, Vector3 from) => Vector(to - from).normalized;
     }
 }

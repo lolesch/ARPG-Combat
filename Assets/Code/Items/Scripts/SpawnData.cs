@@ -27,7 +27,7 @@ namespace ARPG.Container
         public bool SpawnAtCursor => spawnAtCursor;
 
         [Tooltip("The max distance to the caster the skill can spawn at")]
-        [Range(1f, 30f)][SerializeField] private float spawnRange = 5;
+        [Range(0f, 30f)][SerializeField] private float spawnRange = 5;
         public float SpawnRange => spawnRange;
 
         [Header("Projectile Settings")]
@@ -56,10 +56,6 @@ namespace ARPG.Container
         [Tooltip("The amount of projectiles spawned")]
         [Range(1u, 24u)][SerializeField] private uint projectileAmount = 1u;
         public uint ProjectileAmount => projectileAmount;
-
-        [Tooltip("The angle of launched projectiles centered on the caster's forward direction. Use this when launching multiple projectiles")]
-        [Range(0u, 360u)][SerializeField] private uint projectileDistribution = 0u;
-        public float ProjectileDistribution => projectileDistribution;
 
         [Tooltip("The traveling speed of the projectile")]
         [Range(0u, 30u)][SerializeField] private uint projectileSpeed = 3u;

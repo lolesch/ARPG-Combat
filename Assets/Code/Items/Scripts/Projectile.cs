@@ -112,7 +112,7 @@ namespace ARPG.Combat
             if (possibleEffectReceiver.Any())
                 foreach (var candidate in possibleEffectReceiver)
                 {
-                    var dist = XZPlane.Magnitude(transform.position, candidate.transform.position);
+                    var dist = XZPlane.Distance(transform.position, candidate.transform.position);
 
                     if (data.InnerRadius <= dist && dist <= data.OuterRadius)
                     {

@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54a4efd8a2e840b46ac2c392478fc3a4, type: 3}
+  m_Name: MultiProjectileAtCursor
+  m_EditorClassIdentifier: 
+  CooldownTicker:
+    duration: 0.5
+    progress: 0.5
+  cooldownDuration: 0.5
+  resourceCost: 10
+  spawnAtCursor: 0
+  spawnRange: 1
+  innerRadius: 0
+  outerRadius: 0.5
+  shapeAngle: 60
+  lifetime: 0
+  projectileAmount: 5
+  projectileDistribution: 0
+  projectileSpeed: 25
+  despawnRange: 15
+  projectile: {fileID: 2626277891086901119, guid: 789c3459cbf1a9349a82a0d7a10125b5, type: 3}
+  targetTypes: 0100000005000000
+  effects:
+  - rid: 5201751225000001539
+  references:
+    version: 2
+    RefIds:
+    - rid: 5201751225000001539
+      type: {class: ResourceEffect, ns: ARPG.Combat, asm: ARPG}
+      data:
+        resourceName: 2
+        amount: 20
+        duration: 0
