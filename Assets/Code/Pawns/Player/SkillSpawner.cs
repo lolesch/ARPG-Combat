@@ -18,8 +18,8 @@ namespace ARPG.Combat
         [SerializeField] private PlayerController player;
         [SerializeField] private Transform caster;
 
-        private void OnDestroy() => InputReceiver.Instance.OnSetCasting -= TryCast;
-        private void Awake() => InputReceiver.Instance.OnSetCasting += TryCast;
+        private void OnDestroy() => InputReceiver.Instance.OnCast -= TryCast;
+        private void Awake() => InputReceiver.Instance.OnCast += TryCast;
 
         public void TryCast(int index)
         {

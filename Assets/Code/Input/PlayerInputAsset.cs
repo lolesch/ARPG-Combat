@@ -30,9 +30,27 @@ namespace ARPG.Input
             ""id"": ""08969cf6-7aeb-44c3-919e-159bc5ccebf8"",
             ""actions"": [
                 {
-                    ""name"": ""Interact"",
+                    ""name"": ""LeftClick"",
                     ""type"": ""Button"",
                     ""id"": ""b5742ca7-d879-495a-b944-ac53456b406c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""5c57c28c-7be9-465b-99d6-c6df4e7acf67"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skill0"",
+                    ""type"": ""Button"",
+                    ""id"": ""f7cab294-f4e0-42bd-8cb0-3fb28a3fd596"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -91,6 +109,15 @@ namespace ARPG.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftStick"",
+                    ""type"": ""Value"",
+                    ""id"": ""d5927181-8acb-42cb-ad7b-e12190b0c546"",
+                    ""expectedControlType"": ""Stick"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -101,18 +128,7 @@ namespace ARPG.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
-                    ""action"": ""Interact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""81e99635-cb74-41dc-8d31-9800f0756af6"",
-                    ""path"": ""<Gamepad>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Desktop"",
-                    ""action"": ""Interact"",
+                    ""action"": ""LeftClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -129,8 +145,8 @@ namespace ARPG.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""9d06d23e-45b8-4ca1-b46a-2b7033d6eedc"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""id"": ""502a4d17-771e-4c6c-a07c-b7e11fc2bda8"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -151,8 +167,8 @@ namespace ARPG.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ec4d94b1-b432-4670-91f8-3f4c47ec0632"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""id"": ""c061b42b-c3a0-481e-a423-f3a00f6d1028"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -173,30 +189,8 @@ namespace ARPG.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""59ba62aa-f850-484b-8245-0759dce840ad"",
-                    ""path"": ""<Gamepad>/leftShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Desktop"",
-                    ""action"": ""Skill4"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""18346994-da14-478f-b70a-be709de6393e"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Desktop"",
-                    ""action"": ""Skill1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c061b42b-c3a0-481e-a423-f3a00f6d1028"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""id"": ""ccbc5ac5-aed6-4794-9597-8a5d39eaf665"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -208,17 +202,6 @@ namespace ARPG.Input
                     ""name"": """",
                     ""id"": ""b3a090ac-2599-4d83-810b-05a2fc885a06"",
                     ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Desktop"",
-                    ""action"": ""Skill5"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ccbc5ac5-aed6-4794-9597-8a5d39eaf665"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Desktop"",
@@ -245,6 +228,61 @@ namespace ARPG.Input
                     ""processors"": """",
                     ""groups"": ""Desktop"",
                     ""action"": ""ForceStop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""59ba62aa-f850-484b-8245-0759dce840ad"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Skill0"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a5ca3118-0bb4-4a00-8cb8-cbeaafeb2326"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""RightClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9d06d23e-45b8-4ca1-b46a-2b7033d6eedc"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Skill4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ec4d94b1-b432-4670-91f8-3f4c47ec0632"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""Skill5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""13cc32f8-c355-4b2e-be9a-6b408d0f74d2"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Desktop"",
+                    ""action"": ""LeftStick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -277,13 +315,16 @@ namespace ARPG.Input
 }");
             // PlayerInput
             m_PlayerInput = asset.FindActionMap("PlayerInput", throwIfNotFound: true);
-            m_PlayerInput_Interact = m_PlayerInput.FindAction("Interact", throwIfNotFound: true);
+            m_PlayerInput_LeftClick = m_PlayerInput.FindAction("LeftClick", throwIfNotFound: true);
+            m_PlayerInput_RightClick = m_PlayerInput.FindAction("RightClick", throwIfNotFound: true);
+            m_PlayerInput_Skill0 = m_PlayerInput.FindAction("Skill0", throwIfNotFound: true);
             m_PlayerInput_Skill1 = m_PlayerInput.FindAction("Skill1", throwIfNotFound: true);
             m_PlayerInput_Skill2 = m_PlayerInput.FindAction("Skill2", throwIfNotFound: true);
             m_PlayerInput_Skill3 = m_PlayerInput.FindAction("Skill3", throwIfNotFound: true);
             m_PlayerInput_Skill4 = m_PlayerInput.FindAction("Skill4", throwIfNotFound: true);
             m_PlayerInput_Skill5 = m_PlayerInput.FindAction("Skill5", throwIfNotFound: true);
             m_PlayerInput_ForceStop = m_PlayerInput.FindAction("ForceStop", throwIfNotFound: true);
+            m_PlayerInput_LeftStick = m_PlayerInput.FindAction("LeftStick", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -343,24 +384,30 @@ namespace ARPG.Input
         // PlayerInput
         private readonly InputActionMap m_PlayerInput;
         private IPlayerInputActions m_PlayerInputActionsCallbackInterface;
-        private readonly InputAction m_PlayerInput_Interact;
+        private readonly InputAction m_PlayerInput_LeftClick;
+        private readonly InputAction m_PlayerInput_RightClick;
+        private readonly InputAction m_PlayerInput_Skill0;
         private readonly InputAction m_PlayerInput_Skill1;
         private readonly InputAction m_PlayerInput_Skill2;
         private readonly InputAction m_PlayerInput_Skill3;
         private readonly InputAction m_PlayerInput_Skill4;
         private readonly InputAction m_PlayerInput_Skill5;
         private readonly InputAction m_PlayerInput_ForceStop;
+        private readonly InputAction m_PlayerInput_LeftStick;
         public struct PlayerInputActions
         {
             private @PlayerInputAsset m_Wrapper;
             public PlayerInputActions(@PlayerInputAsset wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Interact => m_Wrapper.m_PlayerInput_Interact;
+            public InputAction @LeftClick => m_Wrapper.m_PlayerInput_LeftClick;
+            public InputAction @RightClick => m_Wrapper.m_PlayerInput_RightClick;
+            public InputAction @Skill0 => m_Wrapper.m_PlayerInput_Skill0;
             public InputAction @Skill1 => m_Wrapper.m_PlayerInput_Skill1;
             public InputAction @Skill2 => m_Wrapper.m_PlayerInput_Skill2;
             public InputAction @Skill3 => m_Wrapper.m_PlayerInput_Skill3;
             public InputAction @Skill4 => m_Wrapper.m_PlayerInput_Skill4;
             public InputAction @Skill5 => m_Wrapper.m_PlayerInput_Skill5;
             public InputAction @ForceStop => m_Wrapper.m_PlayerInput_ForceStop;
+            public InputAction @LeftStick => m_Wrapper.m_PlayerInput_LeftStick;
             public InputActionMap Get() { return m_Wrapper.m_PlayerInput; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -370,9 +417,15 @@ namespace ARPG.Input
             {
                 if (m_Wrapper.m_PlayerInputActionsCallbackInterface != null)
                 {
-                    @Interact.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnInteract;
-                    @Interact.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnInteract;
-                    @Interact.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnInteract;
+                    @LeftClick.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnLeftClick;
+                    @LeftClick.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnLeftClick;
+                    @LeftClick.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnLeftClick;
+                    @RightClick.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnRightClick;
+                    @RightClick.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnRightClick;
+                    @RightClick.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnRightClick;
+                    @Skill0.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill0;
+                    @Skill0.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill0;
+                    @Skill0.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill0;
                     @Skill1.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill1;
                     @Skill1.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill1;
                     @Skill1.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnSkill1;
@@ -391,13 +444,22 @@ namespace ARPG.Input
                     @ForceStop.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnForceStop;
                     @ForceStop.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnForceStop;
                     @ForceStop.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnForceStop;
+                    @LeftStick.started -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnLeftStick;
+                    @LeftStick.performed -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnLeftStick;
+                    @LeftStick.canceled -= m_Wrapper.m_PlayerInputActionsCallbackInterface.OnLeftStick;
                 }
                 m_Wrapper.m_PlayerInputActionsCallbackInterface = instance;
                 if (instance != null)
                 {
-                    @Interact.started += instance.OnInteract;
-                    @Interact.performed += instance.OnInteract;
-                    @Interact.canceled += instance.OnInteract;
+                    @LeftClick.started += instance.OnLeftClick;
+                    @LeftClick.performed += instance.OnLeftClick;
+                    @LeftClick.canceled += instance.OnLeftClick;
+                    @RightClick.started += instance.OnRightClick;
+                    @RightClick.performed += instance.OnRightClick;
+                    @RightClick.canceled += instance.OnRightClick;
+                    @Skill0.started += instance.OnSkill0;
+                    @Skill0.performed += instance.OnSkill0;
+                    @Skill0.canceled += instance.OnSkill0;
                     @Skill1.started += instance.OnSkill1;
                     @Skill1.performed += instance.OnSkill1;
                     @Skill1.canceled += instance.OnSkill1;
@@ -416,6 +478,9 @@ namespace ARPG.Input
                     @ForceStop.started += instance.OnForceStop;
                     @ForceStop.performed += instance.OnForceStop;
                     @ForceStop.canceled += instance.OnForceStop;
+                    @LeftStick.started += instance.OnLeftStick;
+                    @LeftStick.performed += instance.OnLeftStick;
+                    @LeftStick.canceled += instance.OnLeftStick;
                 }
             }
         }
@@ -431,13 +496,16 @@ namespace ARPG.Input
         }
         public interface IPlayerInputActions
         {
-            void OnInteract(InputAction.CallbackContext context);
+            void OnLeftClick(InputAction.CallbackContext context);
+            void OnRightClick(InputAction.CallbackContext context);
+            void OnSkill0(InputAction.CallbackContext context);
             void OnSkill1(InputAction.CallbackContext context);
             void OnSkill2(InputAction.CallbackContext context);
             void OnSkill3(InputAction.CallbackContext context);
             void OnSkill4(InputAction.CallbackContext context);
             void OnSkill5(InputAction.CallbackContext context);
             void OnForceStop(InputAction.CallbackContext context);
+            void OnLeftStick(InputAction.CallbackContext context);
         }
     }
 }

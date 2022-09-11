@@ -61,7 +61,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 660850840498718442}
-        m_TargetAssemblyTypeName: ARPG.Input.InputTranslator, ARPG
+        m_TargetAssemblyTypeName: ARPG.Input.InputReceiver, ARPG
         m_MethodName: LeftClick
         m_Mode: 0
         m_Arguments:
@@ -77,8 +77,8 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 660850840498718442}
-        m_TargetAssemblyTypeName: ARPG.Input.InputTranslator, ARPG
-        m_MethodName: RightClick
+        m_TargetAssemblyTypeName: ARPG.Input.InputReceiver, ARPG
+        m_MethodName: CastSkill1
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -170,6 +170,54 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: eabd715e-1c6d-4c19-bda6-c67bb1d2ef23
     m_ActionName: PlayerInput/ForceStandStill[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 660850840498718442}
+        m_TargetAssemblyTypeName: ARPG.Input.InputReceiver, ARPG
+        m_MethodName: CastSkill0
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: f7cab294-f4e0-42bd-8cb0-3fb28a3fd596
+    m_ActionName: PlayerInput/Skill0[/Mouse/leftButton,/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 660850840498718442}
+        m_TargetAssemblyTypeName: ARPG.Input.InputReceiver, ARPG
+        m_MethodName: RightClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 5c57c28c-7be9-465b-99d6-c6df4e7acf67
+    m_ActionName: PlayerInput/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 660850840498718442}
+        m_TargetAssemblyTypeName: ARPG.Input.InputReceiver, ARPG
+        m_MethodName: LeftStick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d5927181-8acb-42cb-ad7b-e12190b0c546
+    m_ActionName: PlayerInput/LeftStick[/XInputControllerWindows/leftStick]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Desktop
   m_DefaultActionMap: PlayerInput
@@ -187,12 +235,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edfa3ac91466b1b40ba5fb67d2931f98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask:
+  layerMaskToIgnore:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 8
   gamepadMovementRadius: 15
+  PointerPosition: {x: 0, y: 0}
+  LeftStickVector: {x: 0, y: 0}
+  RightStickVector: {x: 0, y: 0}
   hasClickedOnUI: 0
   isCrouching: 0
   hasMovementInput: 0
-  isLeftSticking: 0
   isForcingStop: 0

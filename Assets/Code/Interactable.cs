@@ -8,7 +8,7 @@ namespace ARPG.Input
     [RequireComponent(typeof(CapsuleCollider))]
     public abstract class Interactable : MonoBehaviour
     {
-        public static Interactable current;
+        public static Interactable Current;
 
         [SerializeField]
         protected float interactionRange = 2f;
@@ -32,7 +32,7 @@ namespace ARPG.Input
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            Handles.color = current == this ? Color.cyan : Color.grey;
+            Handles.color = Current == this ? Color.cyan : Color.grey;
             Handles.DrawWireDisc(transform.position, transform.up, InteractionRange);
         }
 #endif

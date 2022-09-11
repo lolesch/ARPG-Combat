@@ -4,7 +4,6 @@ using ARPG.Tools;
 using TeppichsTools.Logging;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.InputSystem;
 
 namespace ARPG.Pawns.Movement
 {
@@ -19,15 +18,15 @@ namespace ARPG.Pawns.Movement
         private void OnDestroy()
         {
             movementLocker.locked -= ForceStop;
-            InputReceiver.Instance.OnSetMoving -= SetMove;
-            InputReceiver.Instance.OnSetForceStop -= SetForceStop;
+            InputReceiver.Instance.OnMove -= SetMove;
+            InputReceiver.Instance.OnForceStop -= SetForceStop;
         }
 
         protected void Awake()
         {
             movementLocker.locked += ForceStop;
-            InputReceiver.Instance.OnSetMoving += SetMove;
-            InputReceiver.Instance.OnSetForceStop += SetForceStop;
+            InputReceiver.Instance.OnMove += SetMove;
+            InputReceiver.Instance.OnForceStop += SetForceStop;
 
             agent.updateRotation = false;
         }
@@ -36,8 +35,11 @@ namespace ARPG.Pawns.Movement
         {
             if (hasMovementInput)
             {
-                CalculatePointerMovementTarget();
+                var hasGamepadMovementInput = 0.125f < InputReceiver.Instance.LeftStickVector.magnitude;
 
+                Vector2 screenPoint = hasGamepadMovementInput ? Camera.main.WorldToScreenPoint(InputReceiver.Instance.LeftStickVector) : InputReceiver.Instance.PointerPosition;
+
+                SetMovementTarget(screenPoint);
             }
 
             if (pawn.stats.TryGetValue(StatName.MovementSpeed, out StatScore speed) && 0 < speed.MaxValue)
@@ -48,35 +50,31 @@ namespace ARPG.Pawns.Movement
             SetRotation();
         }
 
-        private void CalculatePointerMovementTarget()
-        {
-            var screenPoint = Pointer.current.position.ReadValue();
+        private void SetMove(bool clickMove) => hasMovementInput = clickMove;
 
-            Ray ray = Camera.main.ScreenPointToRay(screenPoint);
-
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, 3))
-                SetMovementTarget(hit.point);
-        }
-
-        private void SetMove(bool hasMovingInput) => this.hasMovementInput = hasMovingInput;
 
         public void SetMovementTarget(Vector3 inputTarget)
         {
+            Ray ray = Camera.main.ScreenPointToRay(inputTarget);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, 3))
+                inputTarget = hit.point;
+
             // switch case?
-            if (Interactable.current == null)
+            if (Interactable.Current == null)
                 SetDestination(FindNavigableLocationAt(inputTarget));
 
-            else if (Interactable.current.Interaction == InteractionType.Enemy || Interactable.current.Interaction == InteractionType.Destroyable)
+            else if (Interactable.Current.Interaction == InteractionType.Enemy || Interactable.Current.Interaction == InteractionType.Destroyable)
             {
-                Vector3 target = Interactable.current.transform.position;
-                target = target - GetDirection(transform.position, target) * Mathf.Min(/* TODO: skill attack range or default meele attack range */20 + Interactable.current.InteractionRange, Vector3.Distance(transform.position, target));
+                Vector3 target = Interactable.Current.transform.position;
+                target = target - GetDirection(transform.position, target) * Mathf.Min(/* TODO: skill attack range or default meele attack range */20 + Interactable.Current.InteractionRange, Vector3.Distance(transform.position, target));
                 SetDestination(FindNavigableLocationAt(target));
             }
 
-            else if (Interactable.current.Interaction == InteractionType.NPC || Interactable.current.Interaction == InteractionType.Container)
+            else if (Interactable.Current.Interaction == InteractionType.NPC || Interactable.Current.Interaction == InteractionType.Container)
             {
-                Vector3 target = Interactable.current.transform.position;
-                target = target - GetDirection(transform.position, target) * Mathf.Min(Interactable.current.InteractionRange, Vector3.Distance(transform.position, target));
+                Vector3 target = Interactable.Current.transform.position;
+                target = target - GetDirection(transform.position, target) * Mathf.Min(Interactable.Current.InteractionRange, Vector3.Distance(transform.position, target));
                 SetDestination(FindNavigableLocationAt(target));
             }
         }
@@ -97,10 +95,10 @@ namespace ARPG.Pawns.Movement
 
         Vector3 FindNavigableLocationAt(Vector3 input)
         {
-            if (Interactable.current)
-                return Interactable.current.transform.position -
-                        GetDirection(transform.position, Interactable.current.transform.position) *
-                        Mathf.Min(Vector3.Distance(Interactable.current.transform.position, transform.position), Interactable.current.InteractionRange);
+            if (Interactable.Current)
+                return Interactable.Current.transform.position -
+                        GetDirection(transform.position, Interactable.Current.transform.position) *
+                        Mathf.Min(Vector3.Distance(Interactable.Current.transform.position, transform.position), Interactable.Current.InteractionRange);
 
             ///check if hitResult.point is navigable
             if (SamplePosition(input))

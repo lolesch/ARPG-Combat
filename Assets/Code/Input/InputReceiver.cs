@@ -13,24 +13,27 @@ namespace ARPG.Input
     /// </summary>
     public class InputReceiver : Monoton<InputReceiver>
     {
-        [SerializeField] private LayerMask layerMask = 1;
+        [SerializeField] private LayerMask layerMaskToIgnore;
 
-        [Range(1f, 20f)]
-        [SerializeField] private float gamepadMovementRadius = 15f; // maybe use the selected skill's range
+        [SerializeField][Range(1f, 20f)] private float gamepadMovementRadius = 15f; // maybe use the selected skill's range
 
-        private Vector2 leftStickPosition;
         private RaycastHit hit;
+
+        public Vector2 PointerPosition;
+        public Vector2 LeftStickVector;
+        public Vector2 RightStickVector;
 
         [Header("Observation")]
         [SerializeField] private bool hasClickedOnUI;
         [SerializeField] private bool isCrouching;
         [SerializeField] private bool hasMovementInput;
-        [SerializeField] private bool isLeftSticking;
         [SerializeField] private bool isForcingStop;
 
-        public event Action<int> OnSetCasting;
-        public event Action<bool> OnSetMoving;
-        public event Action<bool> OnSetForceStop;
+        public event Action<int> OnCast;
+        public event Action<bool> OnMove;
+        public event Action<bool> OnForceStop;
+
+        public bool IsPointerOutsideOfScreen() => IsOutsideOfScreen(PointerPosition);
 
         /// <summary>
         /// Returns true if the passed position extends the screen's current resolution
@@ -39,7 +42,7 @@ namespace ARPG.Input
         /// <remarks>
         /// Make sure that the position is calculated with the transform's lossyScale in mind.
         /// </remarks>
-        public static bool IsOutsideOfScreen(Vector2 position)
+        public bool IsOutsideOfScreen(Vector2 position)
         {
             return
                 position.x < 0 ||
@@ -48,38 +51,49 @@ namespace ARPG.Input
                 position.y > Screen.currentResolution.height;
         }
 
+        private void Update()
+        {
+            PointerPosition = Pointer.current.position.ReadValue();
+
+            LeftStickVector = Gamepad.current.leftStick.ReadValue();
+            /// stick sensitivity adjustment
+            LeftStickVector *= LeftStickVector.magnitude;
+            /// range factor
+            LeftStickVector *= gamepadMovementRadius;
+            /// project the Vector2 into the isometric plane (forward vector is rotated by 45 degrees)
+            //LeftStickVector = XZPlane.IsometricForward(LeftStickVector) + transform.position; // TODO: why transform.position? this is not the player 
+        }
+
         #region Interaction
 
         public void LeftClick(InputAction.CallbackContext ctx)
         {
-            var pointerPosition = Pointer.current.position.ReadValue();
-
-            if (IsOutsideOfScreen(pointerPosition))
+            if (IsPointerOutsideOfScreen())
                 return;
 
             if (ctx.started)
                 //if (!EventSystem.current.IsPointerOverGameObject()) // some check for IsOverUI here => no movement when interacting with UI
-                SetCurrentInteractable(pointerPosition);
+                SetCurrentInteractable(PointerPosition);
 
-            if (isForcingStop || Interactable.current && Interactable.current.Interaction == InteractionType.Enemy || Interactable.current && Interactable.current.Interaction == InteractionType.Destroyable)
+            if (isForcingStop || Interactable.Current && Interactable.Current.Interaction == InteractionType.Enemy || Interactable.Current && Interactable.Current.Interaction == InteractionType.Destroyable)
                 CastSkill0(ctx);
-            else
-                OnSetMoving?.Invoke(ctx.performed); // TODO: rework movement to calculate the target position here
-                                                    // this alowes different calculation for mouse/gamepad input 
 
+            OnMove?.Invoke(ctx.performed);
+
+            // TODO move into interactable / listen to event action
             void SetCurrentInteractable(Vector2 pointerPosition)
             {
-                Ray ray = Camera.main.ScreenPointToRay(pointerPosition);
+                var ray = Camera.main.ScreenPointToRay(pointerPosition);
 
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~layerMask))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~layerMaskToIgnore))
                 {
-                    Interactable.current = hit.collider.TryGetComponent(out Interactable interactable) ? interactable : null;
-                    EditorDebug.LogWarning($"{hit.collider.gameObject.name} | isInteractable {null != interactable} | {~layerMask}");
+                    Interactable.Current = hit.collider.TryGetComponent(out Interactable interactable) ? interactable : null;
+                    EditorDebug.LogWarning($"{hit.collider.gameObject.name} | isInteractable {null != interactable} | {~layerMaskToIgnore}");
                 }
-                else if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+                else if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMaskToIgnore))
                 {
-                    Interactable.current = hit.collider.TryGetComponent(out Interactable interactable) ? interactable : null;
-                    EditorDebug.LogWarning($"{hit.collider.gameObject.name} | isInteractable {null != interactable} | {layerMask}");
+                    Interactable.Current = hit.collider.TryGetComponent(out Interactable interactable) ? interactable : null;
+                    EditorDebug.LogWarning($"{hit.collider.gameObject.name} | isInteractable {null != interactable} | {layerMaskToIgnore}");
                 }
                 else
                     EditorDebug.LogError("raycast \t no collider found");
@@ -88,7 +102,7 @@ namespace ARPG.Input
 
         public void RightClick(InputAction.CallbackContext ctx)
         {
-            if (IsOutsideOfScreen(Pointer.current.position.ReadValue()))
+            if (IsPointerOutsideOfScreen())
                 return;
 
             if (ctx.started)
@@ -98,40 +112,16 @@ namespace ARPG.Input
 
         public void LeftStick(InputAction.CallbackContext ctx)
         {
-            leftStickPosition = ctx.ReadValue<Vector2>();
-            /// stick sensitivity adjustment
-            leftStickPosition *= leftStickPosition.magnitude;
-            /// range factor
-            leftStickPosition *= gamepadMovementRadius;
-
-            OnSetMoving?.Invoke(ctx.performed);
-
-            //TODO: set Interactable in close range
-
-            //Vector3 XZVector(Vector2 target)
-            //{
-            //    // this should be a cross product, no?
-            //    return Quaternion.AngleAxis(45f, Vector3.up) * XZPlane.Vector(target);
-            //}
-
-            //screenPoint = Camera.main.WorldToScreenPoint(XZVector(leftStickPosition) + transform.position); // why transform.position? this is not the player 
-
-            //private Vector3 HitPosition(Ray ray)
-            //{
-            //    if (!Physics.Raycast(ray, out hit, Mathf.Infinity, 3))
-            //        EditorDebug.LogError("raycast \t no collider found");
-            //
-            //    return hit.point;
-            //}
+            OnMove?.Invoke(ctx.performed);
         }
 
         public void ForceStop(InputAction.CallbackContext ctx)
         {
             if (ctx.started && hasMovementInput)
-                CastSkill(0);
+                CastSkill0(ctx);
 
             isForcingStop = ctx.performed;
-            OnSetForceStop?.Invoke(isForcingStop);
+            OnForceStop?.Invoke(ctx.performed);
         }
 
         //public void Crouch(InputAction.CallbackContext ctx)
@@ -149,12 +139,6 @@ namespace ARPG.Input
         #endregion
 
         #region Skills
-
-        private void CastSkill(int index)
-        {
-            // TODO: rotate towards target and cast in that directions
-            OnSetCasting?.Invoke(index);
-        }
 
         public void CastSkill0(InputAction.CallbackContext ctx)
         {
@@ -192,6 +176,12 @@ namespace ARPG.Input
                 CastSkill(5);
         }
 
+        private void CastSkill(int index)
+        {
+            // TODO: rotate towards target and cast in that directions
+            OnCast?.Invoke(index);
+        }
+
         #endregion
 
         #region Menus
@@ -211,13 +201,5 @@ namespace ARPG.Input
         public void ToggleOptions(InputAction.CallbackContext ctx) { if (ctx.started) toggleOptions?.Invoke(); }
 
         #endregion
-
-        ///// <summary>
-        ///// Projects the point on the xzPlane around the objectPosition from a cameras perspective
-        ///// </summary>
-        //Vector3 TargetOnMovementPlane(Vector3 point, Vector3 objectPos, Vector3 cameraPos)
-        //{
-        //    return cameraPos + (point - cameraPos) * ((cameraPos.y - objectPos.y) / (cameraPos.y - point.y));
-        //}
     }
 }
