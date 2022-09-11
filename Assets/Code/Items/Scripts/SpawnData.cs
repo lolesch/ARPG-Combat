@@ -47,6 +47,7 @@ namespace ARPG.Container
         [Range(0f, 20f)][SerializeField] private float lifetime = 0;
         public float Lifetime => lifetime;
 
+        //[SerializeField] private bool isRequiringATarget = false;
         //[SerializeField] private bool isPiercing = false;
         //[SerializeField] private bool isHoming = false;
 

@@ -70,8 +70,8 @@ namespace ARPG.Displays
             if (resourceImage)
                 resourceImage.fillAmount = current / 100; // is this in percent?
 
-            if (current == 0 || max == 0)
-                gameObject.SetActive(false);
+            //if (current == 0 || max == 0)
+            //    gameObject.SetActive(false);
         }
     }
 }

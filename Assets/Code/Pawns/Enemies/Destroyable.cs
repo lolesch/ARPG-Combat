@@ -1,7 +1,10 @@
 ﻿using ARPG.Combat;
 using ARPG.Enums;
 using ARPG.Input;
+using System.Collections;
+using System.Linq;
 using TeppichsTools.Logging;
+using UnityEngine;
 
 namespace ARPG.Pawns.Destroyables
 {
@@ -45,9 +48,23 @@ namespace ARPG.Pawns.Destroyables
         {
             DropLoot();
 
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            StartCoroutine(RespawnWithDelay(1f));
 
             void DropLoot() => EditorDebug.Log($"{name} is dropping Loot");
+        }
+
+        IEnumerator RespawnWithDelay(float delay)
+        {
+            var transform = gameObject.GetComponentsInChildren<Transform>().FirstOrDefault(x => x != null && x.gameObject != gameObject);
+
+            if (transform != null)
+            {
+                var GO = transform.gameObject;
+                GO.SetActive(false);
+                yield return new WaitForSeconds(delay);
+                GO.SetActive(true);
+            }
         }
     }
 }

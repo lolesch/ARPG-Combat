@@ -53,15 +53,19 @@ namespace ARPG.Input
 
         private void Update()
         {
-            PointerPosition = Pointer.current.position.ReadValue();
+            if (Pointer.current != null)
+                PointerPosition = Pointer.current.position.ReadValue();
 
-            LeftStickVector = Gamepad.current.leftStick.ReadValue();
-            /// stick sensitivity adjustment
-            LeftStickVector *= LeftStickVector.magnitude;
-            /// range factor
-            LeftStickVector *= gamepadMovementRadius;
-            /// project the Vector2 into the isometric plane (forward vector is rotated by 45 degrees)
-            //LeftStickVector = XZPlane.IsometricForward(LeftStickVector) + transform.position; // TODO: why transform.position? this is not the player 
+            if (Gamepad.current != null)
+            {
+                LeftStickVector = Gamepad.current.leftStick.ReadValue();
+                /// stick sensitivity adjustment
+                LeftStickVector *= LeftStickVector.magnitude;
+                /// range factor
+                LeftStickVector *= gamepadMovementRadius;
+                /// project the Vector2 into the isometric plane (forward vector is rotated by 45 degrees)
+                //LeftStickVector = XZPlane.IsometricForward(LeftStickVector) + transform.position; // TODO: why transform.position? this is not the player 
+            }
         }
 
         #region Interaction
