@@ -21,8 +21,6 @@ namespace ARPG.Pawns
         [SerializeField] private float currentValue;
         public float CurrentValue => currentValue;
 
-        [SerializeField] private float currentPercent = 1;
-
         private void RecalculateValues()
         {
             // TODO: FIX ME => this results in mana not regenerating over 60% (its max value as percent)

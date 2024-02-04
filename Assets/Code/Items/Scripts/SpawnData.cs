@@ -10,6 +10,17 @@ namespace ARPG.Container
     [CreateAssetMenu(fileName = "New Spawn Behaviour", menuName = "Inventory System/Items/SkillBehaviour/SpawnBehaviour")]
     public class SpawnData : ScriptableObject
     {
+        // Active/Passive/Toggle
+        // CastingType
+        // Targeting - auto, self, single, ground, skillshot
+        // Shape
+        // Effect
+
+        // COMPONENT SETTINGS:
+
+        // scaling - what stats this ability will benefit from
+        // charges/ammo - as opposed to a cooldown
+
         public Ticker CooldownTicker;
 
         [Tooltip("The duration (seconds) to wait before re-casting is enabled")]
@@ -21,6 +32,15 @@ namespace ARPG.Container
         public uint ManaCost => manaCost;
 
         [Header("Spawn Settings")]
+
+        // Range - the maximum distance between caster and target in order for the ability to be cast / to hit
+
+        // Casttime - Abilities may incur a casting time in which the caster is unable to perform any other actions for a short period of time until the ability takes effect
+        //              (can only be interrupted by the champion's death).
+        //              Cast times are measured in seconds and commonly last for 0.25, 0.5, and 1 second(s).
+        //              They prevent abilities from triggering their effects instantaneously.
+        //                  A cast may include a lockout that prevents certain actives until afterward(buffer), or disables them entirely.
+        //                  This lockout can extend past the cast time up until the ability ends.
 
         [Tooltip("Spawn at the current cursor position? else spawn at the caster's position")]
         [SerializeField] private bool spawnAtCursor = false;

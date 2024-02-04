@@ -8,15 +8,15 @@ namespace ARPG.Pawns.Movement
     [RequireComponent(typeof(NavMeshAgent))]
     public abstract class PawnMovement : MonoBehaviour
     {
-        protected NavMeshAgent agent;
-        protected Pawn pawn;
-        protected Animator animator;
+        [SerializeField] protected NavMeshAgent agent;
+        [SerializeField] protected Pawn pawn;
+        [SerializeField] protected Animator animator;
 
         [Header("Rotation")]
         [Range(1f, 40f)]
         [SerializeField] protected float rotationSpeed = 17f;
 
-        protected virtual void OnValidate()
+        private void OnValidate()
         {
             agent = GetComponent<NavMeshAgent>();
             if (!agent)

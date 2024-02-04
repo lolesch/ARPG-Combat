@@ -15,6 +15,8 @@ namespace ARPG.Pawns.Movement
 
         private bool hasMovementInput;
 
+        private float movementSpeed;
+
         private void OnDestroy()
         {
             movementLocker.locked -= ForceStop;
@@ -29,6 +31,12 @@ namespace ARPG.Pawns.Movement
             InputReceiver.Instance.OnForceStop += SetForceStop;
 
             agent.updateRotation = false;
+        }
+
+        private void OnEnable()
+        {
+            if (pawn.stats.TryGetValue(StatName.MovementSpeed, out StatScore speed))
+                movementSpeed = speed.baseValue;
         }
 
         private void Update()

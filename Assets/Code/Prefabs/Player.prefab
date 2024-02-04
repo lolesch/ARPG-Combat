@@ -121,7 +121,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d365d7ae94fd834984d306a2180d2e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crouchFactor: 0.5
+  agent: {fileID: 13144345300620096}
+  pawn: {fileID: 659768728422110613}
+  animator: {fileID: 249431562987489028}
   rotationSpeed: 17
 --- !u!114 &5748334073002140420
 MonoBehaviour:
@@ -411,6 +413,11 @@ PrefabInstance:
 --- !u!4 &158783349367165280 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4807772044541664, guid: f018c9b8a16f9c3449b1c025f1a66ce4, type: 3}
+  m_PrefabInstance: {fileID: 154538806469914496}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &249431562987489028 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 95455848339679364, guid: f018c9b8a16f9c3449b1c025f1a66ce4, type: 3}
   m_PrefabInstance: {fileID: 154538806469914496}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &793486277617916569
